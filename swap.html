@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudentSwap - Cộng Đồng Đổi Đồ Sinh Viên</title>
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --secondary: #0284c7;
+            --accent: #f59e0b;
+            --bg-light: #f8fafc;
+            --card-bg: #ffffff;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.5;
+            padding-bottom: 60px;
+        }
+
+        /* HEADER & NAVBAR */
+        header {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            text-decoration: none;
+        }
+
+        .logo i {
+            color: var(--primary);
+            font-size: 1.6rem;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 450px;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 10px 15px 10px 40px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            outline: none;
+            background: #f1f5f9;
+            transition: all 0.3s;
+        }
+
+        .search-bar input:focus {
+            background: white;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 9px 18px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid var(--border);
+            color: var(--text-dark);
+        }
+
+        .btn-outline:hover {
+            background: #f1f5f9;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            background: linear-gradient(135deg, #059669 0%, #0284c7 100%);
+            color: white;
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 25px;
+        }
+
+        /* MAIN CONTAINER & CATEGORIES */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .categories {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+            scrollbar-width: thin;
+        }
+
+        .cat-btn {
+            padding: 8px 18px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            white-space: nowrap;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+
+        .cat-btn.active, .cat-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* PRODUCT GRID & CARDS */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            background: #e2e8f0;
+        }
+
+        .card-body {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .card-tag {
+            align-self: flex-start;
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+            background: #e0f2fe;
+            color: var(--secondary);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .card-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-dark);
+        }
+
+        .card-condition {
+            font-size: 0.85rem;
+            color: var(--primary-dark);
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .swap-for {
+            background: #f8fafc;
+            border-left: 3px solid var(--accent);
+            padding: 8px 10px;
+            font-size: 0.85rem;
+            border-radius: 0 6px 6px 0;
+            margin-bottom: 12px;
+        }
+
+        .swap-for strong {
+            color: var(--text-dark);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: auto;
+            padding-top: 10px;
+            border-top: 1px dashed var(--border);
+        }
+
+        .btn-swap {
+            width: 100%;
+            margin-top: 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-swap:hover {
+            background: var(--primary-dark);
+        }
+
+        /* MODAL FORM */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            border-radius: var(--radius);
+            padding: 25px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            font-size: 1.3rem;
+            color: var(--text-dark);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            outline: none;
+            font-size: 0.9rem;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--primary);
+        }
+
+        /* FOOTER */
+        footer {
+            background: white;
+            border-top: 1px solid var(--border);
+            margin-top: 60px;
+            padding: 30px 20px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 640px) {
+            .navbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .search-bar {
+                max-width: 100%;
+            }
+            .hero h1 {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER / NAVIGATION -->
+    <header>
+        <div class="navbar">
+            <a href="#" class="logo">
+                <i class="fa-solid fa-arrows-rotate"></i>
+                <span>StudentSwap</span>
+            </a>
+
+            <div class="search-bar">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" placeholder="Tìm giáo trình, đồ điện tử, thời trang..." onkeyup="filterItems()">
+            </div>
+
+            <div class="nav-actions">
+                <button class="btn btn-primary" onclick="openModal('postModal')">
+                    <i class="fa-solid fa-plus"></i> Đăng món đồ
+                </button>
+                <button class="btn btn-outline" onclick="alert('Tính năng trang cá nhân đang phát triển!')">
+                    <i class="fa-regular fa-user"></i> Tài khoản
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Đổi Đồ Cũ - Lấy Đồ Cần - Tiết Kiệm Cho Sinh Viên</h1>
+            <p>Nền tảng trao đổi sách vở, đồ dùng học tập và vật dụng phòng trọ hoàn toàn miễn phí dành cho cộng đồng sinh viên.</p>
+            <button class="btn btn-primary" style="background: white; color: var(--primary-dark);" onclick="openModal('postModal')">
+                <i class="fa-solid fa-box-archive"></i> Đăng đồ đổi ngay
+            </button>
+        </div>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main class="container">
+        <!-- CATEGORIES FILTER -->
+        <div class="categories">
+            <button class="cat-btn active" onclick="filterCategory('all', this)">Tất cả</button>
+            <button class="cat-btn" onclick="filterCategory('Sách/Giáo trình', this)">📚 Sách & Giáo trình</button>
+            <button class="cat-btn" onclick="filterCategory('Đồ điện tử', this)">💻 Đồ điện tử</button>
+            <button class="cat-btn" onclick="filterCategory('Thời trang', this)">👕 Thời trang</button>
+            <button class="cat-btn" onclick="filterCategory('Đồ phòng trọ', this)">🏠 Đồ phòng trọ</button>
+        </div>
+
+        <div class="section-title">
+            <span>Món đồ mới nhất</span>
+            <small style="font-weight: normal; color: var(--text-muted); font-size: 0.9rem;" id="itemCount">Hiển thị 4 sản phẩm</small>
+        </div>
+
+        <!-- PRODUCT GRID -->
+        <div class="product-grid" id="productGrid">
+            <!-- Items generated by JS -->
+        </div>
+    </main>
+
+    <!-- MODAL: ĐĂNG MÓN ĐỒ MỚI -->
+    <div class="modal" id="postModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Đăng món đồ muốn đổi</h2>
+                <button class="close-btn" onclick="closeModal('postModal')">&times;</button>
+            </div>
+            <form id="addItemForm" onsubmit="handleAddNewItem(event)">
+                <div class="form-group">
+                    <label>Tên món đồ của bạn *</label>
+                    <input type="text" id="itemName" required placeholder="Ví dụ: Giáo trình Kinh tế Vĩ mô 2025">
+                </div>
+                <div class="form-group">
+                    <label>Danh mục *</label>
+                    <select id="itemCategory" required>
+                        <option value="Sách/Giáo trình">Sách/Giáo trình</option>
+                        <option value="Đồ điện tử">Đồ điện tử</option>
+                        <option value="Thời trang">Thời trang</option>
+                        <option value="Đồ phòng trọ">Đồ phòng trọ</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Tình trạng đồ *</label>
+                    <input type="text" id="itemCondition" required placeholder="Ví dụ: Mới 95%, không ghi chép">
+                </div>
+                <div class="form-group">
+                    <label>Món đồ bạn muốn đổi lại *</label>
+                    <input type="text" id="itemWant" required placeholder="Ví dụ: Đổi lấy ấm siêu tốc hoặc chuột máy tính">
+                </div>
+                <div class="form-group">
+                    <label>Link hình ảnh (URL)</label>
+                    <input type="url" id="itemImage" placeholder="Dán link ảnh (Hoặc để trống dùng ảnh mặc định)">
+                </div>
+                <div class="form-group">
+                    <label>Tên của bạn & Trường Đại học *</label>
+                    <input type="text" id="itemUser" required placeholder="Ví dụ: Diệu Linh - FTU">
+                </div>
+                <div class="form-group">
+                    <label>Thông tin liên hệ (Zalo/SĐT) *</label>
+                    <input type="text" id="itemContact" required placeholder="Ví dụ: Zalo 0912xxx888">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 10px;">
+                    Đăng tin ngay
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: GỬI ĐỀ NGHỊ ĐỔI -->
+    <div class="modal" id="swapModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Gửi đề nghị trao đổi</h2>
+                <button class="close-btn" onclick="closeModal('swapModal')">&times;</button>
+            </div>
+            <div id="swapModalBody">
+                <!-- Content generated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>© 2026 StudentSwap - Nền tảng kết nối & trao đổi đồ dùng sinh viên.</p>
+        <p style="margin-top: 5px; font-size: 0.8rem;">Thúc đẩy lối sống xanh, tái chế và chia sẻ trong môi trường học đường.</p>
+    </footer>
+
+    <!-- INTERACTIVE JAVASCRIPT -->
+    <script>
+        // DỮ LIỆU MẪU BAN ĐẦU
+        let items = [
+            {
+                id: 1,
+                title: "Giáo trình Kinh tế Vĩ mô",
+                category: "Sách/Giáo trình",
+                condition: "Mới 90% (Chưa viết vẽ)",
+                want: "Đổi lấy Giáo trình Vi mô hoặc Sách IELTS",
+                user: "Diệu Linh",
+                school: "Foreign Trade University",
+                contact: "Zalo: 0987xxx321",
+                image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=500&q=80"
+            },
+            {
+                id: 2,
+                title: "Chuột không dây Logitech M330",
+                category: "Đồ điện tử",
+                condition: "Dùng tốt, bấm êm không tiếng động",
+                want: "Đổi lấy Bàn phím máy tính cũ",
+                user: "Minh Quân",
+                school: "Đại học Bách Khoa",
+                contact: "SĐT: 0912xxx999",
+                image: "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=500&q=80"
+            },
+            {
+                id: 3,
+                title: "Áo khoác Blazer dáng rộng",
+                category: "Thời trang",
+                condition: "Mới 98% (Mặc đúng 1 lần thuyết trình)",
+                want: "Đổi lấy Áo sơ mi trắng size M",
+                user: "Thu Hà",
+                school: "Đại học Quốc Gia",
+                contact: "Zalo: 0934xxx111",
+                image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=500&q=80"
+            },
+            {
+                id: 4,
+                title: "Ấm siêu tốc Sunhouse 1.8L",
+                category: "Đồ phòng trọ",
+                condition: "Đang hoạt động tốt, đun nước nhanh",
+                want: "Đổi lấy Quạt bàn nhỏ gọn",
+                user: "Tuấn Anh",
+                school: "Đại học Xây Dựng",
+                contact: "SĐT: 0978xxx444",
+                image: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f6?w=500&q=80"
+            }
+        ];
+
+        let currentCategory = 'all';
+
+        // RENDER DANH SÁCH SẢN PHẨM
+        function renderItems(data) {
+            const grid = document.getElementById('productGrid');
+            const countText = document.getElementById('itemCount');
+            grid.innerHTML = '';
+
+            countText.textContent = `Hiển thị ${data.length} sản phẩm`;
+
+            if (data.length === 0) {
+                grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px 0;">Không tìm thấy món đồ nào phù hợp.</p>`;
+                return;
+            }
+
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <img src="${item.image}" class="card-img" alt="${item.title}" onerror="this.src='https://images.unsplash.com/photo-1532012197267-da84d127e765?w=500&q=80'">
+                    <div class="card-body">
+                        <span class="card-tag">${item.category}</span>
+                        <h3 class="card-title">${item.title}</h3>
+                        <p class="card-condition"><i class="fa-solid fa-check-circle"></i> ${item.condition}</p>
+                        <div class="swap-for">
+                            <strong>Muốn đổi:</strong> ${item.want}
+                        </div>
+                        <div class="user-info">
+                            <i class="fa-solid fa-user-graduate"></i>
+                            <span>${item.user} • ${item.school}</span>
+                        </div>
+                        <button class="btn-swap" onclick="openSwapModal(${item.id})">
+                            <i class="fa-solid fa-handshake"></i> Đề nghị đổi
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // LỌC THEO DANH MỤC
+        function filterCategory(cat, btn) {
+            currentCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            applyFilters();
+        }
+
+        // TÌM KIẾM SẢN PHẨM
+        function filterItems() {
+            applyFilters();
+        }
+
+        // ÁP DỤNG CẢ LỌC VÀ TÌM KIẾM
+        function applyFilters() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = items.filter(item => {
+                const matchCat = (currentCategory === 'all') || (item.category === currentCategory);
+                const matchQuery = item.title.toLowerCase().includes(query) || item.want.toLowerCase().includes(query);
+                return matchCat && matchQuery;
+            });
+            renderItems(filtered);
+        }
+
+        // THÊM MÓN ĐỒ MỚI
+        function handleAddNewItem(e) {
+            e.preventDefault();
+            const name = document.getElementById('itemName').value;
+            const category = document.getElementById('itemCategory').value;
+            const condition = document.getElementById('itemCondition').value;
+            const want = document.getElementById('itemWant').value;
+            let image = document.getElementById('itemImage').value;
+            const userStr = document.getElementById('itemUser').value;
+            const contact = document.getElementById('itemContact').value;
+
+            if (!image.trim()) {
+                image = 'https://images.unsplash.com/photo-1532012197267-da84d127e765?w=500&q=80';
+            }
+
+            const userParts = userStr.split('-');
+            const userName = userParts[0] ? userParts[0].trim() : userStr;
+            const schoolName = userParts[1] ? userParts[1].trim() : 'Sinh viên';
+
+            const newItem = {
+                id: Date.now(),
+                title: name,
+                category: category,
+                condition: condition,
+                want: want,
+                user: userName,
+                school: schoolName,
+                contact: contact,
+                image: image
+            };
+
+            items.unshift(newItem);
+            applyFilters();
+            closeModal('postModal');
+            document.getElementById('addItemForm').reset();
+            alert('🎉 Đã đăng món đồ của bạn thành công!');
+        }
+
+        // MỞ MODAL GỬI ĐỀ NGHỊ ĐỔI
+        function openSwapModal(id) {
+            const item = items.find(i => i.id === id);
+            if (!item) return;
+
+            const modalBody = document.getElementById('swapModalBody');
+            modalBody.innerHTML = `
+                <p style="margin-bottom: 12px;">Bạn đang gửi đề nghị đổi đồ với <strong>${item.user}</strong> (${item.school}).</p>
+                <div style="background: #f1f5f9; padding: 12px; border-radius: 8px; margin-bottom: 15px;">
+                    <p><strong>Món đồ:</strong> ${item.title}</p>
+                    <p><strong>Nhu cầu đổi:</strong> ${item.want}</p>
+                </div>
+                <div class="form-group">
+                    <label>Món đồ bạn có thể trao đổi lại:</label>
+                    <input type="text" id="mySwapOffer" placeholder="Nhập tên món đồ bạn muốn mang ra đổi...">
+                </div>
+                <div class="form-group">
+                    <label>Lời nhắn tới chủ món đồ:</label>
+                    <textarea rows="3" placeholder="Chào bạn, mình có món đồ này muốn đổi..."></textarea>
+                </div>
+                <div style="background: #e0f2fe; color: #0369a1; padding: 10px; border-radius: 6px; font-size: 0.85rem; margin-bottom: 15px;">
+                    <i class="fa-solid fa-info-circle"></i> <strong>Liên hệ trực tiếp:</strong> ${item.contact}
+                </div>
+                <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="submitSwapOffer()">
+                    Gửi đề nghị ngay
+                </button>
+            `;
+            openModal('swapModal');
+        }
+
+        function submitSwapOffer() {
+            alert('✅ Đề nghị trao đổi của bạn đã được gửi thành công! Hãy chủ động liên hệ qua thông tin Zalo/SĐT của bạn ấy nhé.');
+            closeModal('swapModal');
+        }
+
+        // UTILS: MODAL CONTROLS
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        // KHỞI CHẠY LẦN ĐẦU
+        renderItems(items);
+    </script>
+</body>
+</html>
