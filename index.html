@@ -1,745 +1,290 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudentSwap - Cộng Đồng Đổi Đồ Sinh Viên</title>
-    <!-- Google Fonts & FontAwesome -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <style>
-        :root {
-            --primary: #10b981;
-            --primary-dark: #059669;
-            --secondary: #0284c7;
-            --accent: #f59e0b;
-            --bg-light: #f8fafc;
-            --card-bg: #ffffff;
-            --text-dark: #1e293b;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
-            --radius: 12px;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-light);
-            color: var(--text-dark);
-            line-height: 1.5;
-            padding-bottom: 60px;
-        }
-
-        /* HEADER & NAVBAR */
-        header {
-            background: white;
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-        }
-
-        .navbar {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--primary-dark);
-            text-decoration: none;
-        }
-
-        .logo i {
-            color: var(--primary);
-            font-size: 1.6rem;
-        }
-
-        .search-bar {
-            flex: 1;
-            max-width: 450px;
-            position: relative;
-        }
-
-        .search-bar input {
-            width: 100%;
-            padding: 10px 15px 10px 40px;
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            outline: none;
-            background: #f1f5f9;
-            transition: all 0.3s;
-        }
-
-        .search-bar input:focus {
-            background: white;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
-        }
-
-        .search-bar i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-        }
-
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .btn {
-            padding: 9px 18px;
-            border-radius: 20px;
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
-            font-size: 0.9rem;
-        }
-
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary-dark);
-            transform: translateY(-1px);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 1.5px solid var(--border);
-            color: var(--text-dark);
-        }
-
-        .btn-outline:hover {
-            background: #f1f5f9;
-        }
-
-        /* HERO SECTION */
-        .hero {
-            background: linear-gradient(135deg, #059669 0%, #0284c7 100%);
-            color: white;
-            padding: 50px 20px;
-            text-align: center;
-        }
-
-        .hero-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .hero h1 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-
-        .hero p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            margin-bottom: 25px;
-        }
-
-        /* MAIN CONTAINER & CATEGORIES */
-        .container {
-            max-width: 1200px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-
-        .categories {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            padding-bottom: 10px;
-            margin-bottom: 25px;
-            scrollbar-width: thin;
-        }
-
-        .cat-btn {
-            padding: 8px 18px;
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            white-space: nowrap;
-            cursor: pointer;
-            font-weight: 500;
-            color: var(--text-muted);
-            transition: all 0.2s;
-        }
-
-        .cat-btn.active, .cat-btn:hover {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        .section-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* PRODUCT GRID & CARDS */
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 20px;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            overflow: hidden;
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.1);
-        }
-
-        .card-img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            background: #e2e8f0;
-        }
-
-        .card-body {
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-        }
-
-        .card-tag {
-            align-self: flex-start;
-            font-size: 0.75rem;
-            padding: 3px 8px;
-            border-radius: 4px;
-            background: #e0f2fe;
-            color: var(--secondary);
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .card-title {
-            font-size: 1.05rem;
-            font-weight: 600;
-            margin-bottom: 6px;
-            color: var(--text-dark);
-        }
-
-        .card-condition {
-            font-size: 0.85rem;
-            color: var(--primary-dark);
-            font-weight: 500;
-            margin-bottom: 10px;
-        }
-
-        .swap-for {
-            background: #f8fafc;
-            border-left: 3px solid var(--accent);
-            padding: 8px 10px;
-            font-size: 0.85rem;
-            border-radius: 0 6px 6px 0;
-            margin-bottom: 12px;
-        }
-
-        .swap-for strong {
-            color: var(--text-dark);
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-top: auto;
-            padding-top: 10px;
-            border-top: 1px dashed var(--border);
-        }
-
-        .btn-swap {
-            width: 100%;
-            margin-top: 12px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 8px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .btn-swap:hover {
-            background: var(--primary-dark);
-        }
-
-        /* MODAL FORM */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(4px);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: white;
-            width: 100%;
-            max-width: 500px;
-            border-radius: var(--radius);
-            padding: 25px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .modal-header h2 {
-            font-size: 1.3rem;
-            color: var(--text-dark);
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            cursor: pointer;
-            color: var(--text-muted);
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            outline: none;
-            font-size: 0.9rem;
-        }
-
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-            border-color: var(--primary);
-        }
-
-        /* FOOTER */
-        footer {
-            background: white;
-            border-top: 1px solid var(--border);
-            margin-top: 60px;
-            padding: 30px 20px;
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        /* RESPONSIVE DESIGN */
-        @media (max-width: 640px) {
-            .navbar {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .search-bar {
-                max-width: 100%;
-            }
-            .hero h1 {
-                font-size: 1.6rem;
-            }
-        }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Read With Me | Diệu Linh</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e7e4cc;--ink:#2a1f18;--mut:#6b6150;--card:#f3f0dd;--line:rgba(42,31,24,.22);--bt:#f2d875;--ol:#5f6038;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17120e;--ink:#ede6d0;--mut:#a89e86;--card:#231c16;--line:rgba(237,230,208,.22)}}
+:root[data-theme="dark"]{--bg:#17120e;--ink:#ede6d0;--mut:#a89e86;--card:#231c16;--line:rgba(237,230,208,.22)}
+html{scroll-padding-top:4rem;scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:1.1rem/1.65 'Newsreader',Georgia,serif;transition:background .5s,color .5s}
+h1,h2,h3{font-family:'Instrument Serif',Georgia,serif;font-weight:400;margin:0;line-height:1}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--bt);outline-offset:3px}
+body::before{content:"";position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.18;mix-blend-mode:multiply;
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+.rainfx{position:fixed;inset:0;z-index:55;pointer-events:none;opacity:0;transition:opacity 1s;background:repeating-linear-gradient(100deg,transparent 0 9px,rgba(242,216,117,.16) 9px 10px);background-size:60px 60px;animation:rain .5s linear infinite}
+body.rain .rainfx{opacity:1}
+@keyframes rain{to{background-position:-12px 60px}}
+/* top bar */
+.top{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:40;display:flex;justify-content:space-between;align-items:center;padding:.9rem clamp(1rem,4vw,2.5rem);color:var(--bt);font-style:italic;font-size:1rem;text-shadow:0 1px 8px rgba(0,0,0,.35)}
+.top button{background:none;border:0;border-bottom:1px solid currentColor;padding:0 0 1px;margin-left:1.2rem;font-style:italic}
+.top .nm{font-style:normal;font-family:'Instrument Serif',serif;font-size:1.4rem}
+/* hero */
+.hero{position:relative;min-height:100vh;display:grid;grid-template-rows:1fr 1fr;color:var(--bt);overflow:hidden}
+.p1{background:radial-gradient(ellipse at 50% 30%,#c9ab76 0,#8b7a4f 55%,#5e5a3a 100%)}
+.p2{background:#17120e;position:relative}
+.cup{position:absolute;left:50%;bottom:-18%;width:min(78vw,430px);aspect-ratio:1;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle at 40% 35%,#d7b48a,#7a5238 70%,#2c1c12);box-shadow:0 0 0 14px #1f1812,0 0 0 16px #3a2e24}
+.cup i{position:absolute;left:24%;top:22%;width:50%;height:52%;border-radius:22%;transform:rotate(-14deg);background:linear-gradient(135deg,rgba(255,240,215,.55),rgba(160,110,70,.35));box-shadow:inset 0 0 22px rgba(255,255,255,.35);animation:bob 7s ease-in-out infinite}
+@keyframes bob{50%{transform:rotate(-8deg) translateY(6px)}}
+.mt{position:absolute;top:5.2rem;font-size:clamp(1.05rem,2.6vw,1.5rem);line-height:1.2}
+.mt.l{left:clamp(1rem,4vw,2.5rem)}.mt.r{right:clamp(1rem,4vw,2.5rem);text-align:right;font-style:italic}
+.mt span{display:block}
+.hero h1{position:absolute;left:0;right:0;top:50%;transform:translateY(-58%);text-align:center;font-size:clamp(4.2rem,17vw,12rem);letter-spacing:-.02em;z-index:2}
+.lead{position:absolute;left:50%;bottom:2.2rem;transform:translateX(-50%);width:min(92%,640px);text-align:center;font-size:1.15rem;line-height:1.5;z-index:2;text-shadow:0 1px 10px #000}
+.lead a{color:inherit}
+/* sections */
+section.s{max-width:1080px;margin:0 auto;padding:5.5rem clamp(1.2rem,5vw,2.5rem)}
+h2{font-size:clamp(2.4rem,6vw,4rem);margin-bottom:1rem}
+.sub{color:var(--mut);max-width:34rem;margin:0 0 2.2rem}
+.about{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center}
+.about p{max-width:30rem}
+.pos{display:flex;flex-wrap:wrap;gap:1.2rem;justify-content:center;padding:1rem}
+.po{margin:0;width:min(46%,170px);background:var(--card);padding:.55rem .55rem .8rem;box-shadow:0 10px 24px rgba(0,0,0,.22);transform:rotate(var(--r));transition:transform .4s}
+.po:hover{transform:rotate(0) scale(1.06);z-index:3}
+.po div{aspect-ratio:1;display:grid;place-items:center;font:2.1rem 'Instrument Serif',serif;color:var(--bt)}
+.po figcaption{font-size:.82rem;line-height:1.3;margin-top:.5rem;font-style:italic}
+/* shelf */
+.bar{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;margin-bottom:2.4rem}
+.bar button{border:1px solid var(--line);background:none;border-radius:99px;padding:.25rem 1rem;transition:.25s}
+.bar button[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.bar .rd{margin-left:auto;background:var(--bt);color:#2a1f18;border-color:var(--bt)}
+.sh{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:2.4rem 1.6rem;padding-bottom:1.5rem}
+.b3{perspective:700px;background:none;border:0;padding:0;text-align:left;transition:opacity .4s,filter .4s}
+.b3:nth-child(even){margin-top:1.6rem}
+.b3.off{opacity:.15;filter:grayscale(1);pointer-events:none}
+.cv{position:relative;aspect-ratio:2/3;border-radius:3px 9px 9px 3px;padding:1rem .9rem;display:flex;flex-direction:column;justify-content:space-between;
+transform:rotateX(var(--rx,0)) rotateY(var(--ry,0));transition:transform .25s,box-shadow .25s;box-shadow:inset 7px 0 8px -4px rgba(0,0,0,.4),0 14px 22px -8px rgba(0,0,0,.45)}
+.b3:hover .cv,.b3:focus-visible .cv{box-shadow:inset 7px 0 8px -4px rgba(0,0,0,.4),0 26px 30px -10px rgba(0,0,0,.55)}
+.b3.pk .cv{outline:3px solid var(--bt);outline-offset:5px}
+.cv img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit;display:none}.cv.has img{display:block}.cv.has .ct,.cv.has .ca{visibility:hidden}
+.ct{font:1.45rem/1.05 'Instrument Serif',serif}.ca{font-size:.78rem;font-style:italic;opacity:.85}
+.plank{height:10px;background:linear-gradient(var(--line),transparent);border-top:2px solid var(--line)}
+/* stats */
+.stats{display:grid;grid-template-columns:auto 1fr;gap:3rem;align-items:center}
+.ring{position:relative;width:190px;height:190px}
+.ring svg{transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:9}
+.ring .bg{stroke:var(--line)}.ring .fg{stroke:var(--ol);stroke-linecap:round;transition:stroke-dashoffset 1.6s cubic-bezier(.2,.7,.2,1)}
+:root[data-theme="dark"] .ring .fg{stroke:var(--bt)}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font:3.2rem 'Instrument Serif',serif;font-weight:400}
+.ring small{position:absolute;bottom:2.6rem;left:0;right:0;text-align:center;color:var(--mut);font-size:.85rem}
+.row{display:grid;grid-template-columns:7.5rem 1fr 2rem;gap:.8rem;align-items:center;margin:.55rem 0}
+.row i{display:block;height:10px;border-radius:99px;background:var(--ol);width:0;transition:width 1.4s cubic-bezier(.2,.7,.2,1)}
+.facts{display:flex;gap:2.4rem;margin-top:1.6rem;flex-wrap:wrap}
+.facts b{display:block;font:2.4rem 'Instrument Serif',serif;font-weight:400;line-height:1}
+.facts span{color:var(--mut);font-size:.9rem}
+footer{background:#17120e;color:var(--bt);text-align:center;padding:5rem 1.5rem 4rem}
+footer h2{font-style:italic}
+footer a{color:inherit}
+/* note modal */
+.md{position:fixed;inset:0;z-index:70;display:none;place-items:center;padding:1rem;background:rgba(15,10,6,.72);backdrop-filter:blur(6px)}
+.md.on{display:grid}
+.pg{display:grid;grid-template-columns:minmax(0,230px) 1fr;gap:2rem;width:min(860px,100%);max-height:92vh;overflow:auto;background:var(--card);padding:2rem;border-radius:4px;transform-origin:left center;animation:turn .65s cubic-bezier(.2,.7,.2,1)}
+@keyframes turn{from{transform:perspective(1400px) rotateY(-75deg);opacity:0}}
+.pg .cv{box-shadow:0 18px 30px -10px rgba(0,0,0,.5);align-self:start}
+.nt{position:relative;padding-right:1.5rem}
+.nt h3{font-size:clamp(2rem,5vw,3rem);margin:.2rem 0}
+.x{position:absolute;right:-.4rem;top:-.6rem;background:none;border:0;font-size:2rem;line-height:1}
+.st{letter-spacing:.2em;color:var(--ol);margin:.3rem 0 1rem}
+:root[data-theme="dark"] .st{color:var(--bt)}
+.ty{min-height:7.5em;font-size:1.2rem}
+.tg span{display:inline-block;border:1px solid var(--line);border-radius:99px;padding:0 .8rem;margin:0 .4rem .4rem 0;font-size:.9rem;font-style:italic}
+.nv{display:flex;align-items:center;justify-content:space-between;margin-top:1rem;border-top:1px solid var(--line);padding-top:.8rem;color:var(--mut)}
+.nv button{background:none;border:0;font-size:1.6rem}
+/* intro */
+.ov{position:fixed;inset:0;z-index:100;background:var(--bt);color:#2a1f18;display:grid;place-items:center;text-align:center;animation:up 1s 1.7s cubic-bezier(.7,0,.2,1) forwards}
+.ov h1{font-size:clamp(3rem,12vw,7rem);font-style:italic}
+.ov p{margin:.6rem 0 0}
+@keyframes up{to{transform:translateY(-101%)}}
+@media(max-width:720px){.about,.stats{grid-template-columns:1fr}.pg{grid-template-columns:1fr}.pg .cv{max-width:150px}.bar .rd{margin-left:0}.mt{top:4.6rem}.ring{margin:0 auto}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
 </head>
 <body>
+<div class="ov" id="ov"><div><h1>Diệu Linh</h1><p>Opening the book...</p></div></div>
+<div class="rainfx"></div>
 
-    <!-- HEADER / NAVIGATION -->
-    <header>
-        <div class="navbar">
-            <a href="#" class="logo">
-                <i class="fa-solid fa-arrows-rotate"></i>
-                <span>StudentSwap</span>
-            </a>
+<header class="top">
+  <span class="nm">Diệu Linh</span>
+  <span id="clk"></span>
+  <span><button id="th">Light or dark</button><button id="rn">Play rain</button></span>
+</header>
 
-            <div class="search-bar">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" id="searchInput" placeholder="Tìm giáo trình, đồ điện tử, thời trang..." onkeyup="filterItems()">
-            </div>
+<section class="hero">
+  <div class="p1"></div>
+  <div class="p2"><div class="cup"><i></i></div></div>
+  <div class="mt l"><span id="dt"></span><span>Hanoi</span><span>a reading corner</span></div>
+  <div class="mt r"><span>with something warm</span><span>...and (more) books</span></div>
+  <h1>Read With Me.</h1>
+  <p class="lead">For economics students who secretly love literature, and anyone looking for their next read. Tap a cover to open my notes. <a href="#shelf">Go to the shelf</a></p>
+</section>
 
-            <div class="nav-actions">
-                <button class="btn btn-primary" onclick="openModal('postModal')">
-                    <i class="fa-solid fa-plus"></i> Đăng món đồ
-                </button>
-                <button class="btn btn-outline" onclick="alert('Tính năng trang cá nhân đang phát triển!')">
-                    <i class="fa-regular fa-user"></i> Tài khoản
-                </button>
-            </div>
-        </div>
-    </header>
+<section class="s about" id="about">
+  <div>
+    <h2>Hi, I am Linh.</h2>
+    <p>I study International Economics at Foreign Trade University, but I spent three years of high school on the Literature track, and the habit of reading slowly stuck. Outside class I dance Latin, sell on Amazon, and read whatever I can.</p>
+    <p>This page is my bookshelf: whenever a book makes me stop, I write it down here.</p>
+  </div>
+  <div class="pos">
+    <figure class="po" style="--r:-5deg"><div style="background:#5f6038">Lit</div><figcaption>Literature track, HNUE High School for Gifted Students</figcaption></figure>
+    <figure class="po" style="--r:3deg"><div style="background:#7a5238">Econ</div><figcaption>International Economics, third year at FTU</figcaption></figure>
+    <figure class="po" style="--r:-2deg"><div style="background:#9c3b34">Latin</div><figcaption>Gold Medal, Hanoi Open 2025</figcaption></figure>
+  </div>
+</section>
 
-    <!-- HERO SECTION -->
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Đổi Đồ Cũ - Lấy Đồ Cần - Tiết Kiệm Cho Sinh Viên</h1>
-            <p>Nền tảng trao đổi sách vở, đồ dùng học tập và vật dụng phòng trọ hoàn toàn miễn phí dành cho cộng đồng sinh viên.</p>
-            <button class="btn btn-primary" style="background: white; color: var(--primary-dark);" onclick="openModal('postModal')">
-                <i class="fa-solid fa-box-archive"></i> Đăng đồ đổi ngay
-            </button>
-        </div>
-    </section>
+<section class="s" id="shelf">
+  <h2>The Shelf</h2>
+  <p class="sub">Hover and the covers tilt toward you. Click a cover to turn to my notes.</p>
+  <div class="bar" id="bar">
+    <button data-f="all" aria-pressed="true">All</button>
+    <button data-f="vn" aria-pressed="false">Vietnam</button>
+    <button data-f="world" aria-pressed="false">World</button>
+    <button data-f="think" aria-pressed="false">Ideas</button>
+    <button class="rd" id="rd">Pick one for me</button>
+  </div>
+  <div class="sh" id="sh"></div>
+  <div class="plank"></div>
+</section>
 
-    <!-- MAIN CONTENT -->
-    <main class="container">
-        <!-- CATEGORIES FILTER -->
-        <div class="categories">
-            <button class="cat-btn active" onclick="filterCategory('all', this)">Tất cả</button>
-            <button class="cat-btn" onclick="filterCategory('Sách/Giáo trình', this)">📚 Sách & Giáo trình</button>
-            <button class="cat-btn" onclick="filterCategory('Đồ điện tử', this)">💻 Đồ điện tử</button>
-            <button class="cat-btn" onclick="filterCategory('Thời trang', this)">👕 Thời trang</button>
-            <button class="cat-btn" onclick="filterCategory('Đồ phòng trọ', this)">🏠 Đồ phòng trọ</button>
-        </div>
-
-        <div class="section-title">
-            <span>Món đồ mới nhất</span>
-            <small style="font-weight: normal; color: var(--text-muted); font-size: 0.9rem;" id="itemCount">Hiển thị 4 sản phẩm</small>
-        </div>
-
-        <!-- PRODUCT GRID -->
-        <div class="product-grid" id="productGrid">
-            <!-- Items generated by JS -->
-        </div>
-    </main>
-
-    <!-- MODAL: ĐĂNG MÓN ĐỒ MỚI -->
-    <div class="modal" id="postModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Đăng món đồ muốn đổi</h2>
-                <button class="close-btn" onclick="closeModal('postModal')">&times;</button>
-            </div>
-            <form id="addItemForm" onsubmit="handleAddNewItem(event)">
-                <div class="form-group">
-                    <label>Tên món đồ của bạn *</label>
-                    <input type="text" id="itemName" required placeholder="Ví dụ: Giáo trình Kinh tế Vĩ mô 2025">
-                </div>
-                <div class="form-group">
-                    <label>Danh mục *</label>
-                    <select id="itemCategory" required>
-                        <option value="Sách/Giáo trình">Sách/Giáo trình</option>
-                        <option value="Đồ điện tử">Đồ điện tử</option>
-                        <option value="Thời trang">Thời trang</option>
-                        <option value="Đồ phòng trọ">Đồ phòng trọ</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Tình trạng đồ *</label>
-                    <input type="text" id="itemCondition" required placeholder="Ví dụ: Mới 95%, không ghi chép">
-                </div>
-                <div class="form-group">
-                    <label>Món đồ bạn muốn đổi lại *</label>
-                    <input type="text" id="itemWant" required placeholder="Ví dụ: Đổi lấy ấm siêu tốc hoặc chuột máy tính">
-                </div>
-                <div class="form-group">
-                    <label>Link hình ảnh (URL)</label>
-                    <input type="url" id="itemImage" placeholder="Dán link ảnh (Hoặc để trống dùng ảnh mặc định)">
-                </div>
-                <div class="form-group">
-                    <label>Tên của bạn & Trường Đại học *</label>
-                    <input type="text" id="itemUser" required placeholder="Ví dụ: Diệu Linh - FTU">
-                </div>
-                <div class="form-group">
-                    <label>Thông tin liên hệ (Zalo/SĐT) *</label>
-                    <input type="text" id="itemContact" required placeholder="Ví dụ: Zalo 0912xxx888">
-                </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 10px;">
-                    Đăng tin ngay
-                </button>
-            </form>
-        </div>
+<section class="s" id="stats">
+  <h2>This year I have read</h2>
+  <div class="stats">
+    <div class="ring"><svg width="190" height="190" viewBox="0 0 120 120"><circle class="bg" cx="60" cy="60" r="52"/><circle class="fg" id="fg" cx="60" cy="60" r="52" stroke-dasharray="326.7" stroke-dashoffset="326.7"/></svg><b id="cn">0</b><small id="gl"></small></div>
+    <div>
+      <div id="bars"></div>
+      <div class="facts"><div><b id="av">0</b><span>average star rating</span></div><div><b id="co">0</b><span>countries on the shelf</span></div></div>
     </div>
+  </div>
+</section>
 
-    <!-- MODAL: GỬI ĐỀ NGHỊ ĐỔI -->
-    <div class="modal" id="swapModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Gửi đề nghị trao đổi</h2>
-                <button class="close-btn" onclick="closeModal('swapModal')">&times;</button>
-            </div>
-            <div id="swapModalBody">
-                <!-- Content generated dynamically -->
-            </div>
-        </div>
+<footer>
+  <h2>Thanks for stopping by.</h2>
+  <p>Any book I should read next? <a href="mailto:linhnguyendieu.work@gmail.com">Send me a title</a></p>
+</footer>
+
+<div class="md" id="md" role="dialog" aria-modal="true" aria-label="Book notes">
+  <div class="pg" id="pg">
+    <div id="mb"></div>
+    <div class="nt">
+      <button class="x" id="mx" aria-label="Close">×</button>
+      <i id="mg"></i>
+      <h3 id="mt"></h3>
+      <div id="ma"></div>
+      <div class="st" id="ms"></div>
+      <p class="ty" id="mn"></p>
+      <div class="tg" id="mtg"></div>
+      <div class="nv"><button id="pv" aria-label="Previous book">←</button><span id="mc"></span><button id="nx" aria-label="Next book">→</button></div>
     </div>
+  </div>
+</div>
 
-    <!-- FOOTER -->
-    <footer>
-        <p>© 2026 StudentSwap - Nền tảng kết nối & trao đổi đồ dùng sinh viên.</p>
-        <p style="margin-top: 5px; font-size: 0.8rem;">Thúc đẩy lối sống xanh, tái chế và chia sẻ trong môi trường học đường.</p>
-    </footer>
+<script>
+/* ===== EDIT HERE: your books =====
+ t: title, a: author, sa: optional author spelling for cover search, q: optional title for cover search,
+ u: optional cover image URL, g: group (vn|world|think), gl: genre, co: country,
+ r: stars, d: finished date, m: where/when you read, tags, n: note, c: fallback cover colors [bg1, bg2, text] */
+const GOAL=24;
+const BOOKS=[
+{t:"Norwegian Wood",a:"Haruki Murakami",g:"world",gl:"Japanese fiction",co:"JP",r:5,d:"Mar 2026",m:"rainy afternoon",tags:["loneliness","youth"],n:"The book I read slowest because I did not want it to end. Perfect for a rainy afternoon with something warm beside you. I finished it missing a place I have never been.",c:["#5d6b45","#2c3524","#f2d875"]},
+{t:"The Lover",a:"Marguerite Duras",g:"world",gl:"French fiction",co:"FR",r:4,d:"May 2026",m:"coffee shop",tags:["memory","heat"],n:"Thin, but it stays with you for a long time. The sentences feel like hot sun poured over a river. I reread the opening three times.",c:["#b9855a","#6d3f2a","#f6e9c8"]},
+{t:"The Sorrow of War",a:"Bảo Ninh",sa:"Bao Ninh",g:"vn",gl:"Vietnamese fiction",co:"VN",r:5,d:"Jun 2026",m:"late night",tags:["memory","loss"],n:"I could not read it in one go. Every chapter was a pause to breathe. It showed me that memory is also a place you can live in.",c:["#3b3a36","#16140f","#e8dfc4"]},
+{t:"Thinking, Fast and Slow",a:"Daniel Kahneman",g:"think",gl:"Economics and psychology",co:"US",r:4,d:"Jul 2026",m:"midterm week",tags:["decisions","bias"],n:"An economist's book that reads like a detective story about my own head. Since then I keep asking: is this a reflex, or is this thinking?",c:["#e0c15a","#b58f2c","#2a1f18"]},
+{t:"The Catcher in the Rye",a:"J. D. Salinger",g:"world",gl:"American fiction",co:"US",r:4,d:"Aug 2026",m:"on the bus",tags:["alienation","growing up"],n:"At any age I feel like I am standing somewhere different. Holden is irritating and heartbreaking in a way that feels very real.",c:["#9c3b34","#5a1f1c","#f2d875"]},
+{t:"The Old Man and the Sea",a:"Ernest Hemingway",g:"world",gl:"American fiction",co:"US",r:4,d:"Aug 2026",m:"weekend morning",tags:["patience","defeat"],n:"Short, quiet and patient. I love how it talks about failure without any self-pity.",c:["#3d6a77","#1b3a45","#f1ead2"]},
+{t:"A Room of One's Own",a:"Virginia Woolf",g:"think",gl:"Essay",co:"UK",r:5,d:"Sep 2026",m:"at my desk",tags:["freedom","writing"],n:"A reminder that freedom needs a room and some time that belong only to you. The book I underlined the most.",c:["#7d6b8e","#3f3350","#f2d875"]},
+{t:"The Little Prince",a:"Antoine de Saint-Exupéry",g:"world",gl:"French fiction",co:"FR",r:5,d:"Oct 2026",m:"before bed",tags:["growing up too fast","tenderness"],n:"The book I reopen whenever I feel I am growing up too fast. Reading it slowly, even out loud, makes it better.",c:["#2f4f7a","#162a47","#f2d875"]}
+];
 
-    <!-- INTERACTIVE JAVASCRIPT -->
-    <script>
-        // DỮ LIỆU MẪU BAN ĐẦU
-        let items = [
-            {
-                id: 1,
-                title: "Giáo trình Kinh tế Vĩ mô",
-                category: "Sách/Giáo trình",
-                condition: "Mới 90% (Chưa viết vẽ)",
-                want: "Đổi lấy Giáo trình Vi mô hoặc Sách IELTS",
-                user: "Diệu Linh",
-                school: "Foreign Trade University",
-                contact: "Zalo: 0987xxx321",
-                image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=500&q=80"
-            },
-            {
-                id: 2,
-                title: "Chuột không dây Logitech M330",
-                category: "Đồ điện tử",
-                condition: "Dùng tốt, bấm êm không tiếng động",
-                want: "Đổi lấy Bàn phím máy tính cũ",
-                user: "Minh Quân",
-                school: "Đại học Bách Khoa",
-                contact: "SĐT: 0912xxx999",
-                image: "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=500&q=80"
-            },
-            {
-                id: 3,
-                title: "Áo khoác Blazer dáng rộng",
-                category: "Thời trang",
-                condition: "Mới 98% (Mặc đúng 1 lần thuyết trình)",
-                want: "Đổi lấy Áo sơ mi trắng size M",
-                user: "Thu Hà",
-                school: "Đại học Quốc Gia",
-                contact: "Zalo: 0934xxx111",
-                image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=500&q=80"
-            },
-            {
-                id: 4,
-                title: "Ấm siêu tốc Sunhouse 1.8L",
-                category: "Đồ phòng trọ",
-                condition: "Đang hoạt động tốt, đun nước nhanh",
-                want: "Đổi lấy Quạt bàn nhỏ gọn",
-                user: "Tuấn Anh",
-                school: "Đại học Xây Dựng",
-                contact: "SĐT: 0978xxx444",
-                image: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f6?w=500&q=80"
-            }
-        ];
+/* Automatic Open Library Cover Fetcher */
+const paint=i=>{const b=BOOKS[i];if(!b.u)return;document.querySelectorAll('.cv[data-i="'+i+'"]').forEach(el=>{const im=el.querySelector('img');im.onload=()=>el.classList.add('has');im.src=b.u})};
+async function findCover(b,i){
+  try{
+    const q=new URLSearchParams({title:b.q||b.t,author:b.sa||b.a,limit:1,fields:'cover_i'});
+    const j=await (await fetch('https://openlibrary.org/search.json?'+q)).json();
+    const id=j.docs&&j.docs[0]&&j.docs[0].cover_i;
+    if(id){b.u='https://covers.openlibrary.org/b/id/'+id+'-L.jpg?default=false';paint(i)}
+  }catch(e){}
+}
+BOOKS.forEach((b,i)=>b.u?paint(i):findCover(b,i));
 
-        let currentCategory = 'all';
+const GN={vn:"Vietnam",world:"World",think:"Ideas"};
+const $=id=>document.getElementById(id), RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const cvr=(b,i)=>`<div class="cv" data-i="${i}" style="background:linear-gradient(135deg,${b.c[0]},${b.c[1]});color:${b.c[2]}"><span class="ct">${b.t}</span><span class="ca">${b.a}</span><img alt="" loading="lazy"></div>`;
 
-        // RENDER DANH SÁCH SẢN PHẨM
-        function renderItems(data) {
-            const grid = document.getElementById('productGrid');
-            const countText = document.getElementById('itemCount');
-            grid.innerHTML = '';
+/* intro, clock, date */
+setTimeout(()=>$('ov').remove(),RM?0:2800);
+const tick=()=>{$('clk').textContent='Hanoi, '+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',timeZone:'Asia/Ho_Chi_Minh'})};
+tick();setInterval(tick,30000);
+$('dt').textContent=new Date().toLocaleDateString('en-GB',{month:'long',year:'numeric'});
 
-            countText.textContent = `Hiển thị ${data.length} sản phẩm`;
+/* theme */
+$('th').onclick=()=>{const r=document.documentElement,d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;r.dataset.theme=d?'light':'dark'};
 
-            if (data.length === 0) {
-                grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px 0;">Không tìm thấy món đồ nào phù hợp.</p>`;
-                return;
-            }
+/* rain effect via Web Audio API */
+let ac,gn,rainOn=false;
+$('rn').onclick=()=>{
+  if(!ac){ac=new(window.AudioContext||window.webkitAudioContext)();const n=ac.sampleRate*2,b=ac.createBuffer(1,n,ac.sampleRate),d=b.getChannelData(0);
+    for(let i=0;i<n;i++)d[i]=Math.random()*2-1;
+    const s=ac.createBufferSource();s.buffer=b;s.loop=true;const f=ac.createBiquadFilter();f.type='lowpass';f.frequency.value=1500;
+    gn=ac.createGain();gn.gain.value=0;s.connect(f);f.connect(gn);gn.connect(ac.destination);s.start();}
+  rainOn=!rainOn;ac.resume();gn.gain.setTargetAtTime(rainOn?.14:0,ac.currentTime,.4);
+  document.body.classList.toggle('rain',rainOn);$('rn').textContent=rainOn?'Stop rain':'Play rain';
+};
 
-            data.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = `
-                    <img src="${item.image}" class="card-img" alt="${item.title}" onerror="this.src='https://images.unsplash.com/photo-1532012197267-da84d127e765?w=500&q=80'">
-                    <div class="card-body">
-                        <span class="card-tag">${item.category}</span>
-                        <h3 class="card-title">${item.title}</h3>
-                        <p class="card-condition"><i class="fa-solid fa-check-circle"></i> ${item.condition}</p>
-                        <div class="swap-for">
-                            <strong>Muốn đổi:</strong> ${item.want}
-                        </div>
-                        <div class="user-info">
-                            <i class="fa-solid fa-user-graduate"></i>
-                            <span>${item.user} • ${item.school}</span>
-                        </div>
-                        <button class="btn-swap" onclick="openSwapModal(${item.id})">
-                            <i class="fa-solid fa-handshake"></i> Đề nghị đổi
-                        </button>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
+/* shelf UI */
+const sh=$('sh');
+sh.innerHTML=BOOKS.map((b,i)=>`<button class="b3" data-i="${i}" aria-label="${b.t}, ${b.a}">${cvr(b,i)}</button>`).join('');
+const els=[...sh.children];
+els.forEach(e=>{
+  e.onclick=()=>openB(+e.dataset.i,e);
+  e.onpointermove=ev=>{if(ev.pointerType!=='mouse')return;const r=e.getBoundingClientRect();
+    e.style.setProperty('--ry',((ev.clientX-r.left)/r.width-.5)*18+'deg');e.style.setProperty('--rx',-((ev.clientY-r.top)/r.height-.5)*18+'deg')};
+  e.onpointerleave=()=>{e.style.setProperty('--ry','0deg');e.style.setProperty('--rx','0deg')};
+});
+$('bar').addEventListener('click',e=>{const f=e.target.dataset.f;if(!f)return;
+  [...$('bar').querySelectorAll('[data-f]')].forEach(b=>b.setAttribute('aria-pressed',b===e.target));
+  els.forEach((el,i)=>el.classList.toggle('off',f!=='all'&&BOOKS[i].g!==f));});
+$('rd').onclick=()=>{
+  els.forEach(e=>e.classList.remove('off'));
+  const n=BOOKS.length,f=Math.floor(Math.random()*n);let s=0,k=-1;
+  const run=()=>{if(k>=0)els[k].classList.remove('pk');k=s<12?Math.floor(Math.random()*n):f;els[k].classList.add('pk');s++;
+    if(s<=12)setTimeout(run,RM?0:60+s*18);else setTimeout(()=>{els[k].classList.remove('pk');openB(f,$('rd'))},RM?0:550)};
+  run();
+};
 
-        // LỌC THEO DANH MỤC
-        function filterCategory(cat, btn) {
-            currentCategory = cat;
-            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            applyFilters();
-        }
+/* note modal */
+let cur=0,opener,tm;
+const typeIt=t=>{clearInterval(tm);const el=$('mn');if(RM){el.textContent=t;return}el.textContent='';let i=0;tm=setInterval(()=>{el.textContent=t.slice(0,++i);if(i>=t.length)clearInterval(tm)},18)};
+function show(i){
+  cur=(i+BOOKS.length)%BOOKS.length;const b=BOOKS[cur];
+  $('mb').innerHTML=cvr(b,cur);paint(cur);$('mg').textContent=b.gl+', finished '+b.d;$('mt').textContent=b.t;$('ma').textContent=b.a;
+  $('ms').textContent='★'.repeat(b.r)+'☆'.repeat(5-b.r);$('ms').setAttribute('aria-label',b.r+' out of 5 stars');$('mtg').innerHTML=`<span>${b.m}</span>`+b.tags.map(t=>`<span>${t}</span>`).join('');
+  $('mc').textContent=(cur+1)+' of '+BOOKS.length;typeIt(b.n);
+  const pg=$('pg');pg.style.animation='none';pg.offsetHeight;pg.style.animation='';
+}
+function openB(i,from){opener=from;$('md').classList.add('on');show(i);$('mx').focus()}
+function closeB(){clearInterval(tm);$('md').classList.remove('on');opener&&opener.focus()}$('mx').onclick=closeB;$('pv').onclick=()=>show(cur-1);$('nx').onclick=()=>show(cur+1);
+$('md').onclick=e=>{if(e.target===$('md'))closeB()};
+addEventListener('keydown',e=>{if(!$('md').classList.contains('on'))return;
+  if(e.key==='Escape')closeB();if(e.key==='ArrowLeft')show(cur-1);if(e.key==='ArrowRight')show(cur+1)});
 
-        // TÌM KIẾM SẢN PHẨM
-        function filterItems() {
-            applyFilters();
-        }
-
-        // ÁP DỤNG CẢ LỌC VÀ TÌM KIẾM
-        function applyFilters() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = items.filter(item => {
-                const matchCat = (currentCategory === 'all') || (item.category === currentCategory);
-                const matchQuery = item.title.toLowerCase().includes(query) || item.want.toLowerCase().includes(query);
-                return matchCat && matchQuery;
-            });
-            renderItems(filtered);
-        }
-
-        // THÊM MÓN ĐỒ MỚI
-        function handleAddNewItem(e) {
-            e.preventDefault();
-            const name = document.getElementById('itemName').value;
-            const category = document.getElementById('itemCategory').value;
-            const condition = document.getElementById('itemCondition').value;
-            const want = document.getElementById('itemWant').value;
-            let image = document.getElementById('itemImage').value;
-            const userStr = document.getElementById('itemUser').value;
-            const contact = document.getElementById('itemContact').value;
-
-            if (!image.trim()) {
-                image = 'https://images.unsplash.com/photo-1532012197267-da84d127e765?w=500&q=80';
-            }
-
-            const userParts = userStr.split('-');
-            const userName = userParts[0] ? userParts[0].trim() : userStr;
-            const schoolName = userParts[1] ? userParts[1].trim() : 'Sinh viên';
-
-            const newItem = {
-                id: Date.now(),
-                title: name,
-                category: category,
-                condition: condition,
-                want: want,
-                user: userName,
-                school: schoolName,
-                contact: contact,
-                image: image
-            };
-
-            items.unshift(newItem);
-            applyFilters();
-            closeModal('postModal');
-            document.getElementById('addItemForm').reset();
-            alert('🎉 Đã đăng món đồ của bạn thành công!');
-        }
-
-        // MỞ MODAL GỬI ĐỀ NGHỊ ĐỔI
-        function openSwapModal(id) {
-            const item = items.find(i => i.id === id);
-            if (!item) return;
-
-            const modalBody = document.getElementById('swapModalBody');
-            modalBody.innerHTML = `
-                <p style="margin-bottom: 12px;">Bạn đang gửi đề nghị đổi đồ với <strong>${item.user}</strong> (${item.school}).</p>
-                <div style="background: #f1f5f9; padding: 12px; border-radius: 8px; margin-bottom: 15px;">
-                    <p><strong>Món đồ:</strong> ${item.title}</p>
-                    <p><strong>Nhu cầu đổi:</strong> ${item.want}</p>
-                </div>
-                <div class="form-group">
-                    <label>Món đồ bạn có thể trao đổi lại:</label>
-                    <input type="text" id="mySwapOffer" placeholder="Nhập tên món đồ bạn muốn mang ra đổi...">
-                </div>
-                <div class="form-group">
-                    <label>Lời nhắn tới chủ món đồ:</label>
-                    <textarea rows="3" placeholder="Chào bạn, mình có món đồ này muốn đổi..."></textarea>
-                </div>
-                <div style="background: #e0f2fe; color: #0369a1; padding: 10px; border-radius: 6px; font-size: 0.85rem; margin-bottom: 15px;">
-                    <i class="fa-solid fa-info-circle"></i> <strong>Liên hệ trực tiếp:</strong> ${item.contact}
-                </div>
-                <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="submitSwapOffer()">
-                    Gửi đề nghị ngay
-                </button>
-            `;
-            openModal('swapModal');
-        }
-
-        function submitSwapOffer() {
-            alert('✅ Đề nghị trao đổi của bạn đã được gửi thành công! Hãy chủ động liên hệ qua thông tin Zalo/SĐT của bạn ấy nhé.');
-            closeModal('swapModal');
-        }
-
-        // UTILS: MODAL CONTROLS
-        function openModal(id) {
-            document.getElementById(id).classList.add('active');
-        }
-
-        function closeModal(id) {
-            document.getElementById(id).classList.remove('active');
-        }
-
-        // KHỞI CHẠY LẦN ĐẦU
-        renderItems(items);
-    </script>
+/* stats: run when scrolled into view */
+const cnt=(el,to,dec)=>{if(RM){el.textContent=to.toFixed(dec);return}let t0;const f=ts=>{t0=t0||ts;const p=Math.min((ts-t0)/1400,1);el.textContent=(to*(1-Math.pow(1-p,3))).toFixed(dec);if(p<1)requestAnimationFrame(f)};requestAnimationFrame(f)};
+const gc={};BOOKS.forEach(b=>gc[b.g]=(gc[b.g]||0)+1);
+$('bars').innerHTML=Object.keys(GN).map(k=>`<div class="row"><span>${GN[k]}</span><i data-w="${(gc[k]||0)/BOOKS.length*100}%"></i><b>${gc[k]||0}</b></div>`).join('');
+$('gl').textContent='of '+GOAL+' books';
+new IntersectionObserver((en,ob)=>{if(!en[0].isIntersecting)return;ob.disconnect();
+  $('fg').style.strokeDashoffset=326.7*(1-Math.min(BOOKS.length/GOAL,1));
+  document.querySelectorAll('.row i').forEach(i=>i.style.width=i.dataset.w);
+  cnt($('cn'),BOOKS.length,0);
+  cnt($('av'),BOOKS.reduce((s,b)=>s+b.r,0)/BOOKS.length,1);
+  cnt($('co'),new Set(BOOKS.map(b=>b.co)).size,0); },{threshold:.4}).observe($('stats'));
+</script>
 </body>
 </html>
