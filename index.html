@@ -4,1202 +4,213 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Read With Me | Diệu Linh</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400;1,6..72,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&display=swap" rel="stylesheet">
 <style>
-/* Design System & Themes */
-:root {
-  --bg: #e7e4cc;
-  --bg-subtle: #dedabf;
-  --ink: #2a1f18;
-  --mut: #6b6150;
-  --card: #f3f0dd;
-  --line: rgba(42, 31, 24, 0.18);
-  --bt: #f2d875;
-  --ol: #5f6038;
-  --gold-shadow: rgba(242, 216, 117, 0.25);
-  box-sizing: border-box;
-  padding-top: env(safe-area-inset-top, 0px);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #17120e;
-    --bg-subtle: #211a14;
-    --ink: #ede6d0;
-    --mut: #a89e86;
-    --card: #231c16;
-    --line: rgba(237, 230, 208, 0.16);
-    --gold-shadow: rgba(0, 0, 0, 0.5);
-  }
-}
-
-:root[data-theme="dark"] {
-  --bg: #17120e;
-  --bg-subtle: #211a14;
-  --ink: #ede6d0;
-  --mut: #a89e86;
-  --card: #231c16;
-  --line: rgba(237, 230, 208, 0.16);
-  --gold-shadow: rgba(0, 0, 0, 0.5);
-}
-
-html {
-  scroll-padding-top: 4rem;
-  scroll-behavior: smooth;
-}
-
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--ink);
-  font-family: 'Newsreader', Georgia, serif;
-  font-size: 1.125rem;
-  line-height: 1.65;
-  transition: background 0.5s ease, color 0.5s ease;
-  overflow-x: hidden;
-}
-
-h1, h2, h3, h4 {
-  font-family: 'Instrument Serif', Georgia, serif;
-  font-weight: 400;
-  margin: 0;
-  line-height: 1.05;
-}
-
-button {
-  font: inherit;
-  color: inherit;
-  cursor: pointer;
-}
-
-:focus-visible {
-  outline: 2px solid var(--bt);
-  outline-offset: 3px;
-}
-
-/* Noise texture overlay */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-  pointer-events: none;
-  opacity: 0.18;
-  mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-/* Rain Effect Overlay */
-.rainfx {
-  position: fixed;
-  inset: 0;
-  z-index: 55;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 1s ease;
-  background: repeating-linear-gradient(105deg, transparent 0 10px, rgba(242, 216, 117, 0.12) 10px 11px);
-  background-size: 80px 80px;
-  animation: rain 0.45s linear infinite;
-}
-
-body.rain .rainfx { opacity: 1; }
-
-@keyframes rain {
-  to { background-position: -20px 80px; }
-}
-
-/* Header Navigation */
-.top {
-  position: fixed;
-  top: env(safe-area-inset-top, 0px);
-  left: 0;
-  right: 0;
-  z-index: 40;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem clamp(1rem, 4vw, 3rem);
-  color: var(--bt);
-  font-style: italic;
-  font-size: 1rem;
-  text-shadow: 0 1px 10px rgba(0,0,0,0.4);
-}
-
-.top button {
-  background: none;
-  border: 0;
-  border-bottom: 1px dashed currentColor;
-  padding: 0 0 1px;
-  margin-left: 1rem;
-  font-style: italic;
-  transition: opacity 0.2s;
-}
-
-.top button:hover { opacity: 0.8; }
-.top .nm { font-style: normal; font-family: 'Instrument Serif', serif; font-size: 1.5rem; letter-spacing: 0.02em; }
-
-/* Hero Section */
-.hero {
-  position: relative;
-  min-height: 100vh;
-  display: grid;
-  grid-template-rows: 1fr 1fr;
-  color: var(--bt);
-  overflow: hidden;
-}
-
-.p1 { background: radial-gradient(ellipse at 50% 30%, #c9ab76 0%, #8b7a4f 55%, #5e5a3a 100%); }
-.p2 { background: #17120e; position: relative; }
-
-.cup {
-  position: absolute;
-  left: 50%;
-  bottom: -18%;
-  width: min(78vw, 430px);
-  aspect-ratio: 1;
-  transform: translateX(-50%);
-  border-radius: 50%;
-  background: radial-gradient(circle at 40% 35%, #d7b48a, #7a5238 70%, #2c1c12);
-  box-shadow: 0 0 0 14px #1f1812, 0 0 0 16px #3a2e24, 0 25px 50px rgba(0,0,0,0.6);
-}
-
-.cup i {
-  position: absolute;
-  left: 24%;
-  top: 22%;
-  width: 50%;
-  height: 52%;
-  border-radius: 22%;
-  transform: rotate(-14deg);
-  background: linear-gradient(135deg, rgba(255,240,215,0.55), rgba(160,110,70,0.35));
-  box-shadow: inset 0 0 22px rgba(255,255,255,0.35);
-  animation: bob 7s ease-in-out infinite;
-}
-
-@keyframes bob { 50% { transform: rotate(-8deg) translateY(6px); } }
-
-.mt { position: absolute; top: 5.5rem; font-size: clamp(1rem, 2.2vw, 1.35rem); line-height: 1.3; z-index: 5; }
-.mt.l { left: clamp(1rem, 4vw, 3rem); }
-.mt.r { right: clamp(1rem, 4vw, 3rem); text-align: right; font-style: italic; }
-.mt span { display: block; opacity: 0.9; }
-
-.hero h1 {
-  position: absolute;
-  left: 0; right: 0; top: 50%;
-  transform: translateY(-58%);
-  text-align: center;
-  font-size: clamp(4.2rem, 16vw, 11.5rem);
-  letter-spacing: -0.02em;
-  z-index: 2;
-  pointer-events: none;
-}
-
-.lead {
-  position: absolute;
-  left: 50%;
-  bottom: 2.2rem;
-  transform: translateX(-50%);
-  width: min(92%, 660px);
-  text-align: center;
-  font-size: 1.15rem;
-  line-height: 1.5;
-  z-index: 2;
-  text-shadow: 0 2px 12px rgba(0,0,0,0.8);
-}
-
-.lead a { color: inherit; text-decoration: underline; text-underline-offset: 4px; }
-
-/* Global Section Layout */
-section.s {
-  max-width: 1080px;
-  margin: 0 auto;
-  padding: 6rem clamp(1.2rem, 5vw, 2.5rem);
-}
-
-h2 {
-  font-size: clamp(2.5rem, 6vw, 4.2rem);
-  margin-bottom: 0.8rem;
-}
-
-.sub {
-  color: var(--mut);
-  max-width: 36rem;
-  margin: 0 0 2.5rem;
-  font-size: 1.15rem;
-}
-
-/* About Section */
-.about {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3.5rem;
-  align-items: center;
-}
-
-.about p { max-width: 32rem; margin-bottom: 1.2rem; }
-
-.pos {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.2rem;
-  justify-content: center;
-  padding: 1rem;
-}
-
-.po {
-  margin: 0;
-  width: min(46%, 170px);
-  background: var(--card);
-  padding: 0.6rem 0.6rem 0.9rem;
-  box-shadow: 0 12px 28px rgba(0,0,0,0.18);
-  transform: rotate(var(--r));
-  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.po:hover {
-  transform: rotate(0deg) scale(1.08);
-  z-index: 3;
-}
-
-.po div {
-  aspect-ratio: 1;
-  display: grid;
-  place-items: center;
-  font: 2.2rem/1 'Instrument Serif', serif;
-  color: #f2d875;
-  text-align: center;
-  padding: 0.5rem;
-}
-
-.po figcaption {
-  font-size: 0.85rem;
-  line-height: 1.3;
-  margin-top: 0.6rem;
-  font-style: italic;
-  color: var(--ink);
-  text-align: center;
-}
-
-/* Shelf Filter & Grid */
-.bar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  align-items: center;
-  margin-bottom: 2.8rem;
-}
-
-.bar button {
-  border: 1px solid var(--line);
-  background: none;
-  border-radius: 99px;
-  padding: 0.35rem 1.2rem;
-  font-size: 0.95rem;
-  transition: all 0.25s ease;
-}
-
-.bar button[aria-pressed="true"] {
-  background: var(--ink);
-  color: var(--bg);
-  border-color: var(--ink);
-}
-
-.bar .rd {
-  margin-left: auto;
-  background: var(--bt);
-  color: #2a1f18;
-  border-color: var(--bt);
-  font-weight: 600;
-  box-shadow: 0 4px 12px var(--gold-shadow);
-}
-
-.bar .rd:hover { transform: translateY(-1px); }
-
-.sh {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
-  gap: 2.8rem 1.8rem;
-  padding-bottom: 1.5rem;
-}
-
-/* 3D Book Cover Card */
-.b3 {
-  perspective: 800px;
-  background: none;
-  border: 0;
-  padding: 0;
-  text-align: left;
-  transition: opacity 0.4s, filter 0.4s;
-}
-
-.b3:nth-child(even) { margin-top: 1.8rem; }
-.b3.off { opacity: 0.15; filter: grayscale(1); pointer-events: none; }
-
-.cv {
-  position: relative;
-  aspect-ratio: 2/3;
-  border-radius: 3px 9px 9px 3px;
-  padding: 1.1rem 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
-  transition: transform 0.25s ease-out, box-shadow 0.25s ease-out;
-  box-shadow: inset 7px 0 9px -4px rgba(0, 0, 0, 0.4), 0 14px 24px -8px rgba(0, 0, 0, 0.45);
-  overflow: hidden;
-}
-
-.b3:hover .cv, .b3:focus-visible .cv {
-  box-shadow: inset 7px 0 9px -4px rgba(0, 0, 0, 0.4), 0 28px 34px -10px rgba(0, 0, 0, 0.55);
-}
-
-.b3.pk .cv {
-  outline: 3px solid var(--bt);
-  outline-offset: 6px;
-  transform: scale(1.05);
-}
-
-.cv img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: inherit;
-  display: none;
-}
-
-.cv.has img { display: block; }
-.cv.has .ct, .cv.has .ca { visibility: hidden; }
-
-.ct { font: 1.5rem/1.05 'Instrument Serif', serif; }
-.ca { font-size: 0.8rem; font-style: italic; opacity: 0.88; }
-
-.plank {
-  height: 12px;
-  background: linear-gradient(var(--line), transparent);
-  border-top: 2px solid var(--line);
-  margin-top: 0.5rem;
-  border-radius: 2px;
-}
-
-/* Gallery of Thoughts (Art & Quotes) */
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 2rem;
-  margin-top: 2.5rem;
-}
-
-.q-card {
-  background: var(--card);
-  border: 1px solid var(--line);
-  padding: 1.8rem;
-  border-radius: 6px;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  box-shadow: 0 10px 24px rgba(0,0,0,0.06);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  overflow: hidden;
-}
-
-.q-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 32px rgba(0,0,0,0.12);
-}
-
-.q-card::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0; height: 5px;
-  background: var(--card-accent, var(--ol));
-}
-
-.q-quote {
-  font-family: 'Instrument Serif', Georgia, serif;
-  font-size: 1.45rem;
-  line-height: 1.35;
-  margin-bottom: 1.2rem;
-  font-style: italic;
-  color: var(--ink);
-}
-
-.q-author {
-  font-size: 0.85rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--mut);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.q-author::before {
-  content: "";
-  display: inline-block;
-  width: 16px;
-  height: 1px;
-  background: currentColor;
-}
-
-/* Stats Dashboard */
-.stats {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 3.5rem;
-  align-items: center;
-  background: var(--card);
-  padding: 2.5rem;
-  border-radius: 8px;
-  border: 1px solid var(--line);
-}
-
-.ring {
-  position: relative;
-  width: 200px;
-  height: 200px;
-}
-
-.ring svg { transform: rotate(-90deg); }
-.ring circle { fill: none; stroke-width: 9; }
-.ring .bg { stroke: var(--line); }
-.ring .fg {
-  stroke: var(--ol);
-  stroke-linecap: round;
-  transition: stroke-dashoffset 1.8s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-
-:root[data-theme="dark"] .ring .fg { stroke: var(--bt); }
-
-.ring b {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  font: 3.5rem/1 'Instrument Serif', serif;
-  font-weight: 400;
-  padding-bottom: 0.5rem;
-}
-
-.ring small {
-  position: absolute;
-  bottom: 2.6rem;
-  left: 0; right: 0;
-  text-align: center;
-  color: var(--mut);
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.row {
-  display: grid;
-  grid-template-columns: 8.5rem 1fr 2.5rem;
-  gap: 1rem;
-  align-items: center;
-  margin: 0.7rem 0;
-}
-
-.row i {
-  display: block;
-  height: 10px;
-  border-radius: 99px;
-  background: var(--ol);
-  width: 0;
-  transition: width 1.4s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-
-:root[data-theme="dark"] .row i { background: var(--bt); }
-
-.facts {
-  display: flex;
-  gap: 3rem;
-  margin-top: 2rem;
-  flex-wrap: wrap;
-  border-top: 1px solid var(--line);
-  padding-top: 1.5rem;
-}
-
-.facts b {
-  display: block;
-  font: 2.6rem/1 'Instrument Serif', serif;
-  font-weight: 400;
-}
-
-.facts span { color: var(--mut); font-size: 0.9rem; }
-
-/* Footer */
-footer {
-  background: #17120e;
-  color: var(--bt);
-  text-align: center;
-  padding: 6rem 1.5rem 5rem;
-  margin-top: 4rem;
-}
-
-footer h2 { font-style: italic; font-size: clamp(2.5rem, 6vw, 4.5rem); }
-footer p { color: #a89e86; margin-top: 1rem; }
-footer a { color: var(--bt); text-decoration: underline; text-underline-offset: 4px; }
-
-/* Book Note Modal */
-.md {
-  position: fixed;
-  inset: 0;
-  z-index: 70;
-  display: none;
-  place-items: center;
-  padding: 1.2rem;
-  background: rgba(15, 10, 6, 0.78);
-  backdrop-filter: blur(8px);
-}
-
-.md.on { display: grid; }
-
-.pg {
-  display: grid;
-  grid-template-columns: minmax(0, 240px) 1fr;
-  gap: 2.5rem;
-  width: min(880px, 100%);
-  max-height: 90vh;
-  overflow-y: auto;
-  background: var(--card);
-  padding: 2.5rem;
-  border-radius: 6px;
-  box-shadow: 0 25px 60px rgba(0,0,0,0.5);
-  transform-origin: left center;
-  animation: turn 0.65s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-
-@keyframes turn {
-  from { transform: perspective(1400px) rotateY(-70deg); opacity: 0; }
-}
-
-.pg .cv { box-shadow: 0 18px 32px -10px rgba(0,0,0,0.5); align-self: start; }
-
-.nt { position: relative; padding-right: 1.5rem; }
-.nt h3 { font-size: clamp(2.2rem, 5vw, 3.2rem); margin: 0.2rem 0; line-height: 1; }
-
-.x {
-  position: absolute;
-  right: -0.5rem;
-  top: -0.6rem;
-  background: none;
-  border: 0;
-  font-size: 2.2rem;
-  line-height: 1;
-  color: var(--mut);
-  transition: color 0.2s;
-}
-
-.x:hover { color: var(--ink); }
-
-.st { letter-spacing: 0.2em; color: var(--ol); margin: 0.4rem 0 1.2rem; font-size: 1.2rem; }
-:root[data-theme="dark"] .st { color: var(--bt); }
-
-.ty { min-height: 7.5em; font-size: 1.15rem; line-height: 1.6; color: var(--ink); }
-
-.tg span {
-  display: inline-block;
-  border: 1px solid var(--line);
-  border-radius: 99px;
-  padding: 0.15rem 0.85rem;
-  margin: 0 0.4rem 0.4rem 0;
-  font-size: 0.85rem;
-  font-style: italic;
-  color: var(--mut);
-}
-
-.nv {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 1.5rem;
-  border-top: 1px solid var(--line);
-  padding-top: 1rem;
-  color: var(--mut);
-}
-
-.nv button { background: none; border: 0; font-size: 1.8rem; padding: 0 0.5rem; }
-.nv button:hover { color: var(--ink); }
-
-/* Intro Curtain Screen */
-.ov {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  background: var(--bt);
-  color: #2a1f18;
-  display: grid;
-  place-items: center;
-  text-align: center;
-  animation: up 1s 1.8s cubic-bezier(0.7, 0, 0.2, 1) forwards;
-}
-
-.ov h1 { font-size: clamp(3.2rem, 12vw, 7.5rem); font-style: italic; }
-.ov p { margin: 0.6rem 0 0; font-size: 1.1rem; letter-spacing: 0.05em; }
-
-@keyframes up { to { transform: translateY(-101%); } }
-
-@media (max-width: 768px) {
-  .about, .stats { grid-template-columns: 1fr; }
-  .pg { grid-template-columns: 1fr; }
-  .pg .cv { max-width: 150px; }
-  .bar .rd { margin-left: 0; width: 100%; text-align: center; }
-  .mt { top: 4.8rem; }
-  .ring { margin: 0 auto; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *, ::before, ::after { animation: none !important; transition: none !important; }
-  html { scroll-behavior: auto; }
-}
+:root{--bg:#e7e4cc;--ink:#2a1f18;--mut:#6b6150;--card:#f3f0dd;--line:rgba(42,31,24,.22);--bt:#f2d875;--ol:#5f6038;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17120e;--ink:#ede6d0;--mut:#a89e86;--card:#231c16;--line:rgba(237,230,208,.22)}}
+:root[data-theme="dark"]{--bg:#17120e;--ink:#ede6d0;--mut:#a89e86;--card:#231c16;--line:rgba(237,230,208,.22)}
+html{scroll-padding-top:4rem;scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:1.1rem/1.65 'Newsreader',Georgia,serif;transition:background .5s,color .5s}
+h1,h2,h3{font-family:'Instrument Serif',Georgia,serif;font-weight:400;margin:0;line-height:1}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--bt);outline-offset:3px}
+body::before{content:"";position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.18;mix-blend-mode:multiply;
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+.top{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:40;display:flex;justify-content:space-between;align-items:center;padding:.9rem clamp(1rem,4vw,2.5rem);color:var(--bt);font-style:italic;font-size:1rem;text-shadow:0 1px 8px rgba(0,0,0,.35)}
+.top button{background:none;border:0;border-bottom:1px solid currentColor;padding:0 0 1px;margin-left:1.2rem;font-style:italic}
+.top .nm{font-style:normal;font-family:'Instrument Serif',serif;font-size:1.4rem}
+
+/* Admin Edit Toolbar floating above Netlify badge */
+.admin-bar{position:fixed;bottom:4rem;right:1.5rem;z-index:90;display:flex;gap:.6rem;background:var(--card);padding:.6rem 1rem;border-radius:99px;box-shadow:0 10px 30px rgba(0,0,0,.3);border:1px solid var(--line)}
+.admin-bar button{background:var(--ink);color:var(--bg);border:none;padding:.3rem .9rem;border-radius:99px;font-size:.85rem}
+.admin-bar button.active{background:#27ae60;color:#fff}
+.edit-active [contenteditable="true"]{outline:2px dashed var(--bt);padding:2px;border-radius:4px;background:rgba(242,216,117,.1)}
+
+/* Hero & Layout */
+.hero{position:relative;min-height:100vh;display:grid;grid-template-rows:1fr 1fr;color:var(--bt);overflow:hidden}
+.p1{background:radial-gradient(ellipse at 50% 30%,#c9ab76 0,#8b7a4f 55%,#5e5a3a 100%)}
+.p2{background:#17120e;position:relative}
+.cup{position:absolute;left:50%;bottom:-18%;width:min(78vw,430px);aspect-ratio:1;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle at 40% 35%,#d7b48a,#7a5238 70%,#2c1c12);box-shadow:0 0 0 14px #1f1812,0 0 0 16px #3a2e24}
+.mt{position:absolute;top:5.2rem;font-size:clamp(1.05rem,2.6vw,1.5rem);line-height:1.2}
+.mt.l{left:clamp(1rem,4vw,2.5rem)}.mt.r{right:clamp(1rem,4vw,2.5rem);text-align:right;font-style:italic}
+.hero h1{position:absolute;left:0;right:0;top:50%;transform:translateY(-58%);text-align:center;font-size:clamp(4.2rem,17vw,12rem);letter-spacing:-.02em;z-index:2}
+.lead{position:absolute;left:50%;bottom:2.2rem;transform:translateX(-50%);width:min(92%,640px);text-align:center;font-size:1.15rem;line-height:1.5;z-index:2}
+
+section.s{max-width:1080px;margin:0 auto;padding:5.5rem clamp(1.2rem,5vw,2.5rem)}
+h2{font-size:clamp(2.4rem,6vw,4rem);margin-bottom:1rem}
+.sub{color:var(--mut);max-width:34rem;margin:0 0 2.2rem}
+.sh{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:2.4rem 1.6rem}
+.b3{perspective:700px;background:none;border:0;padding:0;text-align:left}
+.cv{position:relative;aspect-ratio:2/3;border-radius:3px 9px 9px 3px;padding:1rem .9rem;display:flex;flex-direction:column;justify-content:space-between;box-shadow:inset 7px 0 8px -4px rgba(0,0,0,.4),0 14px 22px -8px rgba(0,0,0,.45)}
+.cv img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit;display:none}
+.cv.has img{display:block}.cv.has .ct,.cv.has .ca{visibility:hidden}
+.ct{font:1.45rem/1.05 'Instrument Serif',serif}.ca{font-size:.78rem;font-style:italic}
+
+.md{position:fixed;inset:0;z-index:70;display:none;place-items:center;padding:1rem;background:rgba(15,10,6,.72);backdrop-filter:blur(6px)}
+.md.on{display:grid}
+.pg{display:grid;grid-template-columns:minmax(0,230px) 1fr;gap:2rem;width:min(860px,100%);background:var(--card);padding:2rem;border-radius:4px}
+.nt{position:relative;padding-right:1.5rem}
+.x{position:absolute;right:-.4rem;top:-.6rem;background:none;border:0;font-size:2rem}
+.img-upload-btn{margin-top:.5rem;font-size:.8rem;display:none}
+.edit-active .img-upload-btn{display:block}
 </style>
 </head>
 <body>
 
-<div class="ov" id="ov">
-  <div>
-    <h1>Diệu Linh</h1>
-    <p>Opening the book journal...</p>
-  </div>
-</div>
-
-<div class="rainfx" aria-hidden="true"></div>
-
 <header class="top">
   <span class="nm">Diệu Linh</span>
-  <span id="clk">Hanoi</span>
+  <span id="clk"></span>
   <span>
     <button id="th">Theme</button>
-    <button id="rn">Play rain</button>
+    <button id="toggleEditTop">Edit</button>
   </span>
 </header>
 
 <section class="hero">
   <div class="p1"></div>
-  <div class="p2"><div class="cup"><i></i></div></div>
-  <div class="mt l"><span id="dt">October 2026</span><span>Hanoi</span><span>a quiet reading corner</span></div>
+  <div class="p2"><div class="cup"></div></div>
+  <div class="mt l"><span id="dt"></span><span>Hanoi</span></div>
   <div class="mt r"><span>with warm tea</span><span>...and lingering books</span></div>
   <h1>Read With Me.</h1>
-  <p class="lead">An economics student's bookshelf for quiet afternoons, slow reading, and lingering notes. Tap a cover to explore my notes. <a href="#shelf">Browse the shelf</a></p>
-</section>
-
-<section class="s about" id="about">
-  <div>
-    <h2>Hi, I am Linh.</h2>
-    <p>I study International Economics at Foreign Trade University in Hanoi, but I spent three years of high school on the Literature track. The habit of slow, attentive reading stayed with me.</p>
-    <p>Outside of class and midterms, I dance Latin competitively, explore e-commerce projects on Amazon, and collect books that make me stop and think. This journal is where I write down what stays after the last page.</p>
-  </div>
-  <div class="pos">
-    <figure class="po" style="--r:-5deg">
-      <div style="background:#5f6038">Lit</div>
-      <figcaption>Lit Track / HNUE High School for Gifted Students</figcaption>
-    </figure>
-    <figure class="po" style="--r:3deg">
-      <div style="background:#7a5238">Econ</div>
-      <figcaption>Econ Major / FTU Senior</figcaption>
-    </figure>
-    <figure class="po" style="--r:-2deg">
-      <div style="background:#9c3b34">Latin</div>
-      <figcaption>Latin Dance / Hanoi Open 2025 Medalist</figcaption>
-    </figure>
-  </div>
+  <p class="lead">An economics student's bookshelf for quiet afternoons, slow reading, and lingering notes.<br>Tap a cover to explore my notes. <a href="#shelf" style="color:inherit">Browse the shelf</a></p>
 </section>
 
 <section class="s" id="shelf">
-  <h2>The Shelf</h2>
-  <p class="sub">Hover over any book to see its 3D tilt. Click a cover to open my personal reading notes.</p>
-  
-  <div class="bar" id="bar">
-    <button data-f="all" aria-pressed="true">All</button>
-    <button data-f="vn" aria-pressed="false">Vietnamese Literature</button>
-    <button data-f="world" aria-pressed="false">World Fiction</button>
-    <button data-f="think" aria-pressed="false">Ideas & Essays</button>
-    <button class="rd" id="rd">Pick a random read</button>
-  </div>
-
+  <h2>The Bookshelf</h2>
+  <p class="sub">Click any book to view or edit notes.</p>
   <div class="sh" id="sh"></div>
-  <div class="plank"></div>
 </section>
 
-<section class="s" id="gallery">
-  <h2>Gallery of Thoughts</h2>
-  <p class="sub">Passages underlined on quiet afternoons.</p>
-  
-  <div class="gallery-grid">
-    <article class="q-card" style="--card-accent: #5d6b45">
-      <p class="q-quote">“If you only read the books that everyone else is reading, you can only think what everyone else is thinking.”</p>
-      <span class="q-author">Haruki Murakami</span>
-    </article>
-    
-    <article class="q-card" style="--card-accent: #7d6b8e">
-      <p class="q-quote">“Lock up your libraries if you like; but there is no gate, no lock, no bolt that you can set upon the freedom of my mind.”</p>
-      <span class="q-author">Virginia Woolf</span>
-    </article>
-    
-    <article class="q-card" style="--card-accent: #b9855a">
-      <p class="q-quote">“Very early in my life it was too late. It was already too late when I was eighteen.”</p>
-      <span class="q-author">Marguerite Duras</span>
-    </article>
-    
-    <article class="q-card" style="--card-accent: #3b3a36">
-      <p class="q-quote">“Memory is a sanctuary where time loses its power, and lost youth returns in quiet waves.”</p>
-      <span class="q-author">Bảo Ninh</span>
-    </article>
-  </div>
-</section>
+<!-- Admin Control Panel Floating -->
+<div class="admin-bar">
+  <button id="toggleEdit">Edit Mode: OFF</button>
+  <button id="addBook" style="display:none;">+ Add Book</button>
+  <button id="exportJson" style="display:none;">Download books.json</button>
+</div>
 
-<section class="s" id="stats">
-  <h2>Reading Progress</h2>
-  <p class="sub">Tracking what I've finished so far this year.</p>
-  
-  <div class="stats">
-    <div class="ring">
-      <svg width="200" height="200" viewBox="0 0 120 120">
-        <circle class="bg" cx="60" cy="60" r="52"/>
-        <circle class="fg" id="fg" cx="60" cy="60" r="52" stroke-dasharray="326.7" stroke-dashoffset="326.7"/>
-      </svg>
-      <b id="cn">0</b>
-      <small id="gl">of 24 books</small>
-    </div>
+<!-- Modal Notes -->
+<div class="md" id="md">
+  <div class="pg">
     <div>
-      <div id="bars"></div>
-      <div class="facts">
-        <div><b id="av">0.0</b><span>average star rating</span></div>
-        <div><b id="co">0</b><span>countries on shelf</span></div>
-      </div>
+      <div id="mb"></div>
+      <input type="file" id="coverInput" class="img-upload-btn" accept="image/*">
     </div>
-  </div>
-</section>
-
-<footer>
-  <h2>Thanks for stopping by.</h2>
-  <p>Have a recommendation for my next read? <a href="mailto:linhnguyendieu.work@gmail.com">Send me a title</a></p>
-  <p style="font-size:0.85rem; margin-top:2rem; opacity:0.6">Designed with analog warmth • Hanoi, Vietnam</p>
-</footer>
-
-<!-- Interactive Note Modal -->
-<div class="md" id="md" role="dialog" aria-modal="true" aria-label="Book journal entry">
-  <div class="pg" id="pg">
-    <div id="mb"></div>
     <div class="nt">
-      <button class="x" id="mx" aria-label="Close modal">×</button>
-      <i id="mg" style="font-style:italic; font-size:0.9rem; color:var(--mut); display:block; margin-bottom:0.2rem"></i>
-      <h3 id="mt"></h3>
-      <div id="ma" style="font-style:italic; font-size:1.1rem; margin-bottom:0.4rem"></div>
-      <div class="st" id="ms"></div>
-      <p class="ty" id="mn"></p>
-      <div class="tg" id="mtg"></div>
-      <div class="nv">
-        <button id="pv" aria-label="Previous book">←</button>
-        <span id="mc"></span>
-        <button id="nx" aria-label="Next book">→</button>
-      </div>
+      <button class="x" id="mx">×</button>
+      <h3 id="mt" class="editable"></h3>
+      <div id="ma" class="editable"></div>
+      <p id="mn" class="editable" style="margin-top:1rem;"></p>
     </div>
   </div>
 </div>
 
 <script>
-/* ===== BOOK JOURNAL DATA STORE ===== */
-const GOAL = 24;
-const BOOKS = [
-  {
-    t: "Norwegian Wood",
-    a: "Haruki Murakami",
-    g: "world",
-    gl: "Japanese Fiction",
-    co: "JP",
-    r: 5,
-    d: "Mar 2026",
-    m: "Rainy Afternoon in Hanoi",
-    tags: ["loneliness", "youth", "nostalgia"],
-    n: "The book I read slowest because I did not want it to end. Perfect for a quiet afternoon with warm tea beside you. I finished it missing a place I have never actually been.",
-    c: ["#5d6b45", "#2c3524", "#f2d875"]
-  },
-  {
-    t: "The Lover",
-    a: "Marguerite Duras",
-    g: "world",
-    gl: "French Fiction",
-    co: "FR",
-    r: 4,
-    d: "May 2026",
-    m: "Old Quarter Cafe",
-    tags: ["memory", "heat", "saigon"],
-    n: "Thin, but it lingers with you for months. Duras's prose feels like hot afternoon sun poured over the Mekong River. I reread the opening sentence three times in a row.",
-    c: ["#b9855a", "#6d3f2a", "#f6e9c8"]
-  },
-  {
-    t: "The Sorrow of War",
-    a: "Bảo Ninh",
-    sa: "Bao Ninh",
-    g: "vn",
-    gl: "Vietnamese Literature",
-    co: "VN",
-    r: 5,
-    d: "Jun 2026",
-    m: "Late Night at Home",
-    tags: ["memory", "loss", "hanoi"],
-    n: "I could not read this in one sitting. Every chapter demanded a pause to breathe. It proved to me that memory is not just time passed, but a physical place you inhabit.",
-    c: ["#3b3a36", "#16140f", "#e8dfc4"]
-  },
-  {
-    t: "Thinking, Fast and Slow",
-    a: "Daniel Kahneman",
-    g: "think",
-    gl: "Behavioral Economics",
-    co: "US",
-    r: 4,
-    d: "Jul 2026",
-    m: "Midterm Study Week",
-    tags: ["decisions", "cognitive bias"],
-    n: "An economics book that reads like a detective story uncovering the quirks of your own mind. Now I constantly stop to ask myself: is this System 1 speaking, or System 2?",
-    c: ["#e0c15a", "#b58f2c", "#2a1f18"]
-  },
-  {
-    t: "The Catcher in the Rye",
-    a: "J. D. Salinger",
-    g: "world",
-    gl: "American Classic",
-    co: "US",
-    r: 4,
-    d: "Aug 2026",
-    m: "Commute Bus",
-    tags: ["growing up", "alienation"],
-    n: "Reading Salinger at twenty feels very different from reading him at sixteen. Holden is equal parts irritating and heartbreaking in his desperate honesty.",
-    c: ["#9c3b34", "#5a1f1c", "#f2d875"]
-  },
-  {
-    t: "The Old Man and the Sea",
-    a: "Ernest Hemingway",
-    g: "world",
-    gl: "American Fiction",
-    co: "US",
-    r: 4,
-    d: "Aug 2026",
-    m: "Sunday Morning",
-    tags: ["patience", "resilience"],
-    n: "Short, quiet, and patient. Hemingway shows how a man can be destroyed but not defeated. A masterclass in narrative economy.",
-    c: ["#3d6a77", "#1b3a45", "#f1ead2"]
-  },
-  {
-    t: "A Room of One's Own",
-    a: "Virginia Woolf",
-    g: "think",
-    gl: "Essay & Feminism",
-    co: "UK",
-    r: 5,
-    d: "Sep 2026",
-    m: "Library Desk",
-    tags: ["freedom", "creativity"],
-    n: "A eternal reminder that creative independence requires five hundred a year and a room with a lock on the door. The single most underlined book on my shelf.",
-    c: ["#7d6b8e", "#3f3350", "#f2d875"]
-  },
-  {
-    t: "The Little Prince",
-    a: "Antoine de Saint-Exupéry",
-    g: "world",
-    gl: "French Fable",
-    co: "FR",
-    r: 5,
-    d: "Oct 2026",
-    m: "Bedtime Reading",
-    tags: ["tenderness", "wonder"],
-    n: "The book I reopen whenever the world feels overly complicated. Reading it out loud reminds you that 'what is essential is invisible to the eye.'",
-    c: ["#2f4f7a", "#162a47", "#f2d875"]
-  }
-];
-
-const CATEGORIES = {
-  vn: "Vietnamese Literature",
-  world: "World Fiction",
-  think: "Ideas & Essays"
-};
+let BOOKS = [];
+let editMode = false;
+let curIndex = 0;
 
 const $ = id => document.getElementById(id);
-const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* ===== AUTOMATIC OPEN LIBRARY COVER FETCH ===== */
-const applyCover = i => {
-  const b = BOOKS[i];
-  if (!b.u) return;
-  document.querySelectorAll(`.cv[data-i="${i}"]`).forEach(el => {
-    const img = el.querySelector('img');
-    img.onload = () => el.classList.add('has');
-    img.src = b.u;
-  });
-};
-
-async function fetchOpenLibraryCover(b, i) {
+async function loadBooks() {
   try {
-    const q = new URLSearchParams({ title: b.q || b.t, author: b.sa || b.a, limit: 1, fields: 'cover_i' });
-    const res = await fetch(`https://openlibrary.org/search.json?${q}`);
-    const data = await res.json();
-    const coverId = data.docs && data.docs[0] && data.docs[0].cover_i;
-    if (coverId) {
-      b.u = `https://covers.openlibrary.org/b/id/${coverId}-L.jpg?default=false`;
-      applyCover(i);
-    }
-  } catch (e) {
-    /* Fallback to CSS custom gradient cover */
+    const res = await fetch('books.json');
+    BOOKS = await res.json();
+  } catch(e) {
+    console.warn("Could not load books.json, using default array.");
+    BOOKS = [
+      { t: "Norwegian Wood", a: "Haruki Murakami", n: "The book I read slowest because I did not want it to end.", c: ["#5d6b45", "#2c3524", "#f2d875"], u: "" },
+      { t: "The Lover", a: "Marguerite Duras", n: "Thin, but it stays with you for a long time.", c: ["#b9855a", "#6d3f2a", "#f6e9c8"], u: "" }
+    ];
   }
+  renderShelf();
 }
 
-BOOKS.forEach((b, i) => b.u ? applyCover(i) : fetchOpenLibraryCover(b, i));
-
-/* ===== COVER SVG GENERATOR ===== */
-const createCoverHTML = (b, i) => `
-  <div class="cv" data-i="${i}" style="background: linear-gradient(135deg, ${b.c[0]}, ${b.c[1]}); color: ${b.c[2]}">
-    <span class="ct">${b.t}</span>
-    <span class="ca">${b.a}</span>
-    <img alt="Cover of ${b.t}" loading="lazy">
-  </div>
-`;
-
-/* ===== INTRO, CLOCK, & METADATA ===== */
-setTimeout(() => $('ov')?.remove(), RM ? 0 : 2800);
-
-const updateClock = () => {
-  $('clk').textContent = 'Hanoi, ' + new Date().toLocaleTimeString('en-GB', {
-    hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Ho_Chi_Minh'
-  });
-};
-updateClock();
-setInterval(updateClock, 30000);
-
-$('dt').textContent = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-
-/* ===== THEME TOGGLE ===== */
-$('th').onclick = () => {
-  const root = document.documentElement;
-  const isDark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
-  root.dataset.theme = isDark ? 'light' : 'dark';
-};
-
-/* ===== AMBIENT RAIN SOUND (WEB AUDIO API) ===== */
-let audioCtx, rainGain, isRainPlaying = false;
-
-$('rn').onclick = () => {
-  if (!audioCtx) {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const bufferSize = audioCtx.sampleRate * 2;
-    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-    const data = buffer.getChannelData(0);
-    
-    // Generate filtered brown/white noise for natural rain
-    for (let i = 0; i < bufferSize; i++) {
-      data[i] = Math.random() * 2 - 1;
-    }
-
-    const noise = audioCtx.createBufferSource();
-    noise.buffer = buffer;
-    noise.loop = true;
-
-    const filter = audioCtx.createBiquadFilter();
-    filter.type = 'lowpass';
-    filter.frequency.value = 1200;
-
-    rainGain = audioCtx.createGain();
-    rainGain.gain.value = 0;
-
-    noise.connect(filter);
-    filter.connect(rainGain);
-    rainGain.connect(audioCtx.destination);
-    noise.start();
-  }
-
-  isRainPlaying = !isRainPlaying;
-  audioCtx.resume();
-  rainGain.gain.setTargetAtTime(isRainPlaying ? 0.15 : 0, audioCtx.currentTime, 0.4);
-  
-  document.body.classList.toggle('rain', isRainPlaying);
-  $('rn').textContent = isRainPlaying ? 'Stop rain' : 'Play rain';
-};
-
-/* ===== SHELF & 3D TILT EFFECT ===== */
-const shelfEl = $('sh');
-shelfEl.innerHTML = BOOKS.map((b, i) => `
-  <button class="b3" data-i="${i}" aria-label="${b.t} by ${b.a}">
-    ${createCoverHTML(b, i)}
-  </button>
-`).join('');
-
-const bookButtons = [...shelfEl.children];
-
-bookButtons.forEach(btn => {
-  btn.onclick = () => openModal(+btn.dataset.i, btn);
-  btn.onpointermove = ev => {
-    if (ev.pointerType !== 'mouse') return;
-    const r = btn.getBoundingClientRect();
-    btn.style.setProperty('--ry', ((ev.clientX - r.left) / r.width - 0.5) * 20 + 'deg');
-    btn.style.setProperty('--rx', -((ev.clientY - r.top) / r.height - 0.5) * 20 + 'deg');
-  };
-  btn.onpointerleave = () => {
-    btn.style.setProperty('--ry', '0deg');
-    btn.style.setProperty('--rx', '0deg');
-  };
-});
-
-/* Shelf Filtering */
-$('bar').addEventListener('click', e => {
-  const filter = e.target.dataset.f;
-  if (!filter) return;
-  
-  [...$('bar').querySelectorAll('[data-f]')].forEach(b => {
-    b.setAttribute('aria-pressed', b === e.target);
-  });
-
-  bookButtons.forEach((btn, i) => {
-    btn.classList.toggle('off', filter !== 'all' && BOOKS[i].g !== filter);
-  });
-});
-
-/* Book Roulette ("Pick for me") */
-$('rd').onclick = () => {
-  bookButtons.forEach(b => b.classList.remove('off'));
-  const total = BOOKS.length;
-  const winnerIndex = Math.floor(Math.random() * total);
-  let step = 0, currentHighlight = -1;
-
-  const runRoulette = () => {
-    if (currentHighlight >= 0) bookButtons[currentHighlight].classList.remove('pk');
-    currentHighlight = step < 14 ? Math.floor(Math.random() * total) : winnerIndex;
-    bookButtons[currentHighlight].classList.add('pk');
-    step++;
-
-    if (step <= 14) {
-      setTimeout(runRoulette, RM ? 0 : 50 + step * 16);
-    } else {
-      setTimeout(() => {
-        bookButtons[currentHighlight].classList.remove('pk');
-        openModal(winnerIndex, $('rd'));
-      }, RM ? 0 : 500);
-    }
-  };
-  runRoulette();
-};
-
-/* ===== INTERACTIVE READING NOTE MODAL ===== */
-let currentIndex = 0, activeOpener = null, typeTimer = null;
-
-const animateTypewriter = text => {
-  clearInterval(typeTimer);
-  const noteEl = $('mn');
-  if (RM) {
-    noteEl.textContent = text;
-    return;
-  }
-  noteEl.textContent = '';
-  let idx = 0;
-  typeTimer = setInterval(() => {
-    noteEl.textContent = text.slice(0, ++idx);
-    if (idx >= text.length) clearInterval(typeTimer);
-  }, 18);
-};
-
-function renderModalEntry(i) {
-  currentIndex = (i + BOOKS.length) % BOOKS.length;
-  const b = BOOKS[currentIndex];
-
-  $('mb').innerHTML = createCoverHTML(b, currentIndex);
-  applyCover(currentIndex);
-
-  $('mg').textContent = `${b.gl} • Finished ${b.d}`;
-  $('mt').textContent = b.t;
-  $('ma').textContent = `by ${b.a}`;
-  $('ms').textContent = '★'.repeat(b.r) + '☆'.repeat(5 - b.r);
-  $('ms').setAttribute('aria-label', `${b.r} out of 5 stars`);
-
-  $('mtg').innerHTML = `<span>${b.m}</span>` + b.tags.map(t => `<span>#${t}</span>`).join('');
-  $('mc').textContent = `${currentIndex + 1} of ${BOOKS.length}`;
-
-  animateTypewriter(b.n);
-
-  const page = $('pg');
-  page.style.animation = 'none';
-  page.offsetHeight; // Force reflow
-  page.style.animation = '';
+function cvr(b, i) {
+  const bg = b.c ? `background:linear-gradient(135deg,${b.c[0]},${b.c[1]});color:${b.c[2]}` : 'background:#333;color:#fff';
+  const imgTag = b.u ? `<img src="${b.u}" style="display:block;">` : `<img src="" style="display:none;">`;
+  const hasClass = b.u ? 'has' : '';
+  return `<div class="cv ${hasClass}" data-i="${i}" style="${bg}"><span class="ct">${b.t}</span><span class="ca">${b.a}</span>${imgTag}</div>`;
 }
 
-function openModal(i, from) {
-  activeOpener = from;
+function renderShelf() {
+  const sh = $('sh');
+  sh.innerHTML = BOOKS.map((b, i) => `<button class="b3" onclick="openModal(${i})">${cvr(b, i)}</button>`).join('');
+}
+
+function openModal(i) {
+  curIndex = i;
+  const b = BOOKS[i];
+  $('mb').innerHTML = cvr(b, i);$('mt').textContent = b.t;
+  $('ma').textContent = b.a;
+  $('mn').textContent = b.n;
   $('md').classList.add('on');
-  renderModalEntry(i);
-  $('mx').focus();
 }
 
-function closeModal() {
-  clearInterval(typeTimer);
-  $('md').classList.remove('on');
-  activeOpener?.focus();
+$('mx').onclick = () =>$('md').classList.remove('on');
+
+function setEditMode(state) {
+  editMode = state;
+  document.body.classList.toggle('edit-active', editMode);
+  $('toggleEdit').textContent = editMode ? 'Edit Mode: ON' : 'Edit Mode: OFF';
+  $('toggleEdit').classList.toggle('active', editMode);$('toggleEditTop').textContent = editMode ? 'Edit (ON)' : 'Edit';
+  $('addBook').style.display = editMode ? 'inline-block' : 'none';
+  $('exportJson').style.display = editMode ? 'inline-block' : 'none';
+
+  document.querySelectorAll('.editable').forEach(el => {
+    el.contentEditable = editMode;
+  });
 }
 
-$('mx').onclick = closeModal;
-$('pv').onclick = () => renderModalEntry(currentIndex - 1);
-$('nx').onclick = () => renderModalEntry(currentIndex + 1);
-$('md').onclick = e => { if (e.target === $('md')) closeModal(); };
+$('toggleEdit').onclick = () => setEditMode(!editMode);$('toggleEditTop').onclick = () => setEditMode(!editMode);
 
-addEventListener('keydown', e => {
-  if (!$('md').classList.contains('on')) return;
-  if (e.key === 'Escape') closeModal();
-  if (e.key === 'ArrowLeft') renderModalEntry(currentIndex - 1);
-  if (e.key === 'ArrowRight') renderModalEntry(currentIndex + 1);
+['mt', 'ma', 'mn'].forEach(id => {
+  $(id).oninput = () => {
+    if (!editMode) return;
+    BOOKS[curIndex].t = $('mt').textContent;
+    BOOKS[curIndex].a = $('ma').textContent;
+    BOOKS[curIndex].n = $('mn').textContent;
+    renderShelf();
+  };
 });
 
-/* ===== STATS DASHBOARD & ANIMATED COUNTERS ===== */
-const animateNumber = (el, target, decimals) => {
-  if (RM) {
-    el.textContent = target.toFixed(decimals);
-    return;
-  }
-  let start = null;
-  const step = timestamp => {
-    if (!start) start = timestamp;
-    const progress = Math.min((timestamp - start) / 1400, 1);
-    const ease = 1 - Math.pow(1 - progress, 3);
-    el.textContent = (target * ease).toFixed(decimals);
-    if (progress < 1) requestAnimationFrame(step);
+$('coverInput').onchange = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    BOOKS[curIndex].u = event.target.result;
+    openModal(curIndex);
+    renderShelf();
   };
-  requestAnimationFrame(step);
+  reader.readAsDataURL(file);
 };
 
-// Calculate category totals
-const categoryCounts = {};
-BOOKS.forEach(b => categoryCounts[b.g] = (categoryCounts[b.g] || 0) + 1);
-
-$('bars').innerHTML = Object.keys(CATEGORIES).map(catKey => `
-  <div class="row">
-    <span style="font-size:0.95rem">${CATEGORIES[catKey]}</span>
-    <i data-w="${(categoryCounts[catKey] || 0) / BOOKS.length * 100}%"></i>
-    <b>${categoryCounts[catKey] || 0}</b>
-  </div>
-`).join('');
-
-new IntersectionObserver((entries, observer) => {
-  if (!entries[0].isIntersecting) return;
-  observer.disconnect();
-
-  // Animate Circular Ring Gauge
-  const offset = 326.7 * (1 - Math.min(BOOKS.length / GOAL, 1));
-  $('fg').style.strokeDashoffset = offset;
-
-  // Animate Progress Bars
-  document.querySelectorAll('.row i').forEach(bar => {
-    bar.style.width = bar.dataset.w;
+$('addBook').onclick = () => {
+  BOOKS.push({
+    t: "New Book Title",
+    a: "Author Name",
+    n: "Write your note here...",
+    c: ["#5d6b45", "#2c3524", "#f2d875"],
+    u: ""
   });
+  renderShelf();
+  openModal(BOOKS.length - 1);
+};
 
-  // Animate Numbers
-  animateNumber($('cn'), BOOKS.length, 0);
-  animateNumber($('av'), BOOKS.reduce((sum, b) => sum + b.r, 0) / BOOKS.length, 1);
-  animateNumber($('co'), new Set(BOOKS.map(b => b.co)).size, 0);
-}, { threshold: 0.35 }).observe($('stats'));
+$('exportJson').onclick = () => {
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(BOOKS, null, 2));
+  const downloadAnchor = document.createElement('a');
+  downloadAnchor.setAttribute("href", dataStr);
+  downloadAnchor.setAttribute("download", "books.json");
+  document.body.appendChild(downloadAnchor);
+  downloadAnchor.click();
+  downloadAnchor.remove();
+};
+
+$('clk').textContent = new Date().toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'});$('dt').textContent = new Date().toLocaleDateString('en-GB', {month:'long', year:'numeric'});
+loadBooks();
 </script>
 </body>
 </html>
