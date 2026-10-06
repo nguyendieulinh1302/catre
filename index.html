@@ -18,10 +18,6 @@ button{font:inherit;color:inherit;cursor:pointer}
 :focus-visible{outline:2px solid var(--bt);outline-offset:3px}
 body::before{content:"";position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.18;mix-blend-mode:multiply;
 background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
-
-/* Canvas Cherry Blossom Overlay */
-#sakura-canvas{position:fixed;inset:0;z-index:56;pointer-events:none}
-
 .rainfx{position:fixed;inset:0;z-index:55;pointer-events:none;opacity:0;transition:opacity 1s;background:repeating-linear-gradient(100deg,transparent 0 9px,rgba(242,216,117,.16) 9px 10px);background-size:60px 60px;animation:rain .5s linear infinite}
 body.rain .rainfx{opacity:1}
 @keyframes rain{to{background-position:-12px 60px}}
@@ -63,7 +59,7 @@ h2{font-size:clamp(2.4rem,6vw,4rem);margin-bottom:1rem}
 .b3:nth-child(even){margin-top:1.6rem}
 .b3.off{opacity:.15;filter:grayscale(1);pointer-events:none}
 .cv{position:relative;aspect-ratio:2/3;border-radius:3px 9px 9px 3px;padding:1rem .9rem;display:flex;flex-direction:column;justify-content:space-between;
-transform:rotateX(var(--rx,0)) rotateY(var(--ry,0));transition:transform .25s,box-shadow .25s;box-shadow:inset 7px 0 8px -4px rgba(0,0,0,.4),0 14px 22px -8px rgba(0,0,0,.45);cursor:pointer}
+transform:rotateX(var(--rx,0)) rotateY(var(--ry,0));transition:transform .25s,box-shadow .25s;box-shadow:inset 7px 0 8px -4px rgba(0,0,0,.4),0 14px 22px -8px rgba(0,0,0,.45)}
 .b3:hover .cv,.b3:focus-visible .cv{box-shadow:inset 7px 0 8px -4px rgba(0,0,0,.4),0 26px 30px -10px rgba(0,0,0,.55)}
 .b3.pk .cv{outline:3px solid var(--bt);outline-offset:5px}
 .cv img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit;display:none}.cv.has img{display:block}.cv.has .ct,.cv.has .ca{visibility:hidden}
@@ -141,15 +137,16 @@ body.lampon .lamp{opacity:1}
 @keyframes mq{to{transform:translateX(-50%)}}
 .hw{font:500 1.5em/1.25 'Caveat',cursive,Georgia;margin:.8em 0 0}
 .au{font-style:italic;margin:0 0 1em}
-/* cabinet */
-.cab{--sc:1;width:min(100%,540px);margin:2.5rem auto 0;position:relative;padding:24px 20px 0;background:linear-gradient(90deg,#2d2016,#4a3524 8%,#3a2a1e 50%,#4a3524 92%,#2d2016);border-radius:6px 6px 0 0;box-shadow:0 30px 50px -20px rgba(0,0,0,.6)}
+
+/* CABINET FIX: Căn đồng bộ kích thước tủ & sàn */
+.cab{--sc:1;width:min(100%,720px);margin:2.5rem auto 0;position:relative;padding:24px 20px 0;background:linear-gradient(90deg,#2d2016,#4a3524 8%,#3a2a1e 50%,#4a3524 92%,#2d2016);border-radius:6px 6px 0 0;box-shadow:0 30px 50px -20px rgba(0,0,0,.6)}
 .cab::before{content:"";position:absolute;left:-14px;right:-14px;top:-16px;height:24px;background:linear-gradient(#5a4430,#3a2a1e);border-radius:4px;box-shadow:0 6px 10px rgba(0,0,0,.4)}
 .inner{background:radial-gradient(circle at 15% 0,rgba(242,216,117,.2),transparent 55%),linear-gradient(#1c130d,#2a1d13);box-shadow:inset 0 0 40px rgba(0,0,0,.75)}
-.shelfrow{display:flex;align-items:flex-end;gap:4px;padding:14px 16px 0;min-height:235px}
+.shelfrow{display:flex;align-items:flex-end;gap:6px;padding:14px 16px 0;min-height:235px;overflow:hidden}
 .pl{height:16px;background:linear-gradient(#6a5038,#3c2b1d);box-shadow:0 5px 8px rgba(0,0,0,.55)}
 .feet{height:28px;margin:0 -6px;background:linear-gradient(#3a2a1e,#1d130c)}
 .deco{height:105px;margin-left:auto;flex:none}
-.sp{position:relative;flex:none;height:calc(var(--h)*var(--sc));width:calc(var(--w)*var(--sc));border:0;border-radius:3px 3px 1px 1px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:10px 0;box-shadow:inset 3px 0 5px rgba(255,255,255,.14),inset -4px 0 6px rgba(0,0,0,.35);transform-origin:100% 100%;transition:transform .25s;cursor:pointer}
+.sp{position:relative;flex:none;height:calc(var(--h)*var(--sc));width:calc(var(--w)*var(--sc));border:0;border-radius:3px 3px 1px 1px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:10px 0;box-shadow:inset 3px 0 5px rgba(255,255,255,.14),inset -4px 0 6px rgba(0,0,0,.35);transform-origin:100% 100%;transition:transform .25s}
 .sp:hover,.sp:focus-visible{transform:translateY(-10px)}
 .sp::before,.sp::after{content:"";width:70%;height:3px;background:currentColor;opacity:.55}
 .stt{writing-mode:vertical-rl;transform:rotate(180deg);font:.98rem 'Instrument Serif',serif;max-height:68%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -158,13 +155,14 @@ body.lampon .lamp{opacity:1}
 .sp.gone{visibility:hidden}
 .sp.back{animation:back .6s ease-out}
 @keyframes back{from{transform:translateY(-40px);opacity:0}}
-.floor{position:relative;width:min(100%,860px);margin:0 auto;min-height:190px;padding:2.2rem 1rem 1.2rem;display:flex;flex-wrap:wrap;gap:1rem 1.6rem;justify-content:center;align-items:flex-end;background:linear-gradient(#24190f,#4b3825);border-radius:0 0 10px 10px;box-shadow:inset 0 16px 22px -10px rgba(0,0,0,.65)}
+.floor{position:relative;width:min(100%,720px);margin:0 auto;min-height:160px;padding:2.2rem 1rem 1.2rem;display:flex;flex-wrap:wrap;gap:1rem 1.6rem;justify-content:center;align-items:flex-end;background:linear-gradient(#24190f,#4b3825);border-radius:0 0 10px 10px;box-shadow:inset 0 16px 22px -10px rgba(0,0,0,.65)}
 .fh{position:absolute;left:0;right:0;top:1rem;text-align:center;color:var(--bt);font-style:italic;opacity:.8}
 .floor.has .fh{display:none}
-.fb{width:100px;background:none;border:0;padding:0;transform:rotate(var(--r));transition:transform .3s;animation:land .6s cubic-bezier(.3,1.6,.5,1);cursor:pointer}
+.fb{width:100px;background:none;border:0;padding:0;transform:rotate(var(--r));transition:transform .3s;animation:land .6s cubic-bezier(.3,1.6,.5,1)}
 .fb:hover,.fb:focus-visible{transform:rotate(0) translateY(-8px)}
 .fb .ct{font-size:1rem}.fb .ca{font-size:.62rem}
 @keyframes land{from{transform:translateY(-70px) rotate(calc(var(--r) - 30deg));opacity:0}}
+
 /* nightstand */
 .nowc{display:grid;grid-template-columns:150px 1fr;gap:2.5rem;align-items:center}
 .nbook{aspect-ratio:2/3;border-radius:3px 9px 9px 3px;background:linear-gradient(135deg,#2f4f7a,#162a47);transform:rotate(-4deg);position:relative;box-shadow:inset 7px 0 8px -4px rgba(0,0,0,.4),0 18px 26px -10px rgba(0,0,0,.5)}
@@ -220,7 +218,7 @@ body.edit .gi{cursor:default}
 .bvn{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;justify-content:center;color:var(--bt);font-style:italic}
 .bvn button{background:none;border:1px solid var(--bt);color:var(--bt);border-radius:99px;padding:.1rem 1rem}
 @media(max-width:720px){.cab{--sc:.78}.nowc{grid-template-columns:1fr}.nbook{width:110px}#clk{display:none}.top{font-size:.88rem}.top button{margin-left:.7rem}}
-@media(prefers-reduced-motion:reduce){.pt{display:none}#sakura-canvas{display:none}}
+@media(prefers-reduced-motion:reduce){.pt{display:none}}
 /* intro */
 .ov{position:fixed;inset:0;z-index:100;background:var(--bt);color:#2a1f18;display:grid;place-items:center;text-align:center;animation:up 1s 1.7s cubic-bezier(.7,0,.2,1) forwards}
 .ov h1{font-size:clamp(3rem,12vw,7rem);font-style:italic}
@@ -231,7 +229,6 @@ body.edit .gi{cursor:default}
 </style>
 </head>
 <body>
-<canvas id="sakura-canvas"></canvas>
 <div class="ov" id="ov"><div><h1>Diệu Linh</h1><p>Opening the book...</p></div></div>
 <div class="rainfx"></div>
 
@@ -239,7 +236,7 @@ body.edit .gi{cursor:default}
 <header class="top">
   <span class="nm" data-k="name">Diệu Linh</span>
   <span id="clk"></span>
-  <span><button id="edt-btn" style="color:var(--bt);border-color:currentColor;">Edit Mode</button><button id="th">Light or dark</button><button id="rn">Play rain</button><button id="sn">Sounds off</button><button id="lp">Lamp</button></span>
+  <span><button id="th">Light or dark</button><button id="rn">Play rain</button><button id="sn">Sounds off</button><button id="lp">Lamp</button></span>
 </header>
 
 <section class="hero" id="hero"><div id="petals"></div>
@@ -380,7 +377,7 @@ const GN={vn:"Vietnam",world:"World",think:"Ideas"};
 const PAL=[["#5d6b45","#2c3524","#f2d875"],["#b9855a","#6d3f2a","#f6e9c8"],["#3b3a36","#16140f","#e8dfc4"],["#e0c15a","#b58f2c","#2a1f18"],["#9c3b34","#5a1f1c","#f2d875"],["#3d6a77","#1b3a45","#f1ead2"],["#7d6b8e","#3f3350","#f2d875"],["#2f4f7a","#162a47","#f2d875"]];
 const $=id=>document.getElementById(id),Q=s=>document.querySelectorAll(s),RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-let EDIT=location.hash==='#edit'||/[?&]edit\b/.test(location.search);
+const EDIT=location.hash==='#edit'||/[?&]edit\b/.test(location.search);
 const T={};Q('[data-k]').forEach(el=>T[el.dataset.k]=el.textContent.trim());
 const C={texts:T,images:{},books:DEFAULT_BOOKS,goal:GOAL,gallery:[],email:'linhnguyendieu.work@gmail.com'};
 let cur=0,opener,tm,ft,flt='all',els=[],dirty=false,seen=false,io;
@@ -407,21 +404,6 @@ $('rn').onclick=()=>{
   document.body.classList.toggle('rain',rainOn);$('rn').textContent=rainOn?'Stop rain':'Play rain';
 };
 
-/* Edit Mode toggle button */
-$('edt-btn').onclick=()=>{
-  if(!EDIT){
-    EDIT=true;
-    location.hash='#edit';
-    startEdit();
-  } else {
-    if(!dirty||confirm('Leave Edit Mode without downloading your changes?')){
-      dirty=false;
-      location.hash='';
-      location.reload();
-    }
-  }
-};
-
 /* texts and photos */
 function applyTexts(){Q('[data-k]').forEach(el=>{const v=T[el.dataset.k];if(v!=null&&el!==document.activeElement)el.textContent=v});$('em').href='mailto:'+C.email;nowBar()}
 function applyImages(){Q('[data-im]').forEach(el=>{const u=C.images[el.dataset.im];el.style.backgroundImage=u?'url("'+u+'")':'';el.classList.toggle('hasim',!!u)})}
@@ -431,6 +413,7 @@ function pick(max,cb){const f=document.createElement('input');f.type='file';f.ac
       c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',.82));URL.revokeObjectURL(im.src)};
     im.src=URL.createObjectURL(fl)};f.click()}
 
+/* covers */
 const paint=b=>{const i=C.books.indexOf(b),u=b.u||b._u;if(i<0||!u)return;Q('.cv[data-i="'+i+'"]').forEach(el=>{const im=el.querySelector('img');im.onload=()=>el.classList.add('has');im.src=u})};
 async function findCover(b){
   try{
@@ -483,8 +466,7 @@ function show(i){
   $('mb').innerHTML=cvr(b,cur);paint(b);
   if(EDIT)form(b);else{
     $('mg').textContent=b.gl+(b.d?', finished '+b.d:'');$('mt').textContent=b.t;$('ma').textContent=b.a;
-    $('ms').textContent='★'.repeat(b.r)+'☆'.repeat(5-b.r);$('ms').setAttribute('aria-label',b.r+' out of 5 stars');
-    $('mtg').innerHTML=(b.m?`<span>${esc(b.m)}</span>`:'')+(b.tags||[]).map(t=>`<span>${esc(t)}</span>`).join('');
+    $('ms').textContent='★'.repeat(b.r)+'☆'.repeat(5-b.r);$('ms').setAttribute('aria-label',b.r+' out of 5 stars');$('mtg').innerHTML=(b.m?`<span>${esc(b.m)}</span>`:'')+(b.tags||[]).map(t=>`<span>${esc(t)}</span>`).join('');
     typeIt(b.n||'');
   }
   $('mc').textContent=(cur+1)+' of '+L;
@@ -492,8 +474,7 @@ function show(i){
 }
 function openForm(i,from){opener=from;$('md').classList.add('on');document.body.classList.add('mo');show(i);$('mx').focus()}
 function openB(i,from){opener=from;if(EDIT)openForm(i,from);else openBook(i,false)}
-function closeB(){clearInterval(tm);$('md').classList.remove('on');document.body.classList.remove('mo');if(EDIT){renderShelf();renderStats()}opener&&opener.focus&&opener.focus()}
-$('mx').onclick=closeB;$('pv').onclick=()=>show(cur-1);$('nx').onclick=()=>show(cur+1);
+function closeB(){clearInterval(tm);$('md').classList.remove('on');document.body.classList.remove('mo');if(EDIT){renderShelf();renderStats()}opener&&opener.focus&&opener.focus()}$('mx').onclick=closeB;$('pv').onclick=()=>show(cur-1);$('nx').onclick=()=>show(cur+1);
 $('md').onclick=e=>{if(e.target===$('md'))closeB()};
 addEventListener('keydown',e=>{if(!$('md').classList.contains('on'))return;
   if(EDIT&&/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)&&e.key!=='Escape')return;
@@ -501,8 +482,7 @@ addEventListener('keydown',e=>{if(!$('md').classList.contains('on'))return;
 $('ef').addEventListener('input',e=>{const k=e.target.dataset.f;if(!k)return;const b=C.books[cur];
   if(k==='tg')b.tags=e.target.value.split(',').map(x=>x.trim()).filter(Boolean);else if(k==='r')b.r=+e.target.value;else b[k]=e.target.value;
   dirty=true;
-  if(k==='t'||k==='a'){$('mb').innerHTML=cvr(b,cur);if(!b.u){delete b._u;clearTimeout(ft);ft=setTimeout(()=>findCover(b),800)}paint(b)}});
-$('ef').addEventListener('click',e=>{const a=e.target.dataset.a;if(!a)return;const b=C.books[cur];
+  if(k==='t'||k==='a'){$('mb').innerHTML=cvr(b,cur);if(!b.u){delete b._u;clearTimeout(ft);ft=setTimeout(()=>findCover(b),800)}paint(b)}});$('ef').addEventListener('click',e=>{const a=e.target.dataset.a;if(!a)return;const b=C.books[cur];
   if(a==='cover')pick(600,u=>{b.u=u;dirty=true;$('mb').innerHTML=cvr(b,cur);paint(b)});
   if(a==='auto'){delete b.u;dirty=true;$('mb').innerHTML=cvr(b,cur);if(b._u)paint(b);else findCover(b)}
   if(a==='del'&&confirm('Delete "'+b.t+'"?')){C.books.splice(cur,1);dirty=true;
@@ -538,11 +518,11 @@ function startEdit(){
   $('ab').onclick=()=>{C.books.push({t:'New book',a:'Author',g:'world',gl:'Genre',co:'',r:4,d:'',m:'',tags:[],n:'',c:PAL[Math.floor(Math.random()*PAL.length)]});dirty=true;renderShelf();renderStats();openB(C.books.length-1,$('ab'))};$('eb').onclick=()=>{const v=prompt('Contact email',C.email);if(v){C.email=v.trim();applyTexts();dirty=true}};
   $('gb').onclick=()=>{const v=parseInt(prompt('How many books do you want to read this year?',C.goal),10);if(v>0){C.goal=v;renderStats();dirty=true}};$('db').onclick=()=>{const blob=new Blob([JSON.stringify(C,(k,v)=>k[0]==='_'?undefined:v,1)],{type:'application/json'});
     const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='content.json';document.body.appendChild(a);a.click();a.remove();dirty=false};
-  $('xb').onclick=()=>{if(!dirty||confirm('Leave without downloading your changes?')){dirty=false;location.hash='';location.reload();}};
+  $('xb').onclick=()=>{if(!dirty||confirm('Leave without downloading your changes?')){dirty=false;location.href=location.pathname}};
   addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue=''}});
 }
 
-/* ===== cabinet, open book, path, marquee, lamp, sounds ===== */
+/* cabinet, open book, path, marquee, lamp, sounds */
 let sndOn=false,ac2,per=0,leaves=[],pgi=0,L=0,bvI=-1,rt,tk=false;
 const fallen=new Set();
 function sfx(k){
@@ -577,47 +557,17 @@ function renderCabinet(){
   $('rows').innerHTML=h;
 }
 addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{if((innerWidth<640?4:5)!==per)renderCabinet()},200)});
-
-/* Trigger book fall directly on click */
-function dropBook(i, el){
-  if(fallen.has(i)||(el&&el.classList.contains('fall'))) return;
-  const fr=$('floor').getBoundingClientRect();
-  const r=el ? el.getBoundingClientRect() : {bottom: 0};
-  if(el){
-    el.style.setProperty('--dy',Math.max(80,fr.top-r.bottom+60)+'px');
-    el.style.setProperty('--dx',(Math.random()*50-25)+'px');
-    el.style.setProperty('--rot',(60+Math.random()*30)+'deg');
-    el.classList.add('fall');
-  }
-  sfx('flip');
-  setTimeout(()=>{
-    sfx('thud');
-    fallen.add(i);
-    if(el){
-      el.classList.remove('fall');
-      el.classList.add('gone');
-    }
-    addFloor(i);
-  }, 900);
-}
-
 $('rows').addEventListener('click',e=>{
   const el=e.target.closest('.sp');if(!el)return;const i=+el.dataset.i;
   if(EDIT){openForm(i,el);return}
-  dropBook(i, el);
+  if(fallen.has(i)||el.classList.contains('fall'))return;
+  const fr=$('floor').getBoundingClientRect(),r=el.getBoundingClientRect();
+  el.style.setProperty('--dy',Math.max(80,fr.top-r.bottom+60)+'px');
+  el.style.setProperty('--dx',(Math.random()*50-25)+'px');
+  el.style.setProperty('--rot',(60+Math.random()*30)+'deg');
+  el.classList.add('fall');sfx('flip');
+  setTimeout(()=>{sfx('thud');fallen.add(i);el.classList.remove('fall');el.classList.add('gone');addFloor(i)},900);
 });
-
-/* Click event on bookshelf or cover images to trigger falling book */
-$('sh').addEventListener('click', e => {
-  if(EDIT) return;
-  const cv = e.target.closest('.b3');
-  if(cv){
-    const i = +cv.dataset.i;
-    dropBook(i, $('rows').querySelector(`.sp[data-i="${i}"]`));
-    $('cabinet').scrollIntoView({ behavior: 'smooth' });
-  }
-});
-
 function addFloor(i){const b=C.books[i],f=$('floor'),x=document.createElement('button');x.className='fb';x.dataset.i=i;
   x.style.setProperty('--r',(Math.random()*20-10)+'deg');x.setAttribute('aria-label','Open: '+b.t);x.innerHTML=cvr(b,i);f.appendChild(x);f.classList.add('has');paint(b)}
 $('floor').addEventListener('click',e=>{const x=e.target.closest('.fb');if(x)openBook(+x.dataset.i,true)});
@@ -704,76 +654,27 @@ $('lbi').addEventListener('touchstart',e=>{lx=e.touches[0].clientX},{passive:tru
 addEventListener('keydown',e=>{if(!$('lb').classList.contains('on'))return;
   if(e.key==='Escape')closeLb();if(e.key==='ArrowRight')openLb(gi+1);if(e.key==='ArrowLeft')openLb(gi-1)});
 
-/* Canvas Sakura Blossom Effect */
-(function(){
-  const canvas = $('sakura-canvas');
-  const ctx = canvas.getContext('2d');
-  let width = canvas.width = window.innerWidth;
-  let height = canvas.height = window.innerHeight;
-
-  window.addEventListener('resize', () => {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-  });
-
-  const petals = [];
-  const petalCount = 35;
-
-  class Petal {
-    constructor() {
-      this.reset();
-    }
-    reset() {
-      this.x = Math.random() * width;
-      this.y = Math.random() * -height;
-      this.size = Math.random() * 8 + 6;
-      this.speedY = Math.random() * 1.2 + 0.8;
-      this.speedX = Math.random() * 0.8 - 0.4;
-      this.angle = Math.random() * Math.PI * 2;
-      this.spin = Math.random() * 0.02 - 0.01;
-      this.opacity = Math.random() * 0.5 + 0.4;
-    }
-    update() {
-      this.y += this.speedY;
-      this.x += Math.sin(this.y * 0.01) + this.speedX;
-      this.angle += this.spin;
-      if (this.y > height + 20) this.reset();
-    }
-    draw() {
-      ctx.save();
-      ctx.translate(this.x, this.y);
-      ctx.rotate(this.angle);
-      ctx.globalAlpha = this.opacity;
-      ctx.fillStyle = "#ffb7c5";
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.bezierCurveTo(-this.size/2, -this.size/2, -this.size, this.size/3, 0, this.size);
-      ctx.bezierCurveTo(this.size, this.size/3, this.size/2, -this.size/2, 0, 0);
-      ctx.fill();
-      ctx.restore();
-    }
-  }
-
-  for (let i = 0; i < petalCount; i++) {
-    petals.push(new Petal());
-  }
-
-  function render() {
-    ctx.clearRect(0, 0, width, height);
-    petals.forEach(p => {
-      p.update();
-      p.draw();
-    });
-    requestAnimationFrame(render);
-  }
-  render();
-})();
-
-/* start */
+/* START FIX: Nạp dữ liệu mặc định ngay cả khi fetch content.json thất bại */
 (async()=>{
-  try{const r=await fetch('content.json',{cache:'no-store'});
-    if(r.ok){const j=await r.json();Object.assign(T,j.texts||{});if(j.images)C.images=j.images;if(Array.isArray(j.books))C.books=j.books;if(j.goal)C.goal=j.goal;if(j.email)C.email=j.email;if(Array.isArray(j.gallery))C.gallery=j.gallery}}catch(e){}
-  applyTexts();applyImages();renderShelf();renderStats();if(EDIT)startEdit();
+  try{
+    const r=await fetch('content.json',{cache:'no-store'});
+    if(r.ok){
+      const j=await r.json();
+      Object.assign(T,j.texts||{});
+      if(j.images)C.images=j.images;
+      if(Array.isArray(j.books)&&j.books.length)C.books=j.books;
+      if(j.goal)C.goal=j.goal;
+      if(j.email)C.email=j.email;
+      if(Array.isArray(j.gallery))C.gallery=j.gallery;
+    }
+  }catch(e){
+    console.log("Loading default local data...");
+  }
+  applyTexts();
+  applyImages();
+  renderShelf();
+  renderStats();
+  if(EDIT)startEdit();
 })();
 </script>
 </body>
