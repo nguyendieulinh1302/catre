@@ -3,22 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Read With Me | Cozy Bookshelf & Nook</title>
+  <title>Read With Me | Diệu Linh</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-  
-  <style>
-    :root {
-      --bg-color: #e5dfd3;
-      --wood-dark: #2c1a0e;
-      --wood-mid: #4a2e1b;
-      --wood-light: #5c3a21;
-      --shelf-shadow: rgba(0, 0, 0, 0.4);
-      --text-gold: #e2c08d;
-      --paper-white: #f8f5ee;
-    }
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=EB+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
+  <style>
     * {
       box-sizing: border-box;
       margin: 0;
@@ -26,15 +16,16 @@
     }
 
     body {
-      background-color: var(--bg-color);
-      font-family: 'Playfair Display', serif;
+      background-color: #d8d2c2;
+      font-family: 'EB Garamond', serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 20px;
-      overflow-x: hidden;
+      justify-content: center;
+      padding: 30px;
       position: relative;
+      overflow-x: hidden;
     }
 
     /* Canvas cho cánh hoa rơi */
@@ -45,96 +36,80 @@
       width: 100vw;
       height: 100vh;
       pointer-events: none;
-      z-index: 99;
+      z-index: 999;
     }
 
-    /* Thanh công cụ / Top Bar */
-    .header-bar {
-      width: 100%;
-      max-width: 1000px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      z-index: 10;
+    /* Control Bar trên cùng */
+    .top-bar {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      z-index: 100;
     }
 
-    .site-title {
-      font-size: 1.5rem;
-      color: #3a2e2b;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-    }
-
-    .edit-toggle-btn {
-      background: #3a2e2b;
-      color: #f8f5ee;
-      border: none;
-      padding: 8px 16px;
+    .edit-btn {
+      background: #36281e;
+      color: #e5dfd3;
+      border: 1px solid #5c4333;
+      padding: 8px 18px;
       border-radius: 20px;
-      cursor: pointer;
       font-family: 'Plus Jakarta Sans', sans-serif;
       font-size: 0.85rem;
+      cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     }
 
-    .edit-toggle-btn:hover {
-      background: #5c3a21;
-      transform: translateY(-1px);
+    .edit-btn:hover {
+      background: #5c4333;
     }
 
-    .edit-toggle-btn.active {
+    .edit-btn.active {
       background: #8c2d19;
+      color: #fff;
     }
 
-    /* Bố cục chính */
-    .container {
+    /* Layout chính giữ chuẩn tỷ lệ 2 cột như ảnh */
+    .main-wrapper {
       display: flex;
-      gap: 40px;
-      max-width: 1000px;
-      width: 100%;
+      gap: 30px;
       align-items: flex-start;
-      z-index: 2;
+      justify-content: center;
+      max-width: 1050px;
+      width: 100%;
     }
 
-    /* Sảnh / Khung Polaroid */
-    .gallery-section {
+    /* ----- SẢNH / KHUNG POLAROID (Trái) ----- */
+    .hall-container {
       flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
+      max-width: 440px;
     }
 
     .polaroid-frame {
-      background: var(--paper-white);
-      padding: 18px 18px 25px 18px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15), 0 2px 5px rgba(0,0,0,0.05);
+      background-color: #f4f0e6;
+      padding: 16px 16px 20px 16px;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.22), 0 2px 6px rgba(0,0,0,0.08);
       border-radius: 2px;
       width: 100%;
-      max-width: 380px;
-      transition: transform 0.3s ease;
       position: relative;
     }
 
-    .polaroid-frame:hover {
-      transform: rotate(-1deg) scale(1.01);
-    }
-
-    .photo-wrapper {
+    .photo-area {
       width: 100%;
-      height: 480px;
-      background-color: #6b6343;
-      background-image: linear-gradient(135deg, #7a704d 0%, #524b33 100%);
+      height: 520px;
+      background-color: #5c553d;
+      background-image: linear-gradient(180deg, #625b43 0%, #4a4532 100%);
       overflow: hidden;
       position: relative;
-      border-radius: 2px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    .photo-wrapper img {
+    .photo-area img {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -143,106 +118,83 @@
 
     .polaroid-caption {
       font-family: 'Caveat', cursive;
-      font-size: 1.8rem;
+      font-size: 2.2rem;
       color: #2b2b2b;
-      margin-top: 15px;
+      margin-top: 18px;
       text-align: left;
+      padding-left: 5px;
       outline: none;
-      padding: 2px 5px;
-      border-radius: 4px;
     }
 
     .edit-mode .polaroid-caption[contenteditable="true"] {
-      border: 1px dashed #a08265;
-      background: rgba(255,255,255,0.6);
+      border: 1px dashed #8c6d53;
+      background: rgba(255,255,255,0.5);
     }
 
-    .upload-btn-wrapper {
-      margin-top: 10px;
+    .upload-controls {
+      margin-top: 12px;
       display: none;
     }
 
-    .edit-mode .upload-btn-wrapper {
+    .edit-mode .upload-controls {
       display: block;
     }
 
-    .file-input {
-      display: none;
-    }
-
-    .custom-file-upload {
-      display: inline-block;
-      padding: 6px 12px;
-      cursor: pointer;
-      background: #5c3a21;
-      color: white;
+    .upload-label {
+      background: #36281e;
+      color: #f4f0e6;
+      padding: 6px 14px;
       border-radius: 4px;
       font-family: 'Plus Jakarta Sans', sans-serif;
       font-size: 0.8rem;
+      cursor: pointer;
     }
 
-    /* Kệ Sách */
-    .bookshelf-section {
-      flex: 1.2;
+    /* ----- TỦ SÁCH (Phải) ----- */
+    .bookshelf-container {
+      flex: 1.1;
       display: flex;
       flex-direction: column;
+      max-width: 480px;
+      width: 100%;
     }
 
     .bookshelf {
-      background: linear-gradient(to right, var(--wood-dark), var(--wood-mid), var(--wood-dark));
-      border: 12px solid var(--wood-dark);
-      border-radius: 6px;
-      box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 12px 30px rgba(0,0,0,0.3);
-      padding: 0;
+      background: #23140a;
+      border: 14px solid #1c0f07;
+      box-shadow: inset 0 0 30px rgba(0,0,0,0.9), 0 15px 35px rgba(0,0,0,0.35);
       position: relative;
     }
 
-    .shelf {
-      height: 200px;
-      border-bottom: 16px solid var(--wood-light);
-      box-shadow: 0 8px 12px var(--shelf-shadow);
+    .shelf-row {
+      height: 220px;
+      background: linear-gradient(to bottom, #2d1a0e 0%, #1f1209 100%);
+      border-bottom: 18px solid #3d2414;
       position: relative;
       display: flex;
       align-items: flex-end;
-      padding: 0 15px;
-      gap: 4px;
+      padding: 0 18px;
+      gap: 3px;
+      box-shadow: inset 0 -8px 12px rgba(0,0,0,0.6);
     }
 
-    .shelf::after {
+    /* Bóng đổ dưới gờ kệ */
+    .shelf-row::after {
       content: '';
       position: absolute;
-      bottom: -16px;
+      bottom: -18px;
       left: 0;
       right: 0;
-      height: 6px;
-      background: rgba(0,0,0,0.4);
+      height: 8px;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent);
+      z-index: 5;
     }
 
-    /* Trang trí trên kệ */
-    .plant-decor {
-      position: absolute;
-      right: 20px;
-      bottom: 0;
-      width: 45px;
-      height: 70px;
-      pointer-events: none;
-    }
-
-    .candle-decor {
-      position: absolute;
-      right: 20px;
-      bottom: 0;
-      width: 35px;
-      height: 65px;
-      pointer-events: none;
-    }
-
-    /* Quy chuẩn Sách */
+    /* Sách nghệ thuật */
     .book {
-      height: 140px;
-      width: 32px;
-      background-color: #3b5998;
-      border-radius: 2px 4px 4px 2px;
+      height: 150px;
+      width: 34px;
+      border-radius: 2px 3px 3px 2px;
       cursor: pointer;
       position: relative;
       writing-mode: vertical-rl;
@@ -250,461 +202,439 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #ecdab9;
-      font-size: 0.8rem;
-      font-weight: 500;
-      letter-spacing: 0.5px;
-      box-shadow: -2px 0 5px rgba(0,0,0,0.3), inset 3px 0 4px rgba(255,255,255,0.2);
-      transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.3s;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      box-shadow: -2px 0 6px rgba(0,0,0,0.4), inset 2px 0 3px rgba(255,255,255,0.18);
+      transition: transform 0.2s ease, filter 0.2s;
       user-select: none;
       flex-shrink: 0;
     }
 
     .book:hover {
-      transform: translateY(-5px) scale(1.02);
-      box-shadow: -4px 0 8px rgba(0,0,0,0.4), inset 3px 0 4px rgba(255,255,255,0.3);
+      transform: translateY(-6px);
+      filter: brightness(1.1);
     }
 
-    .book.falling {
-      animation: fallDown 0.6s ease-in forwards;
-    }
-
-    @keyframes fallDown {
-      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-      50% { transform: translateY(100px) rotate(15deg); opacity: 0.5; }
-      100% { transform: translateY(200px) rotate(45deg); opacity: 0; }
-    }
-
-    .book-title-text {
-      padding: 8px 0;
+    .book-title {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-height: 130px;
+      max-height: 140px;
+      padding: 4px 0;
     }
 
-    /* Khu vực sách rơi / Góc đọc */
-    .reading-nook {
-      background: linear-gradient(to bottom, #1a0f08, #2c1a0e);
-      min-height: 120px;
+    /* Cây nhỏ trang trí (Kệ trên) */
+    .plant-icon {
+      position: absolute;
+      right: 25px;
+      bottom: 0;
+      width: 42px;
+      height: 65px;
+      pointer-events: none;
+    }
+
+    /* Cây nến trang trí (Kệ dưới) */
+    .candle-icon {
+      position: absolute;
+      right: 25px;
+      bottom: 0;
+      width: 32px;
+      height: 60px;
+      pointer-events: none;
+    }
+
+    /* Khu vực Fallen Books */
+    .fallen-area {
+      background: #140a04;
+      min-height: 110px;
       padding: 15px;
       text-align: center;
       position: relative;
-      border-top: 4px solid var(--wood-dark);
     }
 
-    .nook-title {
-      font-family: 'Playfair Display', serif;
+    .fallen-title {
       font-style: italic;
-      color: var(--text-gold);
-      font-size: 1.1rem;
+      color: #d1ab6e;
+      font-size: 1.15rem;
       margin-bottom: 15px;
-      opacity: 0.8;
+      opacity: 0.9;
+      letter-spacing: 0.5px;
     }
 
-    .fallen-books-container {
+    .fallen-books-list {
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 10px;
       justify-content: center;
       align-items: flex-end;
-      min-height: 50px;
+      min-height: 40px;
     }
 
-    /* Sách khi ở góc đọc bên dưới */
-    .fallen-book {
-      height: 30px;
-      width: 130px;
-      writing-mode: horizontal-tb;
+    .fallen-book-item {
+      height: 28px;
+      padding: 0 12px;
       border-radius: 3px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #ecdab9;
-      font-size: 0.75rem;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+      font-size: 0.78rem;
+      font-weight: 500;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.5);
       cursor: pointer;
       transition: transform 0.2s;
-      animation: landBook 0.4s ease-out;
+      animation: dropIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    @keyframes landBook {
-      from { transform: translateY(-20px) scale(0.9); opacity: 0; }
+    @keyframes dropIn {
+      from { transform: translateY(-30px) scale(0.8); opacity: 0; }
       to { transform: translateY(0) scale(1); opacity: 1; }
     }
 
-    .fallen-book:hover {
-      transform: translateY(-3px);
+    .fallen-book-item:hover {
+      transform: translateY(-3px) scale(1.03);
     }
 
-    /* Chỉnh sửa Sách điều khiển */
-    .add-book-panel {
+    /* Bảng thêm/xóa sách khi ở Edit Mode */
+    .edit-panel {
       margin-top: 15px;
-      background: var(--paper-white);
+      background: #e8e2d5;
       padding: 15px;
-      border-radius: 6px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      border-radius: 4px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       display: none;
       flex-direction: column;
       gap: 10px;
+      border: 1px solid #c2b8a3;
     }
 
-    .edit-mode .add-book-panel {
+    .edit-mode .edit-panel {
       display: flex;
     }
 
-    .form-group {
+    .panel-row {
       display: flex;
-      gap: 10px;
+      gap: 8px;
     }
 
-    .form-input {
-      padding: 8px 12px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+    .input-field {
+      padding: 7px 10px;
+      border: 1px solid #a89d87;
+      border-radius: 3px;
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
+      background: #faf8f5;
       flex: 1;
     }
 
-    .btn {
-      background: var(--wood-mid);
-      color: white;
+    .action-btn {
+      background: #36281e;
+      color: #fff;
       border: none;
-      padding: 8px 14px;
-      border-radius: 4px;
+      padding: 7px 14px;
+      border-radius: 3px;
       cursor: pointer;
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
     }
 
-    .btn:hover {
-      background: var(--wood-dark);
-    }
-
-    .delete-btn {
+    .del-tag {
       position: absolute;
-      top: -8px;
-      right: -8px;
-      background: #8c2d19;
+      top: -6px;
+      right: -6px;
+      background: #a82e2e;
       color: white;
       border-radius: 50%;
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
       font-size: 10px;
       display: none;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
       writing-mode: horizontal-tb;
     }
 
-    .edit-mode .book .delete-btn {
+    .edit-mode .book .del-tag {
       display: flex;
     }
   </style>
 </head>
 <body>
 
+  <!-- Canvas hiệu ứng cánh hoa đào rơi -->
   <canvas id="petals-canvas"></canvas>
 
-  <div class="header-bar">
-    <div class="site-title">Read With Me</div>
-    <button class="edit-toggle-btn" id="editToggleBtn">Enable Edit Mode</button>
+  <!-- Nút Bật/Tắt Edit Mode -->
+  <div class="top-bar">
+    <button class="edit-btn" id="toggleEditBtn">Edit Mode</button>
   </div>
 
-  <div class="container">
-    <!-- Phần Sảnh / Cửa sổ (Polaroid Gallery) -->
-    <div class="gallery-section">
+  <div class="main-wrapper">
+    <!-- KHUNG PHOTO SẢNH (BÊN TRÁI) -->
+    <div class="hall-container">
       <div class="polaroid-frame">
-        <div class="photo-wrapper">
-          <img id="hallImage" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='500' viewBox='0 0 400 500'><rect width='400' height='500' fill='%23625b43'/><circle cx='200' cy='250' r='80' fill='%2370674c' opacity='0.5'/></svg>" alt="A quiet window view">
+        <div class="photo-area">
+          <img id="windowImg" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='500' viewBox='0 0 400 500'><rect width='400' height='500' fill='%235c553d'/><circle cx='200' cy='250' r='70' fill='%236d654c' opacity='0.4'/></svg>" alt="Window view">
         </div>
-        <div class="polaroid-caption" id="hallCaption" contenteditable="false">a quiet window</div>
+        <div class="polaroid-caption" id="captionText" contenteditable="false">a quiet window</div>
       </div>
-      <div class="upload-btn-wrapper">
-        <label for="imageUpload" class="custom-file-upload">
-          Change Image
-        </label>
-        <input type="file" id="imageUpload" class="file-input" accept="image/*">
+      <div class="upload-controls">
+        <label for="imgInput" class="upload-label">Change Window Photo</label>
+        <input type="file" id="imgInput" accept="image/*" style="display:none;">
       </div>
     </div>
 
-    <!-- Phần Tủ Sách -->
-    <div class="bookshelf-section">
+    <!-- TỦ SÁCH (BÊN PHẢI) -->
+    <div class="bookshelf-container">
       <div class="bookshelf">
         <!-- Kệ trên -->
-        <div class="shelf" id="shelf1">
-          <!-- Cây trang trí SVGs -->
-          <svg class="plant-decor" viewBox="0 0 60 90">
-            <path d="M30 60 L30 90" stroke="#3a2518" stroke-width="4"/>
-            <path d="M20 70 L40 70 L36 90 L24 90 Z" fill="#b06c49"/>
-            <circle cx="20" cy="45" r="12" fill="#5b7052"/>
-            <circle cx="38" cy="40" r="14" fill="#68825c"/>
-            <circle cx="28" cy="25" r="15" fill="#78966a"/>
+        <div class="shelf-row" id="shelfTop">
+          <!-- SVG Cây nhỏ -->
+          <svg class="plant-icon" viewBox="0 0 50 80">
+            <path d="M25 50 L25 80" stroke="#2b1a0e" stroke-width="3"/>
+            <path d="M15 62 L35 62 L32 80 L18 80 Z" fill="#8c583f"/>
+            <circle cx="16" cy="38" r="11" fill="#697e5a"/>
+            <circle cx="32" cy="34" r="12" fill="#7a936a"/>
+            <circle cx="24" cy="20" r="13" fill="#8ca87a"/>
           </svg>
         </div>
 
         <!-- Kệ dưới -->
-        <div class="shelf" id="shelf2">
-          <!-- Nến trang trí SVGs -->
-          <svg class="candle-decor" viewBox="0 0 40 70">
-            <rect x="12" y="30" width="16" height="35" fill="#f4ebd9" rx="2"/>
-            <rect x="10" y="65" width="20" height="5" fill="#8c6d53"/>
-            <line x1="20" y1="30" x2="20" y2="22" stroke="#333" stroke-width="2"/>
-            <ellipse cx="20" cy="16" rx="4" ry="7" fill="#facc15"/>
+        <div class="shelf-row" id="shelfBottom">
+          <!-- SVG Cây nến -->
+          <svg class="candle-icon" viewBox="0 0 40 70">
+            <rect x="13" y="32" width="14" height="32" fill="#eae3d2" rx="1"/>
+            <rect x="10" y="62" width="20" height="4" fill="#705238"/>
+            <line x1="20" y1="32" x2="20" y2="24" stroke="#222" stroke-width="1.5"/>
+            <ellipse cx="20" cy="18" rx="3.5" ry="6" fill="#facc15"/>
           </svg>
         </div>
 
-        <!-- Khu vực sách rơi -->
-        <div class="reading-nook">
-          <div class="nook-title">Fallen books land here.</div>
-          <div class="fallen-books-container" id="fallenContainer"></div>
+        <!-- Nơi sách rơi -->
+        <div class="fallen-area">
+          <div class="fallen-title">Fallen books land here.</div>
+          <div class="fallen-books-list" id="fallenList"></div>
         </div>
       </div>
 
-      <!-- Bảng chỉnh sửa Sách (hiển thị khi bật Edit Mode) -->
-      <div class="add-book-panel" id="addBookPanel">
-        <h4 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.9rem; color: #333;">Add New Book</h4>
-        <div class="form-group">
-          <input type="text" id="bookTitleInput" class="form-input" placeholder="Book Title...">
-          <select id="shelfSelect" class="form-input">
-            <option value="shelf1">Top Shelf</option>
-            <option value="shelf2">Bottom Shelf</option>
+      <!-- Bảng chỉnh sửa Sách trong Edit Mode -->
+      <div class="edit-panel">
+        <div style="font-family:'Plus Jakarta Sans'; font-size:0.85rem; font-weight:600; color:#36281e;">Add / Edit Books</div>
+        <div class="panel-row">
+          <input type="text" id="newTitle" class="input-field" placeholder="Book Title...">
+          <select id="newShelf" class="input-field">
+            <option value="shelfTop">Top Shelf</option>
+            <option value="shelfBottom">Bottom Shelf</option>
           </select>
         </div>
-        <div class="form-group">
-          <input type="color" id="bookColorInput" value="#3b5998" style="height: 35px; width: 50px; border:none; cursor:pointer;">
-          <input type="text" id="textColorInput" class="form-input" placeholder="Text Color (e.g. #fff)" value="#ecdab9">
-          <button class="btn" id="addBookBtn">Add Book</button>
+        <div class="panel-row">
+          <input type="color" id="newColor" value="#3b5998" style="height:32px; width:45px; border:none; cursor:pointer;">
+          <input type="text" id="newTextColor" class="input-field" placeholder="Text Color" value="#ecdab9">
+          <button class="action-btn" id="addBtn">Add</button>
         </div>
       </div>
     </div>
   </div>
 
   <script>
-    // --- 1. DỮ LIỆU SÁCH BAN ĐẦU (TIẾNG ANH) ---
-    const initialBooks = [
-      { id: '1', title: 'Norwegian Wood', color: '#2d4a3e', textColor: '#e2c08d', shelf: 'shelf1', height: 145, width: 34 },
-      { id: '2', title: 'The Lover', color: '#8c533e', textColor: '#f2e3d5', shelf: 'shelf1', height: 135, width: 30 },
-      { id: '3', title: 'The Sorrows of Young Werther', color: '#2b2b2b', textColor: '#ffffff', shelf: 'shelf1', height: 155, width: 32 },
-      { id: '4', title: 'Thinking, Fast and Slow', color: '#d9a74a', textColor: '#1a1a1a', shelf: 'shelf1', height: 160, width: 42 },
-      { id: '5', title: 'The Catcher in the Rye', color: '#8c2d19', textColor: '#f8f5ee', shelf: 'shelf2', height: 140, width: 32 },
-      { id: '6', title: 'The Old Man and the Sea', color: '#2a5c68', textColor: '#e0f2fe', shelf: 'shelf2', height: 130, width: 36 },
-      { id: '7', title: 'A Room of One\'s Own', color: '#4a3b5c', textColor: '#ebd9fc', shelf: 'shelf2', height: 125, width: 38 },
-      { id: '8', title: 'The Little Prince', color: '#1e3a5f', textColor: '#fde68a', shelf: 'shelf2', height: 135, width: 34 }
+    // --- 1. DỮ LIỆU SÁCH CHUẨN TỪ HÌNH ẢNH CỦA BẠN ---
+    const initialData = [
+      { id: '1', title: 'Norwegian Wood', bg: '#3a5340', color: '#e0c38c', shelf: 'shelfTop', h: 155, w: 32 },
+      { id: '2', title: 'The Lover', bg: '#8a503a', color: '#f0e2d3', shelf: 'shelfTop', h: 145, w: 30 },
+      { id: '3', title: 'The Sorrows of Young Werther', bg: '#2b2b2b', color: '#ffffff', shelf: 'shelfTop', h: 165, w: 34 },
+      { id: '4', title: 'Thinking, Fast and Slow', bg: '#d49e35', color: '#1a1a1a', shelf: 'shelfTop', h: 170, w: 42 },
+      { id: '5', title: 'The Catcher in the Rye', bg: '#8c2d19', color: '#f5efdf', shelf: 'shelfBottom', h: 150, w: 32 },
+      { id: '6', title: 'The Old Man and the Sea', bg: '#295b66', color: '#dbf0f5', shelf: 'shelfBottom', h: 138, w: 36 },
+      { id: '7', title: 'A Room of One\'s Own', bg: '#483759', color: '#ebd6fa', shelf: 'shelfBottom', h: 130, w: 38 },
+      { id: '8', title: 'The Little Prince', bg: '#1c395e', color: '#fce895', shelf: 'shelfBottom', h: 142, w: 34 }
     ];
 
-    let books = [...initialBooks];
-    let fallenBooks = [];
-    let isEditMode = false;
+    let bookList = [...initialData];
+    let fallenList = [];
+    let isEditing = false;
 
-    // --- 2. HIỂN THỊ TỦ SÁCH ---
-    function renderBooks() {
-      document.getElementById('shelf1').querySelectorAll('.book').forEach(b => b.remove());
-      document.getElementById('shelf2').querySelectorAll('.book').forEach(b => b.remove());
+    // --- 2. RENDER SÁCH LÊN KỆ ---
+    function render() {
+      document.getElementById('shelfTop').querySelectorAll('.book').forEach(el => el.remove());
+      document.getElementById('shelfBottom').querySelectorAll('.book').forEach(el => el.remove());
 
-      books.forEach(book => {
-        const shelfEl = document.getElementById(book.shelf);
-        if (!shelfEl) return;
+      bookList.forEach(item => {
+        const shelf = document.getElementById(item.shelf);
+        if (!shelf) return;
 
-        const bookEl = document.createElement('div');
-        bookEl.className = 'book';
-        bookEl.dataset.id = book.id;
-        bookEl.style.backgroundColor = book.color;
-        bookEl.style.color = book.textColor;
-        bookEl.style.height = `${book.height}px`;
-        bookEl.style.width = `${book.width}px`;
+        const el = document.createElement('div');
+        el.className = 'book';
+        el.style.backgroundColor = item.bg;
+        el.style.color = item.color;
+        el.style.height = `${item.h}px`;
+        el.style.width = `${item.w}px`;
 
-        bookEl.innerHTML = `
-          <span class="book-title-text">${book.title}</span>
-          <div class="delete-btn" onclick="deleteBook(event, '${book.id}')">✕</div>
+        el.innerHTML = `
+          <span class="book-title">${item.title}</span>
+          <div class="del-tag" onclick="removeBook(event, '${item.id}')">✕</div>
         `;
 
-        bookEl.addEventListener('click', (e) => {
-          if (isEditMode) return;
-          dropBook(book.id, bookEl);
+        el.addEventListener('click', () => {
+          if (!isEditing) dropToBottom(item.id);
         });
 
-        shelfEl.appendChild(bookEl);
+        shelf.appendChild(el);
       });
 
-      renderFallenBooks();
+      renderFallen();
     }
 
-    // Drop Book (Hiệu ứng sách rơi xuống)
-    function dropBook(bookId, element) {
-      element.classList.add('falling');
-      setTimeout(() => {
-        const index = books.findIndex(b => b.id === bookId);
-        if (index !== -1) {
-          const [movedBook] = books.splice(index, 1);
-          fallenBooks.push(movedBook);
-          renderBooks();
-        }
-      }, 500);
-    }
-
-    // Return Book (Trả sách lại kệ)
-    function returnBook(bookId) {
-      const index = fallenBooks.findIndex(b => b.id === bookId);
-      if (index !== -1) {
-        const [returnedBook] = fallenBooks.splice(index, 1);
-        books.push(returnedBook);
-        renderBooks();
+    // Hiệu ứng sách rơi xuống khu vực Fallen
+    function dropToBottom(id) {
+      const idx = bookList.findIndex(b => b.id === id);
+      if (idx !== -1) {
+        const [dropped] = bookList.splice(idx, 1);
+        fallenList.push(dropped);
+        render();
       }
     }
 
-    function renderFallenBooks() {
-      const container = document.getElementById('fallenContainer');
+    // Trả sách về lại kệ
+    function returnToShelf(id) {
+      const idx = fallenList.findIndex(b => b.id === id);
+      if (idx !== -1) {
+        const [returned] = fallenList.splice(idx, 1);
+        bookList.push(returned);
+        render();
+      }
+    }
+
+    function renderFallen() {
+      const container = document.getElementById('fallenList');
       container.innerHTML = '';
 
-      fallenBooks.forEach(book => {
-        const fallenEl = document.createElement('div');
-        fallenEl.className = 'fallen-book';
-        fallenEl.style.backgroundColor = book.color;
-        fallenEl.style.color = book.textColor;
-        fallenEl.innerText = book.title;
-        fallenEl.title = "Click to return to shelf";
+      fallenList.forEach(item => {
+        const el = document.createElement('div');
+        el.className = 'fallen-book-item';
+        el.style.backgroundColor = item.bg;
+        el.style.color = item.color;
+        el.innerText = item.title;
 
-        fallenEl.addEventListener('click', () => {
-          if (!isEditMode) returnBook(book.id);
+        el.addEventListener('click', () => {
+          if (!isEditing) returnToShelf(item.id);
         });
 
-        container.appendChild(fallenEl);
+        container.appendChild(el);
       });
     }
 
-    // Xóa sách ở Edit Mode
-    window.deleteBook = function(e, bookId) {
+    window.removeBook = function(e, id) {
       e.stopPropagation();
-      books = books.filter(b => b.id !== bookId);
-      fallenBooks = fallenBooks.filter(b => b.id !== bookId);
-      renderBooks();
+      bookList = bookList.filter(b => b.id !== id);
+      fallenList = fallenList.filter(b => b.id !== id);
+      render();
     }
 
-    // --- 3. CHẾ ĐỘ CHỈNH SỬA (EDIT MODE) ---
-    const editToggleBtn = document.getElementById('editToggleBtn');
-    const hallCaption = document.getElementById('hallCaption');
+    // --- 3. CHẾ ĐỘ EDIT WEBMODE ---
+    const toggleBtn = document.getElementById('toggleEditBtn');
+    const caption = document.getElementById('captionText');
 
-    editToggleBtn.addEventListener('click', () => {
-      isEditMode = !isEditMode;
-      document.body.classList.toggle('edit-mode', isEditMode);
-      
-      if (isEditMode) {
-        editToggleBtn.innerText = 'Exit Edit Mode';
-        editToggleBtn.classList.add('active');
-        hallCaption.setAttribute('contenteditable', 'true');
+    toggleBtn.addEventListener('click', () => {
+      isEditing = !isEditing;
+      document.body.classList.toggle('edit-mode', isEditing);
+
+      if (isEditing) {
+        toggleBtn.innerText = 'Exit Edit Mode';
+        toggleBtn.classList.add('active');
+        caption.setAttribute('contenteditable', 'true');
       } else {
-        editToggleBtn.innerText = 'Enable Edit Mode';
-        editToggleBtn.classList.remove('active');
-        hallCaption.setAttribute('contenteditable', 'false');
+        toggleBtn.innerText = 'Edit Mode';
+        toggleBtn.classList.remove('active');
+        caption.setAttribute('contenteditable', 'false');
       }
     });
 
-    // Tải ảnh mới cho Sảnh/Khung Polaroid
-    document.getElementById('imageUpload').addEventListener('change', function(e) {
+    // Đổi ảnh sảnh / Polaroid
+    document.getElementById('imgInput').addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (file) {
         const reader = new FileReader();
-        reader.onload = function(event) {
-          document.getElementById('hallImage').src = event.target.result;
+        reader.onload = (evt) => {
+          document.getElementById('windowImg').src = evt.target.result;
         };
         reader.readAsDataURL(file);
       }
     });
 
     // Thêm sách mới
-    document.getElementById('addBookBtn').addEventListener('click', () => {
-      const title = document.getElementById('bookTitleInput').value.trim();
-      const shelf = document.getElementById('shelfSelect').value;
-      const color = document.getElementById('bookColorInput').value;
-      const textColor = document.getElementById('textColorInput').value;
+    document.getElementById('addBtn').addEventListener('click', () => {
+      const title = document.getElementById('newTitle').value.trim();
+      if (!title) return;
 
-      if (!title) return alert('Please enter a book title!');
-
-      const newBook = {
+      bookList.push({
         id: Date.now().toString(),
         title: title,
-        color: color,
-        textColor: textColor,
-        shelf: shelf,
-        height: Math.floor(Math.random() * 30) + 130, // Random height 130-160
-        width: Math.floor(Math.random() * 12) + 30    // Random width 30-42
-      };
+        shelf: document.getElementById('newShelf').value,
+        bg: document.getElementById('newColor').value,
+        color: document.getElementById('newTextColor').value,
+        h: Math.floor(Math.random() * 25) + 135,
+        w: Math.floor(Math.random() * 10) + 32
+      });
 
-      books.push(newBook);
-      renderBooks();
-      document.getElementById('bookTitleInput').value = '';
+      render();
+      document.getElementById('newTitle').value = '';
     });
 
-    // --- 4. HIỆU ỨNG CÁNH HOA ĐÀO RƠI (CHERRY BLOSSOM PETALS) ---
+    // --- 4. CÁNH HOA ĐÀO RƠI (CANVAS ANIMATION) ---
     const canvas = document.getElementById('petals-canvas');
     const ctx = canvas.getContext('2d');
-
-    let width = canvas.width = window.innerWidth;
-    let height = canvas.height = window.innerHeight;
+    let w = canvas.width = window.innerWidth;
+    let h = canvas.height = window.innerHeight;
 
     window.addEventListener('resize', () => {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
     });
 
     class Petal {
       constructor() {
-        this.x = Math.random() * width;
-        this.y = Math.random() * height - height;
-        this.size = Math.random() * 8 + 6;
-        this.speedY = Math.random() * 1 + 0.8;
-        this.speedX = Math.random() * 0.8 - 0.4;
-        this.angle = Math.random() * 360;
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * w;
+        this.y = Math.random() * -h;
+        this.size = Math.random() * 7 + 5;
+        this.vy = Math.random() * 1.2 + 0.6;
+        this.vx = Math.random() * 0.6 - 0.3;
+        this.rot = Math.random() * 360;
         this.spin = Math.random() * 0.02 - 0.01;
         this.opacity = Math.random() * 0.5 + 0.4;
       }
-
       update() {
-        this.y += this.speedY;
-        this.x += Math.sin(this.y * 0.01) + this.speedX;
-        this.angle += this.spin;
-
-        if (this.y > height + 20) {
-          this.y = -20;
-          this.x = Math.random() * width;
-        }
+        this.y += this.vy;
+        this.x += Math.sin(this.y * 0.008) + this.vx;
+        this.rot += this.spin;
+        if (this.y > h + 20) this.reset();
       }
-
       draw() {
         ctx.save();
         ctx.translate(this.x, this.y);
-        ctx.rotate(this.angle);
+        ctx.rotate(this.rot);
         ctx.globalAlpha = this.opacity;
-        
+        ctx.fillStyle = '#f8c8d4';
         ctx.beginPath();
-        ctx.fillStyle = '#f7c5d0';
-        // Form hình cánh hoa nhẹ nhàng
         ctx.moveTo(0, 0);
-        ctx.bezierCurveTo(-this.size, -this.size / 2, -this.size, this.size, 0, this.size * 1.5);
-        ctx.bezierCurveTo(this.size, this.size, this.size, -this.size / 2, 0, 0);
+        ctx.bezierCurveTo(-this.size, -this.size/2, -this.size, this.size, 0, this.size*1.4);
+        ctx.bezierCurveTo(this.size, this.size, this.size, -this.size/2, 0, 0);
         ctx.fill();
-        
         ctx.restore();
       }
     }
 
-    const petals = Array.from({ length: 28 }, () => new Petal());
-
-    function animatePetals() {
-      ctx.clearRect(0, 0, width, height);
-      petals.forEach(petal => {
-        petal.update();
-        petal.draw();
-      });
-      requestAnimationFrame(animatePetals);
+    const petals = Array.from({ length: 30 }, () => new Petal());
+    function loop() {
+      ctx.clearRect(0, 0, w, h);
+      petals.forEach(p => { p.update(); p.draw(); });
+      requestAnimationFrame(loop);
     }
 
-    // Khởi chạy ứng dụng
-    renderBooks();
-    animatePetals();
+    render();
+    loop();
   </script>
 </body>
 </html>
