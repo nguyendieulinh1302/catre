@@ -1,640 +1,780 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Read With Me | Diệu Linh</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=EB+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Read With Me | Diệu Linh</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&family=Caveat:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e7e4cc;--ink:#2a1f18;--mut:#6b6150;--card:#f3f0dd;--line:rgba(42,31,24,.22);--bt:#f2d875;--ol:#5f6038;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17120e;--ink:#ede6d0;--mut:#a89e86;--card:#231c16;--line:rgba(237,230,208,.22)}}
+:root[data-theme="dark"]{--bg:#17120e;--ink:#ede6d0;--mut:#a89e86;--card:#231c16;--line:rgba(237,230,208,.22)}
+html{scroll-padding-top:4rem;scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:1.1rem/1.65 'Newsreader',Georgia,serif;transition:background .5s,color .5s}
+h1,h2,h3{font-family:'Instrument Serif',Georgia,serif;font-weight:400;margin:0;line-height:1}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--bt);outline-offset:3px}
+body::before{content:"";position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.18;mix-blend-mode:multiply;
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+/* Canvas Cherry Blossom Overlay */
+#sakura-canvas{position:fixed;inset:0;z-index:56;pointer-events:none}
 
-    body {
-      background-color: #d8d2c2;
-      font-family: 'EB Garamond', serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 30px;
-      position: relative;
-      overflow-x: hidden;
-    }
-
-    /* Canvas cho cánh hoa rơi */
-    #petals-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      z-index: 999;
-    }
-
-    /* Control Bar trên cùng */
-    .top-bar {
-      position: absolute;
-      top: 20px;
-      right: 30px;
-      z-index: 100;
-    }
-
-    .edit-btn {
-      background: #36281e;
-      color: #e5dfd3;
-      border: 1px solid #5c4333;
-      padding: 8px 18px;
-      border-radius: 20px;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    }
-
-    .edit-btn:hover {
-      background: #5c4333;
-    }
-
-    .edit-btn.active {
-      background: #8c2d19;
-      color: #fff;
-    }
-
-    /* Layout chính giữ chuẩn tỷ lệ 2 cột như ảnh */
-    .main-wrapper {
-      display: flex;
-      gap: 30px;
-      align-items: flex-start;
-      justify-content: center;
-      max-width: 1050px;
-      width: 100%;
-    }
-
-    /* ----- SẢNH / KHUNG POLAROID (Trái) ----- */
-    .hall-container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      max-width: 440px;
-    }
-
-    .polaroid-frame {
-      background-color: #f4f0e6;
-      padding: 16px 16px 20px 16px;
-      box-shadow: 0 12px 35px rgba(0,0,0,0.22), 0 2px 6px rgba(0,0,0,0.08);
-      border-radius: 2px;
-      width: 100%;
-      position: relative;
-    }
-
-    .photo-area {
-      width: 100%;
-      height: 520px;
-      background-color: #5c553d;
-      background-image: linear-gradient(180deg, #625b43 0%, #4a4532 100%);
-      overflow: hidden;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .photo-area img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .polaroid-caption {
-      font-family: 'Caveat', cursive;
-      font-size: 2.2rem;
-      color: #2b2b2b;
-      margin-top: 18px;
-      text-align: left;
-      padding-left: 5px;
-      outline: none;
-    }
-
-    .edit-mode .polaroid-caption[contenteditable="true"] {
-      border: 1px dashed #8c6d53;
-      background: rgba(255,255,255,0.5);
-    }
-
-    .upload-controls {
-      margin-top: 12px;
-      display: none;
-    }
-
-    .edit-mode .upload-controls {
-      display: block;
-    }
-
-    .upload-label {
-      background: #36281e;
-      color: #f4f0e6;
-      padding: 6px 14px;
-      border-radius: 4px;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 0.8rem;
-      cursor: pointer;
-    }
-
-    /* ----- TỦ SÁCH (Phải) ----- */
-    .bookshelf-container {
-      flex: 1.1;
-      display: flex;
-      flex-direction: column;
-      max-width: 480px;
-      width: 100%;
-    }
-
-    .bookshelf {
-      background: #23140a;
-      border: 14px solid #1c0f07;
-      box-shadow: inset 0 0 30px rgba(0,0,0,0.9), 0 15px 35px rgba(0,0,0,0.35);
-      position: relative;
-    }
-
-    .shelf-row {
-      height: 220px;
-      background: linear-gradient(to bottom, #2d1a0e 0%, #1f1209 100%);
-      border-bottom: 18px solid #3d2414;
-      position: relative;
-      display: flex;
-      align-items: flex-end;
-      padding: 0 18px;
-      gap: 3px;
-      box-shadow: inset 0 -8px 12px rgba(0,0,0,0.6);
-    }
-
-    /* Bóng đổ dưới gờ kệ */
-    .shelf-row::after {
-      content: '';
-      position: absolute;
-      bottom: -18px;
-      left: 0;
-      right: 0;
-      height: 8px;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent);
-      z-index: 5;
-    }
-
-    /* Sách nghệ thuật */
-    .book {
-      height: 150px;
-      width: 34px;
-      border-radius: 2px 3px 3px 2px;
-      cursor: pointer;
-      position: relative;
-      writing-mode: vertical-rl;
-      text-orientation: mixed;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.82rem;
-      font-weight: 600;
-      letter-spacing: 0.3px;
-      box-shadow: -2px 0 6px rgba(0,0,0,0.4), inset 2px 0 3px rgba(255,255,255,0.18);
-      transition: transform 0.2s ease, filter 0.2s;
-      user-select: none;
-      flex-shrink: 0;
-    }
-
-    .book:hover {
-      transform: translateY(-6px);
-      filter: brightness(1.1);
-    }
-
-    .book-title {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-height: 140px;
-      padding: 4px 0;
-    }
-
-    /* Cây nhỏ trang trí (Kệ trên) */
-    .plant-icon {
-      position: absolute;
-      right: 25px;
-      bottom: 0;
-      width: 42px;
-      height: 65px;
-      pointer-events: none;
-    }
-
-    /* Cây nến trang trí (Kệ dưới) */
-    .candle-icon {
-      position: absolute;
-      right: 25px;
-      bottom: 0;
-      width: 32px;
-      height: 60px;
-      pointer-events: none;
-    }
-
-    /* Khu vực Fallen Books */
-    .fallen-area {
-      background: #140a04;
-      min-height: 110px;
-      padding: 15px;
-      text-align: center;
-      position: relative;
-    }
-
-    .fallen-title {
-      font-style: italic;
-      color: #d1ab6e;
-      font-size: 1.15rem;
-      margin-bottom: 15px;
-      opacity: 0.9;
-      letter-spacing: 0.5px;
-    }
-
-    .fallen-books-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-      align-items: flex-end;
-      min-height: 40px;
-    }
-
-    .fallen-book-item {
-      height: 28px;
-      padding: 0 12px;
-      border-radius: 3px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.78rem;
-      font-weight: 500;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.5);
-      cursor: pointer;
-      transition: transform 0.2s;
-      animation: dropIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    @keyframes dropIn {
-      from { transform: translateY(-30px) scale(0.8); opacity: 0; }
-      to { transform: translateY(0) scale(1); opacity: 1; }
-    }
-
-    .fallen-book-item:hover {
-      transform: translateY(-3px) scale(1.03);
-    }
-
-    /* Bảng thêm/xóa sách khi ở Edit Mode */
-    .edit-panel {
-      margin-top: 15px;
-      background: #e8e2d5;
-      padding: 15px;
-      border-radius: 4px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      display: none;
-      flex-direction: column;
-      gap: 10px;
-      border: 1px solid #c2b8a3;
-    }
-
-    .edit-mode .edit-panel {
-      display: flex;
-    }
-
-    .panel-row {
-      display: flex;
-      gap: 8px;
-    }
-
-    .input-field {
-      padding: 7px 10px;
-      border: 1px solid #a89d87;
-      border-radius: 3px;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 0.82rem;
-      background: #faf8f5;
-      flex: 1;
-    }
-
-    .action-btn {
-      background: #36281e;
-      color: #fff;
-      border: none;
-      padding: 7px 14px;
-      border-radius: 3px;
-      cursor: pointer;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 0.82rem;
-    }
-
-    .del-tag {
-      position: absolute;
-      top: -6px;
-      right: -6px;
-      background: #a82e2e;
-      color: white;
-      border-radius: 50%;
-      width: 16px;
-      height: 16px;
-      font-size: 10px;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      writing-mode: horizontal-tb;
-    }
-
-    .edit-mode .book .del-tag {
-      display: flex;
-    }
-  </style>
+.rainfx{position:fixed;inset:0;z-index:55;pointer-events:none;opacity:0;transition:opacity 1s;background:repeating-linear-gradient(100deg,transparent 0 9px,rgba(242,216,117,.16) 9px 10px);background-size:60px 60px;animation:rain .5s linear infinite}
+body.rain .rainfx{opacity:1}
+@keyframes rain{to{background-position:-12px 60px}}
+/* top bar */
+.top{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:40;display:flex;justify-content:space-between;align-items:center;padding:.9rem clamp(1rem,4vw,2.5rem);color:var(--bt);font-style:italic;font-size:1rem;text-shadow:0 1px 8px rgba(0,0,0,.35)}
+.top button{background:none;border:0;border-bottom:1px solid currentColor;padding:0 0 1px;margin-left:1.2rem;font-style:italic}
+.top .nm{font-style:normal;font-family:'Instrument Serif',serif;font-size:1.4rem}
+/* hero */
+.hero{position:relative;min-height:100vh;display:grid;grid-template-rows:1fr 1fr;color:var(--bt);overflow:hidden}
+.p1{background:radial-gradient(ellipse at 50% 30%,#c9ab76 0,#8b7a4f 55%,#5e5a3a 100%)}
+.p2{background:#17120e;position:relative}
+.cup{position:absolute;left:50%;bottom:-18%;width:min(78vw,430px);aspect-ratio:1;transform:translateX(-50%) translateY(var(--py,0));border-radius:50%;background:radial-gradient(circle at 40% 35%,#d7b48a,#7a5238 70%,#2c1c12);box-shadow:0 0 0 14px #1f1812,0 0 0 16px #3a2e24}
+.cup i{position:absolute;left:24%;top:22%;width:50%;height:52%;border-radius:22%;transform:rotate(-14deg);background:linear-gradient(135deg,rgba(255,240,215,.55),rgba(160,110,70,.35));box-shadow:inset 0 0 22px rgba(255,255,255,.35);animation:bob 7s ease-in-out infinite}
+@keyframes bob{50%{transform:rotate(-8deg) translateY(6px)}}
+.mt{position:absolute;top:5.2rem;font-size:clamp(1.05rem,2.6vw,1.5rem);line-height:1.2}
+.mt.l{left:clamp(1rem,4vw,2.5rem)}.mt.r{right:clamp(1rem,4vw,2.5rem);text-align:right;font-style:italic}
+.mt span{display:block}
+.hero h1{position:absolute;left:0;right:0;top:50%;transform:translateY(-58%);text-align:center;font-size:clamp(4.2rem,17vw,12rem);letter-spacing:-.02em;z-index:2}
+.lead{position:absolute;left:50%;bottom:2.2rem;transform:translateX(-50%);width:min(92%,640px);text-align:center;font-size:1.15rem;line-height:1.5;z-index:2;text-shadow:0 1px 10px #000}
+.lead a{color:inherit}
+/* sections */
+section.s{max-width:1080px;margin:0 auto;padding:5.5rem clamp(1.2rem,5vw,2.5rem)}
+h2{font-size:clamp(2.4rem,6vw,4rem);margin-bottom:1rem}
+.sub{color:var(--mut);max-width:34rem;margin:0 0 2.2rem}
+.about{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center}
+.about p{max-width:30rem}
+.pos{display:flex;flex-wrap:wrap;gap:1.2rem;justify-content:center;padding:1rem}
+.po{margin:0;width:min(46%,170px);background:var(--card);padding:.55rem .55rem .8rem;box-shadow:0 10px 24px rgba(0,0,0,.22);transform:rotate(var(--r));transition:transform .4s}
+.po:hover{transform:rotate(0) scale(1.06);z-index:3}
+.po div{aspect-ratio:1;display:grid;place-items:center;font:2.1rem 'Instrument Serif',serif;color:var(--bt)}
+.po figcaption{font-size:.82rem;line-height:1.3;margin-top:.5rem;font-style:italic}
+/* shelf */
+.bar{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;margin-bottom:2.4rem}
+.bar button{border:1px solid var(--line);background:none;border-radius:99px;padding:.25rem 1rem;transition:.25s}
+.bar button[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.bar .rd{margin-left:auto;background:var(--bt);color:#2a1f18;border-color:var(--bt)}
+.sh{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:2.4rem 1.6rem;padding-bottom:1.5rem}
+.b3{perspective:700px;background:none;border:0;padding:0;text-align:left;transition:opacity .4s,filter .4s}
+.b3:nth-child(even){margin-top:1.6rem}
+.b3.off{opacity:.15;filter:grayscale(1);pointer-events:none}
+.cv{position:relative;aspect-ratio:2/3;border-radius:3px 9px 9px 3px;padding:1rem .9rem;display:flex;flex-direction:column;justify-content:space-between;
+transform:rotateX(var(--rx,0)) rotateY(var(--ry,0));transition:transform .25s,box-shadow .25s;box-shadow:inset 7px 0 8px -4px rgba(0,0,0,.4),0 14px 22px -8px rgba(0,0,0,.45);cursor:pointer}
+.b3:hover .cv,.b3:focus-visible .cv{box-shadow:inset 7px 0 8px -4px rgba(0,0,0,.4),0 26px 30px -10px rgba(0,0,0,.55)}
+.b3.pk .cv{outline:3px solid var(--bt);outline-offset:5px}
+.cv img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit;display:none}.cv.has img{display:block}.cv.has .ct,.cv.has .ca{visibility:hidden}
+.ct{font:1.45rem/1.05 'Instrument Serif',serif}.ca{font-size:.78rem;font-style:italic;opacity:.85}
+.plank{height:10px;background:linear-gradient(var(--line),transparent);border-top:2px solid var(--line)}
+/* stats */
+.stats{display:grid;grid-template-columns:auto 1fr;gap:3rem;align-items:center}
+.ring{position:relative;width:190px;height:190px}
+.ring svg{transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:9}
+.ring .bg{stroke:var(--line)}.ring .fg{stroke:var(--ol);stroke-linecap:round;transition:stroke-dashoffset 1.6s cubic-bezier(.2,.7,.2,1)}
+:root[data-theme="dark"] .ring .fg{stroke:var(--bt)}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font:3.2rem 'Instrument Serif',serif;font-weight:400}
+.ring small{position:absolute;bottom:2.6rem;left:0;right:0;text-align:center;color:var(--mut);font-size:.85rem}
+.row{display:grid;grid-template-columns:7.5rem 1fr 2rem;gap:.8rem;align-items:center;margin:.55rem 0}
+.row i{display:block;height:10px;border-radius:99px;background:var(--ol);width:0;transition:width 1.4s cubic-bezier(.2,.7,.2,1)}
+.facts{display:flex;gap:2.4rem;margin-top:1.6rem;flex-wrap:wrap}
+.facts b{display:block;font:2.4rem 'Instrument Serif',serif;font-weight:400;line-height:1}
+.facts span{color:var(--mut);font-size:.9rem}
+footer{background:#17120e;color:var(--bt);text-align:center;padding:5rem 1.5rem 4rem}
+footer h2{font-style:italic}
+footer a{color:inherit}
+/* note modal */
+.md{position:fixed;inset:0;z-index:70;display:none;place-items:center;padding:1rem;background:rgba(15,10,6,.72);backdrop-filter:blur(6px)}
+.md.on{display:grid}
+.pg{display:grid;grid-template-columns:minmax(0,230px) 1fr;gap:2rem;width:min(860px,100%);max-height:92vh;overflow:auto;background:var(--card);padding:2rem;border-radius:4px;transform-origin:left center;animation:turn .65s cubic-bezier(.2,.7,.2,1)}
+@keyframes turn{from{transform:perspective(1400px) rotateY(-75deg);opacity:0}}
+.pg .cv{box-shadow:0 18px 30px -10px rgba(0,0,0,.5);align-self:start}
+.nt{position:relative;padding-right:1.5rem}
+.nt h3{font-size:clamp(2rem,5vw,3rem);margin:.2rem 0}
+.x{position:absolute;right:-.4rem;top:-.6rem;background:none;border:0;font-size:2rem;line-height:1}
+.st{letter-spacing:.2em;color:var(--ol);margin:.3rem 0 1rem}
+:root[data-theme="dark"] .st{color:var(--bt)}
+.ty{min-height:7.5em;font-size:1.2rem}
+.tg span{display:inline-block;border:1px solid var(--line);border-radius:99px;padding:0 .8rem;margin:0 .4rem .4rem 0;font-size:.9rem;font-style:italic}
+.nv{display:flex;align-items:center;justify-content:space-between;margin-top:1rem;border-top:1px solid var(--line);padding-top:.8rem;color:var(--mut)}
+.nv button{background:none;border:0;font-size:1.6rem}
+/* edit mode + custom photos */
+.p1{position:relative}
+[data-im].hasim{background-size:cover;background-position:center}
+.p1.hasim,.p2.hasim{box-shadow:inset 0 0 0 999px rgba(20,12,6,.3)}
+.p2.hasim .cup{display:none}
+.po .hasim span{display:none}
+#tb,#ef{display:none}
+body.edit #tb{display:flex}body.edit #ef{display:grid}body.edit #vw{display:none}
+body.mo #tb{display:none!important}
+#tb{position:fixed;left:50%;bottom:calc(1rem + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:90;gap:.5rem;flex-wrap:wrap;justify-content:center;width:max-content;max-width:94vw;padding:.6rem .9rem;background:#17120e;color:var(--bt);border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.4);font-size:.95rem}
+#tb .hint{flex-basis:100%;text-align:center;font-style:italic}
+#tb button{background:none;border:1px solid var(--bt);color:var(--bt);border-radius:99px;padding:.1rem .9rem}
+#tb button.go{background:var(--bt);color:#2a1f18}
+body.edit [data-k]{outline:1px dashed var(--line);outline-offset:3px;cursor:text}
+body.edit [data-k]:focus{outline:2px solid var(--bt)}
+body.edit .hero h1{pointer-events:none}
+body.edit [data-im]{cursor:pointer}
+body.edit [data-im]::after{content:"Change photo";position:absolute;z-index:3;top:6rem;left:50%;transform:translateX(-50%);background:#17120e;color:var(--bt);padding:0 .8rem;border-radius:99px;font-size:.9rem;font-style:italic;white-space:nowrap}
+body.edit .p2[data-im]::after{top:auto;bottom:1rem}
+body.edit .po div[data-im]{position:relative}
+body.edit .po [data-im]::after{top:50%;transform:translate(-50%,-50%)}
+#ef{gap:.55rem;font-size:.95rem}
+#ef label{display:grid;gap:.1rem;color:var(--mut);font-size:.8rem}
+#ef input,#ef select,#ef textarea{font:1rem 'Newsreader',Georgia,serif;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:.3rem .5rem;width:100%}
+#ef textarea{min-height:6.5rem;resize:vertical}
+#ef .r2{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+#ef .bt{display:flex;gap:.5rem;flex-wrap:wrap}
+#ef .bt button{border:1px solid var(--line);background:none;border-radius:99px;padding:.1rem .9rem}
+/* ===== cabinet, book viewer, extra art ===== */
+#pbar{position:fixed;top:0;left:0;right:0;height:3px;z-index:45;background:var(--bt);transform-origin:left;transform:scaleX(var(--p,0))}
+.lamp{position:fixed;inset:0;z-index:58;pointer-events:none;opacity:0;transition:opacity .6s;background:radial-gradient(circle 230px at var(--mx,50%) var(--my,40%),transparent 0,rgba(10,6,3,.5) 55%,rgba(10,6,3,.9) 100%)}
+body.lampon .lamp{opacity:1}
+#petals{position:absolute;inset:0;z-index:1;pointer-events:none}
+.pt{position:absolute;top:0;left:var(--l);width:var(--s);height:calc(var(--s)*.6);border-radius:60% 40% 60% 40%;background:rgba(255,246,214,.8);animation:drift var(--d) linear var(--dl) infinite}
+@keyframes drift{from{transform:translate3d(0,-10vh,0) rotate(0)}to{transform:translate3d(var(--sx),110vh,0) rotate(540deg)}}
+.mq{overflow:hidden;border-block:1px solid var(--line);padding:.5rem 0}
+.mqt{display:inline-block;white-space:pre;font:italic 1.7rem 'Instrument Serif',serif;animation:mq 60s linear infinite}
+@keyframes mq{to{transform:translateX(-50%)}}
+.hw{font:500 1.5em/1.25 'Caveat',cursive,Georgia;margin:.8em 0 0}
+.au{font-style:italic;margin:0 0 1em}
+/* cabinet */
+.cab{--sc:1;width:min(100%,540px);margin:2.5rem auto 0;position:relative;padding:24px 20px 0;background:linear-gradient(90deg,#2d2016,#4a3524 8%,#3a2a1e 50%,#4a3524 92%,#2d2016);border-radius:6px 6px 0 0;box-shadow:0 30px 50px -20px rgba(0,0,0,.6)}
+.cab::before{content:"";position:absolute;left:-14px;right:-14px;top:-16px;height:24px;background:linear-gradient(#5a4430,#3a2a1e);border-radius:4px;box-shadow:0 6px 10px rgba(0,0,0,.4)}
+.inner{background:radial-gradient(circle at 15% 0,rgba(242,216,117,.2),transparent 55%),linear-gradient(#1c130d,#2a1d13);box-shadow:inset 0 0 40px rgba(0,0,0,.75)}
+.shelfrow{display:flex;align-items:flex-end;gap:4px;padding:14px 16px 0;min-height:235px}
+.pl{height:16px;background:linear-gradient(#6a5038,#3c2b1d);box-shadow:0 5px 8px rgba(0,0,0,.55)}
+.feet{height:28px;margin:0 -6px;background:linear-gradient(#3a2a1e,#1d130c)}
+.deco{height:105px;margin-left:auto;flex:none}
+.sp{position:relative;flex:none;height:calc(var(--h)*var(--sc));width:calc(var(--w)*var(--sc));border:0;border-radius:3px 3px 1px 1px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:10px 0;box-shadow:inset 3px 0 5px rgba(255,255,255,.14),inset -4px 0 6px rgba(0,0,0,.35);transform-origin:100% 100%;transition:transform .25s;cursor:pointer}
+.sp:hover,.sp:focus-visible{transform:translateY(-10px)}
+.sp::before,.sp::after{content:"";width:70%;height:3px;background:currentColor;opacity:.55}
+.stt{writing-mode:vertical-rl;transform:rotate(180deg);font:.98rem 'Instrument Serif',serif;max-height:68%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sp.fall{z-index:6;pointer-events:none;animation:fall .95s cubic-bezier(.5,0,.9,.55) forwards}
+@keyframes fall{0%{transform:translateY(0) rotate(0)}18%{transform:translateY(-4px) rotate(7deg)}100%{transform:translate(var(--dx),var(--dy)) rotate(var(--rot));opacity:.2}}
+.sp.gone{visibility:hidden}
+.sp.back{animation:back .6s ease-out}
+@keyframes back{from{transform:translateY(-40px);opacity:0}}
+.floor{position:relative;width:min(100%,860px);margin:0 auto;min-height:190px;padding:2.2rem 1rem 1.2rem;display:flex;flex-wrap:wrap;gap:1rem 1.6rem;justify-content:center;align-items:flex-end;background:linear-gradient(#24190f,#4b3825);border-radius:0 0 10px 10px;box-shadow:inset 0 16px 22px -10px rgba(0,0,0,.65)}
+.fh{position:absolute;left:0;right:0;top:1rem;text-align:center;color:var(--bt);font-style:italic;opacity:.8}
+.floor.has .fh{display:none}
+.fb{width:100px;background:none;border:0;padding:0;transform:rotate(var(--r));transition:transform .3s;animation:land .6s cubic-bezier(.3,1.6,.5,1);cursor:pointer}
+.fb:hover,.fb:focus-visible{transform:rotate(0) translateY(-8px)}
+.fb .ct{font-size:1rem}.fb .ca{font-size:.62rem}
+@keyframes land{from{transform:translateY(-70px) rotate(calc(var(--r) - 30deg));opacity:0}}
+/* nightstand */
+.nowc{display:grid;grid-template-columns:150px 1fr;gap:2.5rem;align-items:center}
+.nbook{aspect-ratio:2/3;border-radius:3px 9px 9px 3px;background:linear-gradient(135deg,#2f4f7a,#162a47);transform:rotate(-4deg);position:relative;box-shadow:inset 7px 0 8px -4px rgba(0,0,0,.4),0 18px 26px -10px rgba(0,0,0,.5)}
+.nbook::after{content:"";position:absolute;left:0;right:0;top:46%;height:8px;background:var(--bt);opacity:.85}
+.prog{height:10px;border-radius:99px;background:var(--line);overflow:hidden;margin:.8rem 0 .3rem}
+.prog i{display:block;height:100%;width:0;background:var(--ink);transition:width 1.2s}
+/* gallery */
+.gal{column-width:230px;column-gap:1.7rem;padding:1rem 0}
+.gi{display:block;break-inside:avoid;margin:0 0 1.9rem;position:relative;background:var(--card);padding:.6rem .6rem .5rem;box-shadow:0 12px 24px rgba(0,0,0,.2);transform:rotate(var(--r));transition:transform .35s,box-shadow .35s;cursor:zoom-in}
+.gi:hover,.gi:focus-visible{transform:rotate(0) scale(1.03);box-shadow:0 22px 34px rgba(0,0,0,.28);z-index:2}
+.gi::before{content:"";position:absolute;top:-10px;left:50%;width:66px;height:20px;background:rgba(242,216,117,.72);transform:translateX(-50%) rotate(-3deg);z-index:1}
+.gi img{display:block;width:100%;height:auto}
+.gp{width:100%}
+.gc{font:1.35rem/1.15 'Caveat',cursive,Georgia;margin:.55rem .2rem .1rem;min-height:1.2em}
+.gi.ph{cursor:default}
+.gt{display:none}
+body.edit .gt{display:flex;position:absolute;top:.5rem;right:.5rem;gap:.3rem;z-index:2}
+body.edit .gi{cursor:default}
+.gt button{width:1.7rem;height:1.7rem;border-radius:50%;border:0;background:#17120e;color:var(--bt);line-height:1}
+.gh{column-span:all;color:var(--mut);font-style:italic}
+.lbf{margin:0;text-align:center}
+#lbi{display:block;max-width:92vw;max-height:68vh;border:10px solid #f6f0dc;box-shadow:0 24px 50px rgba(0,0,0,.55)}
+#lbc{color:var(--bt);margin-top:1rem}
+@media(max-width:520px){.gal{column-width:140px;column-gap:1rem}}
+/* margin notes */
+.mn{display:flex;gap:1.6rem;overflow-x:auto;scroll-snap-type:x mandatory;padding:1.5rem .5rem 2.5rem}
+.card{flex:0 0 min(260px,72vw);scroll-snap-align:center;margin:0;background:var(--card);padding:2rem 1.3rem 1.6rem;font:1.55rem/1.2 'Caveat',cursive,Georgia;transform:rotate(var(--r));box-shadow:0 12px 24px rgba(0,0,0,.2);position:relative;transition:transform .3s}
+.card:hover{transform:rotate(0) translateY(-6px)}
+.card::before{content:"";position:absolute;top:-11px;left:50%;width:74px;height:22px;background:rgba(242,216,117,.75);transform:translateX(-50%) rotate(-3deg)}
+/* open-book viewer */
+.bv{position:fixed;inset:0;z-index:80;display:none;flex-direction:column;align-items:center;justify-content:center;gap:2.2rem;padding:1rem;background:radial-gradient(circle at 50% 40%,rgba(66,44,26,.94),rgba(10,6,3,.97))}
+.bv.on{display:flex}
+.bx{position:absolute;top:calc(.8rem + env(safe-area-inset-top,0px));right:1.1rem;background:none;border:0;color:var(--bt);font-size:2.5rem;line-height:1}
+.bk3{--pw:min(44vw,340px);--ph:calc(var(--pw)*1.38);position:relative}
+.bk3::after{content:"";position:absolute;left:8%;right:8%;bottom:-26px;height:30px;background:radial-gradient(rgba(0,0,0,.6),transparent 70%);filter:blur(6px)}
+.bkin{position:relative;width:calc(var(--pw)*2);height:var(--ph);perspective:2400px;transition:transform .9s cubic-bezier(.6,0,.2,1);cursor:pointer}
+.lf{position:absolute;left:50%;top:0;width:50%;height:100%;transform-origin:left center;transform-style:preserve-3d;transition:transform 1s cubic-bezier(.6,0,.2,1)}
+.lf.fl{transform:rotateY(-180deg)}
+.lf>div{position:absolute;inset:0;overflow:hidden;color:#2a1f18;-webkit-backface-visibility:hidden;backface-visibility:hidden}
+.lf .fr{background:#f6f0dc linear-gradient(90deg,rgba(0,0,0,.2),transparent 12%);border-radius:0 6px 6px 0}
+.lf .bk{background:#f6f0dc linear-gradient(270deg,rgba(0,0,0,.2),transparent 12%);border-radius:6px 0 0 6px;transform:rotateY(180deg)}
+.lf:first-child .fr{background:none;border-radius:0 8px 8px 0}
+.fr .cv{position:absolute;inset:0;aspect-ratio:auto;transform:none;border-radius:0 8px 8px 0;padding:1.4rem 1.1rem}
+.fr .ct{font-size:clamp(1.3rem,calc(var(--pw)/9),2.2rem)}
+.pp{height:100%;padding:12% 11% 10%;display:flex;flex-direction:column;position:relative;font-size:clamp(.72rem,calc(var(--pw)/21),1.05rem);line-height:1.5}
+.pp small{font-style:italic;color:#6b6150}
+.pp h3{font-size:2.1em;margin:.5em 0 .1em}
+.pp .stars{letter-spacing:.2em;color:#5f6038}
+.pp .mm{margin-top:auto;color:#6b6150;font-size:.9em}
+.pp .tg span{border-color:rgba(42,31,24,.3)}
+.pgn{position:absolute;bottom:6%;right:11%;font-size:.8em;color:#6b6150}
+.tape{position:absolute;top:-8px;left:50%;width:36%;height:20px;background:rgba(242,216,117,.8);transform:translateX(-50%) rotate(-4deg)}
+.bvn{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;justify-content:center;color:var(--bt);font-style:italic}
+.bvn button{background:none;border:1px solid var(--bt);color:var(--bt);border-radius:99px;padding:.1rem 1rem}
+@media(max-width:720px){.cab{--sc:.78}.nowc{grid-template-columns:1fr}.nbook{width:110px}#clk{display:none}.top{font-size:.88rem}.top button{margin-left:.7rem}}
+@media(prefers-reduced-motion:reduce){.pt{display:none}#sakura-canvas{display:none}}
+/* intro */
+.ov{position:fixed;inset:0;z-index:100;background:var(--bt);color:#2a1f18;display:grid;place-items:center;text-align:center;animation:up 1s 1.7s cubic-bezier(.7,0,.2,1) forwards}
+.ov h1{font-size:clamp(3rem,12vw,7rem);font-style:italic}
+.ov p{margin:.6rem 0 0}
+@keyframes up{to{transform:translateY(-101%)}}
+@media(max-width:720px){.about,.stats{grid-template-columns:1fr}.pg{grid-template-columns:1fr}.pg .cv{max-width:150px}.bar .rd{margin-left:0}.mt{top:4.6rem}.ring{margin:0 auto}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
 </head>
 <body>
+<canvas id="sakura-canvas"></canvas>
+<div class="ov" id="ov"><div><h1>Diệu Linh</h1><p>Opening the book...</p></div></div>
+<div class="rainfx"></div>
 
-  <!-- Canvas hiệu ứng cánh hoa đào rơi -->
-  <canvas id="petals-canvas"></canvas>
+<div id="pbar"></div><div class="lamp"></div>
+<header class="top">
+  <span class="nm" data-k="name">Diệu Linh</span>
+  <span id="clk"></span>
+  <span><button id="edt-btn" style="color:var(--bt);border-color:currentColor;">Edit Mode</button><button id="th">Light or dark</button><button id="rn">Play rain</button><button id="sn">Sounds off</button><button id="lp">Lamp</button></span>
+</header>
 
-  <!-- Nút Bật/Tắt Edit Mode -->
-  <div class="top-bar">
-    <button class="edit-btn" id="toggleEditBtn">Edit Mode</button>
+<section class="hero" id="hero"><div id="petals"></div>
+  <div class="p1" data-im="hero1"></div>
+  <div class="p2" data-im="hero2"><div class="cup"><i></i></div></div>
+  <div class="mt l"><span id="dt"></span><span data-k="l2">Hanoi</span><span data-k="l3">a reading corner</span></div>
+  <div class="mt r"><span data-k="r1">with something warm</span><span data-k="r2">...and (more) books</span></div>
+  <h1>Read With Me.</h1>
+  <p class="lead"><span data-k="lead">For economics students who secretly love literature, and anyone looking for their next read. Tap a cover to open my notes.</span> <a href="#shelf">Go to the shelf</a></p>
+</section>
+
+<section class="s about" id="about">
+  <div>
+    <h2 data-k="aboutH">Hi, I am Linh.</h2>
+    <p data-k="aboutP1">I study International Economics at Foreign Trade University, but I spent three years of high school on the Literature track, and the habit of reading slowly stuck. Outside class I dance Latin, sell on Amazon, and read whatever I can.</p>
+    <p data-k="aboutP2">This page is my bookshelf: whenever a book makes me stop, I write it down here.</p>
   </div>
+  <div class="pos">
+    <figure class="po" style="--r:-5deg"><div data-im="po1" style="background:#5f6038"><span>Lit</span></div><figcaption data-k="cap1">Literature track, HNUE High School for Gifted Students</figcaption></figure>
+    <figure class="po" style="--r:3deg"><div data-im="po2" style="background:#7a5238"><span>Econ</span></div><figcaption data-k="cap2">International Economics, third year at FTU</figcaption></figure>
+    <figure class="po" style="--r:-2deg"><div data-im="po3" style="background:#9c3b34"><span>Latin</span></div><figcaption data-k="cap3">Gold Medal, Hanoi Open 2025</figcaption></figure>
+  </div>
+</section>
 
-  <div class="main-wrapper">
-    <!-- KHUNG PHOTO SẢNH (BÊN TRÁI) -->
-    <div class="hall-container">
-      <div class="polaroid-frame">
-        <div class="photo-area">
-          <img id="windowImg" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='500' viewBox='0 0 400 500'><rect width='400' height='500' fill='%235c553d'/><circle cx='200' cy='250' r='70' fill='%236d654c' opacity='0.4'/></svg>" alt="Window view">
-        </div>
-        <div class="polaroid-caption" id="captionText" contenteditable="false">a quiet window</div>
-      </div>
-      <div class="upload-controls">
-        <label for="imgInput" class="upload-label">Change Window Photo</label>
-        <input type="file" id="imgInput" accept="image/*" style="display:none;">
-      </div>
-    </div>
+<div class="mq" aria-hidden="true"><div class="mqt" id="mq"></div></div>
 
-    <!-- TỦ SÁCH (BÊN PHẢI) -->
-    <div class="bookshelf-container">
-      <div class="bookshelf">
-        <!-- Kệ trên -->
-        <div class="shelf-row" id="shelfTop">
-          <!-- SVG Cây nhỏ -->
-          <svg class="plant-icon" viewBox="0 0 50 80">
-            <path d="M25 50 L25 80" stroke="#2b1a0e" stroke-width="3"/>
-            <path d="M15 62 L35 62 L32 80 L18 80 Z" fill="#8c583f"/>
-            <circle cx="16" cy="38" r="11" fill="#697e5a"/>
-            <circle cx="32" cy="34" r="12" fill="#7a936a"/>
-            <circle cx="24" cy="20" r="13" fill="#8ca87a"/>
-          </svg>
-        </div>
+<section class="s" id="cabinet">
+  <h2 data-k="cabH">The Cabinet</h2>
+  <p class="sub" data-k="cabSub">Tap a spine and the book tumbles off the shelf. Tap it on the floor to open it, then turn the pages.</p>
+  <div class="cab" id="cab"><div class="inner" id="rows"></div><div class="feet"></div></div>
+  <div class="floor" id="floor"><span class="fh">Fallen books land here.</span></div>
+</section>
 
-        <!-- Kệ dưới -->
-        <div class="shelf-row" id="shelfBottom">
-          <!-- SVG Cây nến -->
-          <svg class="candle-icon" viewBox="0 0 40 70">
-            <rect x="13" y="32" width="14" height="32" fill="#eae3d2" rx="1"/>
-            <rect x="10" y="62" width="20" height="4" fill="#705238"/>
-            <line x1="20" y1="32" x2="20" y2="24" stroke="#222" stroke-width="1.5"/>
-            <ellipse cx="20" cy="18" rx="3.5" ry="6" fill="#facc15"/>
-          </svg>
-        </div>
-
-        <!-- Nơi sách rơi -->
-        <div class="fallen-area">
-          <div class="fallen-title">Fallen books land here.</div>
-          <div class="fallen-books-list" id="fallenList"></div>
-        </div>
-      </div>
-
-      <!-- Bảng chỉnh sửa Sách trong Edit Mode -->
-      <div class="edit-panel">
-        <div style="font-family:'Plus Jakarta Sans'; font-size:0.85rem; font-weight:600; color:#36281e;">Add / Edit Books</div>
-        <div class="panel-row">
-          <input type="text" id="newTitle" class="input-field" placeholder="Book Title...">
-          <select id="newShelf" class="input-field">
-            <option value="shelfTop">Top Shelf</option>
-            <option value="shelfBottom">Bottom Shelf</option>
-          </select>
-        </div>
-        <div class="panel-row">
-          <input type="color" id="newColor" value="#3b5998" style="height:32px; width:45px; border:none; cursor:pointer;">
-          <input type="text" id="newTextColor" class="input-field" placeholder="Text Color" value="#ecdab9">
-          <button class="action-btn" id="addBtn">Add</button>
-        </div>
-      </div>
+<section class="s" id="now">
+  <h2 data-k="nowH">On my nightstand</h2>
+  <div class="nowc">
+    <div class="nbook"></div>
+    <div>
+      <h3 data-k="nowT">The book I am reading now</h3>
+      <p class="au" data-k="nowA">Author name</p>
+      <div class="prog"><i id="nowbar"></i></div>
+      <p><span data-k="nowP">120</span> of <span data-k="nowN">320</span> pages</p>
+      <p class="hw" data-k="nowQ">A few words about how it feels so far.</p>
     </div>
   </div>
+</section>
 
-  <script>
-    // --- 1. DỮ LIỆU SÁCH CHUẨN TỪ HÌNH ẢNH CỦA BẠN ---
-    const initialData = [
-      { id: '1', title: 'Norwegian Wood', bg: '#3a5340', color: '#e0c38c', shelf: 'shelfTop', h: 155, w: 32 },
-      { id: '2', title: 'The Lover', bg: '#8a503a', color: '#f0e2d3', shelf: 'shelfTop', h: 145, w: 30 },
-      { id: '3', title: 'The Sorrows of Young Werther', bg: '#2b2b2b', color: '#ffffff', shelf: 'shelfTop', h: 165, w: 34 },
-      { id: '4', title: 'Thinking, Fast and Slow', bg: '#d49e35', color: '#1a1a1a', shelf: 'shelfTop', h: 170, w: 42 },
-      { id: '5', title: 'The Catcher in the Rye', bg: '#8c2d19', color: '#f5efdf', shelf: 'shelfBottom', h: 150, w: 32 },
-      { id: '6', title: 'The Old Man and the Sea', bg: '#295b66', color: '#dbf0f5', shelf: 'shelfBottom', h: 138, w: 36 },
-      { id: '7', title: 'A Room of One\'s Own', bg: '#483759', color: '#ebd6fa', shelf: 'shelfBottom', h: 130, w: 38 },
-      { id: '8', title: 'The Little Prince', bg: '#1c395e', color: '#fce895', shelf: 'shelfBottom', h: 142, w: 34 }
-    ];
+<section class="s" id="shelf">
+  <h2 data-k="shelfH">All the Covers</h2>
+  <p class="sub" data-k="shelfSub">Hover and the covers tilt toward you. Click a cover to open the book.</p>
+  <div class="bar" id="bar">
+    <button data-f="all" aria-pressed="true">All</button>
+    <button data-f="vn" aria-pressed="false">Vietnam</button>
+    <button data-f="world" aria-pressed="false">World</button>
+    <button data-f="think" aria-pressed="false">Ideas</button>
+    <button class="rd" id="rd">Pick one for me</button>
+  </div>
+  <div class="sh" id="sh"></div>
+  <div class="plank"></div>
+</section>
 
-    let bookList = [...initialData];
-    let fallenList = [];
-    let isEditing = false;
+<section class="s" id="gallery">
+  <h2 data-k="galH">The Gallery</h2>
+  <p class="sub" data-k="galSub">Photographs I keep: corners, cups, windows, and the light between pages.</p>
+  <div class="gal" id="gal"></div>
+</section>
 
-    // --- 2. RENDER SÁCH LÊN KỆ ---
-    function render() {
-      document.getElementById('shelfTop').querySelectorAll('.book').forEach(el => el.remove());
-      document.getElementById('shelfBottom').querySelectorAll('.book').forEach(el => el.remove());
+<section class="s" id="notes">
+  <h2 data-k="mnH">Margin Notes</h2>
+  <div class="mn">
+    <p class="card" style="--r:-3deg" data-k="mn1">Read slowly. Nothing is chasing you.</p>
+    <p class="card" style="--r:2deg" data-k="mn2">A book is a room you can carry.</p>
+    <p class="card" style="--r:-1.5deg" data-k="mn3">Underline in pencil, so you can change your mind.</p>
+    <p class="card" style="--r:3deg" data-k="mn4">Economics explains our choices. Novels explain why we make the bad ones.</p>
+    <p class="card" style="--r:-2.5deg" data-k="mn5">Rain is always a good reason to stay in.</p>
+  </div>
+</section>
 
-      bookList.forEach(item => {
-        const shelf = document.getElementById(item.shelf);
-        if (!shelf) return;
+<section class="s" id="stats">
+  <h2 data-k="statsH">This year I have read</h2>
+  <div class="stats">
+    <div class="ring"><svg width="190" height="190" viewBox="0 0 120 120"><circle class="bg" cx="60" cy="60" r="52"/><circle class="fg" id="fg" cx="60" cy="60" r="52" stroke-dasharray="326.7" stroke-dashoffset="326.7"/></svg><b id="cn">0</b><small id="gl"></small></div>
+    <div>
+      <div id="bars"></div>
+      <div class="facts"><div><b id="av">0</b><span>average star rating</span></div><div><b id="co">0</b><span>countries on the shelf</span></div></div>
+    </div>
+  </div>
+</section>
 
-        const el = document.createElement('div');
-        el.className = 'book';
-        el.style.backgroundColor = item.bg;
-        el.style.color = item.color;
-        el.style.height = `${item.h}px`;
-        el.style.width = `${item.w}px`;
+<footer>
+  <h2 data-k="footH">Thanks for stopping by.</h2>
+  <p><span data-k="footP">Any book I should read next?</span> <a id="em" data-k="linkText" href="mailto:linhnguyendieu.work@gmail.com">Send me a title</a></p>
+</footer>
 
-        el.innerHTML = `
-          <span class="book-title">${item.title}</span>
-          <div class="del-tag" onclick="removeBook(event, '${item.id}')">✕</div>
-        `;
+<div id="tb"><span class="hint">Edit mode: click any text to edit, click a photo to replace it (Shift+click removes it).</span><button id="ab">Add a book</button><button id="gp">Add photos</button><button id="eb">Email</button><button id="gb">Yearly goal</button><button class="go" id="db">Download content.json</button><button id="xb">Exit</button></div>
 
-        el.addEventListener('click', () => {
-          if (!isEditing) dropToBottom(item.id);
-        });
+<div class="bv" id="lb" role="dialog" aria-modal="true" aria-label="Photo">
+  <button class="bx" id="lbx" aria-label="Close">×</button>
+  <figure class="lbf"><img id="lbi" alt=""><figcaption class="hw" id="lbc"></figcaption></figure>
+  <div class="bvn"><button id="lbp" aria-label="Previous photo">←</button><span id="lbn"></span><button id="lbnx" aria-label="Next photo">→</button></div>
+</div>
 
-        shelf.appendChild(el);
-      });
+<div class="bv" id="bv" role="dialog" aria-modal="true" aria-label="Open book">
+  <button class="bx" id="bvx" aria-label="Close">×</button>
+  <div class="bk3"><div class="bkin" id="bkin"></div></div>
+  <div class="bvn"><button id="bvp" aria-label="Previous page">←</button><span id="bvc"></span><button id="bvn" aria-label="Next page">→</button><button id="bvb">Put back on the shelf</button></div>
+</div>
 
-      renderFallen();
+<div class="md" id="md" role="dialog" aria-modal="true" aria-label="Book notes">
+  <div class="pg" id="pg">
+    <div id="mb"></div>
+    <div class="nt">
+      <button class="x" id="mx" aria-label="Close">×</button>
+      <div id="vw"><i id="mg"></i>
+      <h3 id="mt"></h3>
+      <div id="ma"></div>
+      <div class="st" id="ms"></div>
+      <p class="ty" id="mn"></p>
+      <div class="tg" id="mtg"></div></div><div id="ef"></div>
+      <div class="nv"><button id="pv" aria-label="Previous book">←</button><span id="mc"></span><button id="nx" aria-label="Next book">→</button></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const GOAL=24;
+const DEFAULT_BOOKS=[
+{t:"Norwegian Wood",a:"Haruki Murakami",g:"world",gl:"Japanese fiction",co:"JP",r:5,d:"Mar 2026",m:"rainy afternoon",tags:["loneliness","youth"],n:"The book I read slowest because I did not want it to end. Perfect for a rainy afternoon with something warm beside you. I finished it missing a place I have never been.",c:["#5d6b45","#2c3524","#f2d875"]},
+{t:"The Lover",a:"Marguerite Duras",g:"world",gl:"French fiction",co:"FR",r:4,d:"May 2026",m:"coffee shop",tags:["memory","heat"],n:"Thin, but it stays with you for a long time. The sentences feel like hot sun poured over a river. I reread the opening three times.",c:["#b9855a","#6d3f2a","#f6e9c8"]},
+{t:"The Sorrow of War",a:"Bảo Ninh",sa:"Bao Ninh",g:"vn",gl:"Vietnamese fiction",co:"VN",r:5,d:"Jun 2026",m:"late night",tags:["memory","loss"],n:"I could not read it in one go. Every chapter was a pause to breathe. It showed me that memory is also a place you can live in.",c:["#3b3a36","#16140f","#e8dfc4"]},
+{t:"Thinking, Fast and Slow",a:"Daniel Kahneman",g:"think",gl:"Economics and psychology",co:"US",r:4,d:"Jul 2026",m:"midterm week",tags:["decisions","bias"],n:"An economist's book that reads like a detective story about my own head. Since then I keep asking: is this a reflex, or is this thinking?",c:["#e0c15a","#b58f2c","#2a1f18"]},
+{t:"The Catcher in the Rye",a:"J. D. Salinger",g:"world",gl:"American fiction",co:"US",r:4,d:"Aug 2026",m:"on the bus",tags:["alienation","growing up"],n:"At any age I feel like I am standing somewhere different. Holden is irritating and heartbreaking in a way that feels very real.",c:["#9c3b34","#5a1f1c","#f2d875"]},
+{t:"The Old Man and the Sea",a:"Ernest Hemingway",g:"world",gl:"American fiction",co:"US",r:4,d:"Aug 2026",m:"weekend morning",tags:["patience","defeat"],n:"Short, quiet and patient. I love how it talks about failure without any self-pity.",c:["#3d6a77","#1b3a45","#f1ead2"]},
+{t:"A Room of One's Own",a:"Virginia Woolf",g:"think",gl:"Essay",co:"UK",r:5,d:"Sep 2026",m:"at my desk",tags:["freedom","writing"],n:"A reminder that freedom needs a room and some time that belong only to you. The book I underlined the most.",c:["#7d6b8e","#3f3350","#f2d875"]},
+{t:"The Little Prince",a:"Antoine de Saint-Exupéry",g:"world",gl:"French fiction",co:"FR",r:5,d:"Oct 2026",m:"before bed",tags:["growing up too fast","tenderness"],n:"The book I reopen whenever I feel I am growing up too fast. Reading it slowly, even out loud, makes it better.",c:["#2f4f7a","#162a47","#f2d875"]}
+];
+const GN={vn:"Vietnam",world:"World",think:"Ideas"};
+const PAL=[["#5d6b45","#2c3524","#f2d875"],["#b9855a","#6d3f2a","#f6e9c8"],["#3b3a36","#16140f","#e8dfc4"],["#e0c15a","#b58f2c","#2a1f18"],["#9c3b34","#5a1f1c","#f2d875"],["#3d6a77","#1b3a45","#f1ead2"],["#7d6b8e","#3f3350","#f2d875"],["#2f4f7a","#162a47","#f2d875"]];
+const $=id=>document.getElementById(id),Q=s=>document.querySelectorAll(s),RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let EDIT=location.hash==='#edit'||/[?&]edit\b/.test(location.search);
+const T={};Q('[data-k]').forEach(el=>T[el.dataset.k]=el.textContent.trim());
+const C={texts:T,images:{},books:DEFAULT_BOOKS,goal:GOAL,gallery:[],email:'linhnguyendieu.work@gmail.com'};
+let cur=0,opener,tm,ft,flt='all',els=[],dirty=false,seen=false,io;
+
+const cvr=(b,i)=>`<div class="cv" data-i="${i}" style="background:linear-gradient(135deg,${b.c[0]},${b.c[1]});color:${b.c[2]}"><span class="ct">${esc(b.t)}</span><span class="ca">${esc(b.a)}</span><img alt="" loading="lazy"></div>`;
+
+/* intro, clock, date */
+setTimeout(()=>$('ov').remove(),RM?0:2800);
+const tick=()=>{$('clk').textContent='Hanoi, '+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',timeZone:'Asia/Ho_Chi_Minh'})};
+tick();setInterval(tick,30000);
+$('dt').textContent=new Date().toLocaleDateString('en-GB',{month:'long',year:'numeric'});
+
+/* theme */
+$('th').onclick=()=>{const r=document.documentElement,d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;r.dataset.theme=d?'light':'dark'};
+
+/* rain */
+let ac,gn,rainOn=false;
+$('rn').onclick=()=>{
+  if(!ac){ac=new(window.AudioContext||window.webkitAudioContext)();const n=ac.sampleRate*2,b=ac.createBuffer(1,n,ac.sampleRate),d=b.getChannelData(0);
+    for(let i=0;i<n;i++)d[i]=Math.random()*2-1;
+    const s=ac.createBufferSource();s.buffer=b;s.loop=true;const f=ac.createBiquadFilter();f.type='lowpass';f.frequency.value=1500;
+    gn=ac.createGain();gn.gain.value=0;s.connect(f);f.connect(gn);gn.connect(ac.destination);s.start();}
+  rainOn=!rainOn;ac.resume();gn.gain.setTargetAtTime(rainOn?.14:0,ac.currentTime,.4);
+  document.body.classList.toggle('rain',rainOn);$('rn').textContent=rainOn?'Stop rain':'Play rain';
+};
+
+/* Edit Mode toggle button */
+$('edt-btn').onclick=()=>{
+  if(!EDIT){
+    EDIT=true;
+    location.hash='#edit';
+    startEdit();
+  } else {
+    if(!dirty||confirm('Leave Edit Mode without downloading your changes?')){
+      dirty=false;
+      location.hash='';
+      location.reload();
     }
+  }
+};
 
-    // Hiệu ứng sách rơi xuống khu vực Fallen
-    function dropToBottom(id) {
-      const idx = bookList.findIndex(b => b.id === id);
-      if (idx !== -1) {
-        const [dropped] = bookList.splice(idx, 1);
-        fallenList.push(dropped);
-        render();
-      }
+/* texts and photos */
+function applyTexts(){Q('[data-k]').forEach(el=>{const v=T[el.dataset.k];if(v!=null&&el!==document.activeElement)el.textContent=v});$('em').href='mailto:'+C.email;nowBar()}
+function applyImages(){Q('[data-im]').forEach(el=>{const u=C.images[el.dataset.im];el.style.backgroundImage=u?'url("'+u+'")':'';el.classList.toggle('hasim',!!u)})}
+function pick(max,cb){const f=document.createElement('input');f.type='file';f.accept='image/*';
+  f.onchange=()=>{const fl=f.files[0];if(!fl)return;const im=new Image();
+    im.onload=()=>{const k=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);
+      c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',.82));URL.revokeObjectURL(im.src)};
+    im.src=URL.createObjectURL(fl)};f.click()}
+
+const paint=b=>{const i=C.books.indexOf(b),u=b.u||b._u;if(i<0||!u)return;Q('.cv[data-i="'+i+'"]').forEach(el=>{const im=el.querySelector('img');im.onload=()=>el.classList.add('has');im.src=u})};
+async function findCover(b){
+  try{
+    const q=new URLSearchParams({title:b.q||b.t,author:b.sa||b.a,limit:1,fields:'cover_i'});
+    const j=await (await fetch('https://openlibrary.org/search.json?'+q)).json();
+    const id=j.docs&&j.docs[0]&&j.docs[0].cover_i;
+    if(id){b._u='https://covers.openlibrary.org/b/id/'+id+'-L.jpg?default=false';paint(b)}
+  }catch(e){}
+}
+
+/* shelf */
+function renderShelf(){
+  const sh=$('sh');
+  sh.innerHTML=C.books.map((b,i)=>`<button class="b3" data-i="${i}" aria-label="${esc(b.t)}, ${esc(b.a)}">${cvr(b,i)}</button>`).join('');
+  els=[...sh.children];
+  els.forEach((e,i)=>{
+    e.onclick=()=>openB(i,e);
+    e.classList.toggle('off',flt!=='all'&&C.books[i].g!==flt);
+    e.onpointermove=ev=>{if(ev.pointerType!=='mouse')return;const r=e.getBoundingClientRect();
+      e.style.setProperty('--ry',((ev.clientX-r.left)/r.width-.5)*18+'deg');e.style.setProperty('--rx',-((ev.clientY-r.top)/r.height-.5)*18+'deg')};
+    e.onpointerleave=()=>{e.style.setProperty('--ry','0deg');e.style.setProperty('--rx','0deg')};
+  });
+  C.books.forEach(b=>{if(b.u||b._u)paint(b);else if(!b._t){b._t=1;findCover(b)}});
+}
+$('bar').addEventListener('click',e=>{const f=e.target.dataset.f;if(!f)return;flt=f;
+  [...$('bar').querySelectorAll('[data-f]')].forEach(b=>b.setAttribute('aria-pressed',b===e.target));
+  els.forEach((el,i)=>el.classList.toggle('off',f!=='all'&&C.books[i].g!==f));});
+$('rd').onclick=()=>{
+  const n=els.length;if(!n)return;els.forEach(e=>e.classList.remove('off'));
+  const f=Math.floor(Math.random()*n);let s=0,k=-1;
+  const run=()=>{if(k>=0&&els[k])els[k].classList.remove('pk');k=s<12?Math.floor(Math.random()*n):f;els[k].classList.add('pk');s++;
+    if(s<=12)setTimeout(run,RM?0:60+s*18);else setTimeout(()=>{els[k].classList.remove('pk');openB(f,$('rd'))},RM?0:550)};
+  run();
+};
+
+/* note modal */
+const typeIt=t=>{clearInterval(tm);const el=$('mn');if(RM){el.textContent=t;return}el.textContent='';let i=0;tm=setInterval(()=>{el.textContent=t.slice(0,++i);if(i>=t.length)clearInterval(tm)},18)};
+function form(b){
+  const f=(k,l,v=b[k])=>`<label>${l}<input data-f="${k}" value="${esc(v)}"></label>`;
+  $('ef').innerHTML=f('t','Title')+f('a','Author')
+   +`<div class="r2">`+f('gl','Genre (e.g. French fiction)')+f('co','Country code (FR, VN, US)')+`</div>`
+   +`<div class="r2"><label>Group<select data-f="g">${Object.keys(GN).map(k=>`<option value="${k}"${b.g===k?' selected':''}>${GN[k]}</option>`).join('')}</select></label><label>Stars<select data-f="r">${[5,4,3,2,1].map(n=>`<option${b.r===n?' selected':''}>${n}</option>`).join('')}</select></label></div>`
+   +`<div class="r2">`+f('d','Finished (e.g. Oct 2026)')+f('m','Where I read it')+`</div>`
+   +f('tg','Tags (comma separated)',(b.tags||[]).join(', '))
+   +`<label>My notes (leave a blank line to start a new page)<textarea data-f="n">${esc(b.n)}</textarea></label>`
+   +`<div class="bt"><button data-a="cover">Change cover photo</button><button data-a="auto">Use automatic cover</button><button data-a="del">Delete this book</button></div>`;
+}
+function show(i){
+  const L=C.books.length;cur=(i+L)%L;const b=C.books[cur];
+  $('mb').innerHTML=cvr(b,cur);paint(b);
+  if(EDIT)form(b);else{
+    $('mg').textContent=b.gl+(b.d?', finished '+b.d:'');$('mt').textContent=b.t;$('ma').textContent=b.a;
+    $('ms').textContent='★'.repeat(b.r)+'☆'.repeat(5-b.r);$('ms').setAttribute('aria-label',b.r+' out of 5 stars');
+    $('mtg').innerHTML=(b.m?`<span>${esc(b.m)}</span>`:'')+(b.tags||[]).map(t=>`<span>${esc(t)}</span>`).join('');
+    typeIt(b.n||'');
+  }
+  $('mc').textContent=(cur+1)+' of '+L;
+  const pg=$('pg');pg.style.animation='none';pg.offsetHeight;pg.style.animation='';
+}
+function openForm(i,from){opener=from;$('md').classList.add('on');document.body.classList.add('mo');show(i);$('mx').focus()}
+function openB(i,from){opener=from;if(EDIT)openForm(i,from);else openBook(i,false)}
+function closeB(){clearInterval(tm);$('md').classList.remove('on');document.body.classList.remove('mo');if(EDIT){renderShelf();renderStats()}opener&&opener.focus&&opener.focus()}
+$('mx').onclick=closeB;$('pv').onclick=()=>show(cur-1);$('nx').onclick=()=>show(cur+1);
+$('md').onclick=e=>{if(e.target===$('md'))closeB()};
+addEventListener('keydown',e=>{if(!$('md').classList.contains('on'))return;
+  if(EDIT&&/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)&&e.key!=='Escape')return;
+  if(e.key==='Escape')closeB();if(e.key==='ArrowLeft')show(cur-1);if(e.key==='ArrowRight')show(cur+1)});
+$('ef').addEventListener('input',e=>{const k=e.target.dataset.f;if(!k)return;const b=C.books[cur];
+  if(k==='tg')b.tags=e.target.value.split(',').map(x=>x.trim()).filter(Boolean);else if(k==='r')b.r=+e.target.value;else b[k]=e.target.value;
+  dirty=true;
+  if(k==='t'||k==='a'){$('mb').innerHTML=cvr(b,cur);if(!b.u){delete b._u;clearTimeout(ft);ft=setTimeout(()=>findCover(b),800)}paint(b)}});
+$('ef').addEventListener('click',e=>{const a=e.target.dataset.a;if(!a)return;const b=C.books[cur];
+  if(a==='cover')pick(600,u=>{b.u=u;dirty=true;$('mb').innerHTML=cvr(b,cur);paint(b)});
+  if(a==='auto'){delete b.u;dirty=true;$('mb').innerHTML=cvr(b,cur);if(b._u)paint(b);else findCover(b)}
+  if(a==='del'&&confirm('Delete "'+b.t+'"?')){C.books.splice(cur,1);dirty=true;
+    if(!C.books.length){closeB();renderShelf();renderStats();return}show(cur)}});
+
+/* stats */
+const cnt=(el,to,dec,fast)=>{if(RM||fast){el.textContent=to.toFixed(dec);return}let t0;const f=ts=>{t0=t0||ts;const p=Math.min((ts-t0)/1400,1);el.textContent=(to*(1-Math.pow(1-p,3))).toFixed(dec);if(p<1)requestAnimationFrame(f)};requestAnimationFrame(f)};
+function statGo(fast){
+  const B=C.books,n=B.length;seen=true;
+  $('fg').style.strokeDashoffset=326.7*(1-Math.min(n/C.goal,1));
+  Q('.row i').forEach(i=>i.style.width=i.dataset.w);
+  cnt($('cn'),n,0,fast);cnt($('av'),n?B.reduce((s,b)=>s+b.r,0)/n:0,1,fast);cnt($('co'),new Set(B.map(b=>b.co).filter(Boolean)).size,0,fast);
+}
+function renderStats(){
+  const B=C.books,n=B.length,gc={};B.forEach(b=>gc[b.g]=(gc[b.g]||0)+1);
+  $('bars').innerHTML=Object.keys(GN).map(k=>`<div class="row"><span>${GN[k]}</span><i data-w="${n?(gc[k]||0)/n*100:0}%"></i><b>${gc[k]||0}</b></div>`).join('');
+  $('gl').textContent='of '+C.goal+' books';
+  if(seen)statGo(true);else if(!io){io=new IntersectionObserver((en,ob)=>{if(en[0].isIntersecting){ob.disconnect();statGo(false)}},{threshold:.4});io.observe($('stats'))}
+  renderCabinet();renderGallery();renderMarq();
+}
+
+/* edit mode */
+function startEdit(){
+  document.body.classList.add('edit');
+  Q('[data-k]').forEach(el=>{el.contentEditable='true';el.spellcheck=false});
+  document.addEventListener('input',e=>{const el=e.target.closest&&e.target.closest('[data-k]');if(!el)return;
+    const k=el.dataset.k,v=el.textContent.trim();T[k]=v;dirty=true;nowBar();Q('[data-k="'+k+'"]').forEach(x=>{if(x!==el)x.textContent=v})});
+  document.addEventListener('click',e=>{
+    if(e.target.closest('#em'))e.preventDefault();
+    const im=e.target.closest('[data-im]');if(!im)return;const k=im.dataset.im;
+    if(e.shiftKey){delete C.images[k];applyImages();dirty=true}
+    else pick(k.indexOf('hero')===0?1600:700,u=>{C.images[k]=u;applyImages();dirty=true})});
+  $('ab').onclick=()=>{C.books.push({t:'New book',a:'Author',g:'world',gl:'Genre',co:'',r:4,d:'',m:'',tags:[],n:'',c:PAL[Math.floor(Math.random()*PAL.length)]});dirty=true;renderShelf();renderStats();openB(C.books.length-1,$('ab'))};$('eb').onclick=()=>{const v=prompt('Contact email',C.email);if(v){C.email=v.trim();applyTexts();dirty=true}};
+  $('gb').onclick=()=>{const v=parseInt(prompt('How many books do you want to read this year?',C.goal),10);if(v>0){C.goal=v;renderStats();dirty=true}};$('db').onclick=()=>{const blob=new Blob([JSON.stringify(C,(k,v)=>k[0]==='_'?undefined:v,1)],{type:'application/json'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='content.json';document.body.appendChild(a);a.click();a.remove();dirty=false};
+  $('xb').onclick=()=>{if(!dirty||confirm('Leave without downloading your changes?')){dirty=false;location.hash='';location.reload();}};
+  addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue=''}});
+}
+
+/* ===== cabinet, open book, path, marquee, lamp, sounds ===== */
+let sndOn=false,ac2,per=0,leaves=[],pgi=0,L=0,bvI=-1,rt,tk=false;
+const fallen=new Set();
+function sfx(k){
+  if(!sndOn)return;
+  try{ac2=ac2||new(window.AudioContext||window.webkitAudioContext)();ac2.resume();
+    const n=Math.floor(ac2.sampleRate*.25),b=ac2.createBuffer(1,n,ac2.sampleRate),d=b.getChannelData(0),th=k==='thud';
+    for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/n,th?3:2);
+    const s=ac2.createBufferSource();s.buffer=b;const f=ac2.createBiquadFilter();f.type=th?'lowpass':'bandpass';f.frequency.value=th?220:2800;
+    const g=ac2.createGain();g.gain.value=th?1.6:.5;s.connect(f);f.connect(g);g.connect(ac2.destination);s.start();}catch(e){}
+}
+$('sn').onclick=()=>{sndOn=!sndOn;$('sn').textContent=sndOn?'Sounds on':'Sounds off';sfx('flip')};$('lp').onclick=()=>document.body.classList.toggle('lampon');
+addEventListener('pointermove',e=>{const s=document.documentElement.style;s.setProperty('--mx',e.clientX+'px');s.setProperty('--my',e.clientY+'px')});
+addEventListener('scroll',()=>{if(tk)return;tk=true;requestAnimationFrame(()=>{tk=false;const y=scrollY,m=document.documentElement.scrollHeight-innerHeight;
+  $('pbar').style.setProperty('--p',m>0?y/m:0);$('hero').style.setProperty('--py',-Math.min(y,innerHeight)*.1+'px')})},{passive:true});
+(()=>{const p=$('petals');for(let i=0;i<16;i++){const x=document.createElement('i');x.className='pt';
+  x.style.cssText=`--l:${Math.random()*100}%;--s:${6+Math.random()*8}px;--d:${10+Math.random()*10}s;--dl:-${Math.random()*14}s;--sx:${Math.random()*160-80}px`;p.appendChild(x)}})();
+function nowBar(){const p=parseFloat(T.nowP),n=parseFloat(T.nowN);$('nowbar').style.width=(n>0?Math.min(100,p/n*100):0)+'%'}
+function renderMarq(){const s=C.books.map(b=>esc(b.t)).join('   ✦   ')+'   ✦   ';$('mq').innerHTML=s+s+s+s}
+
+/* cabinet */
+const hsh=s=>{let h=7;for(const ch of s)h=(h*31+ch.charCodeAt(0))>>>0;return h};
+const PLANT='<svg class="deco" viewBox="0 0 60 120"><path d="M30 118V60" stroke="#6f8a4a" stroke-width="3"/><ellipse cx="20" cy="48" rx="14" ry="7" fill="#6f8a4a" transform="rotate(-35 20 48)"/><ellipse cx="40" cy="34" rx="14" ry="7" fill="#7d9a55" transform="rotate(35 40 34)"/><ellipse cx="22" cy="22" rx="12" ry="6" fill="#7d9a55" transform="rotate(-30 22 22)"/><path d="M14 92h32l-5 26H19z" fill="#9c5a3c"/></svg>';
+const CANDLE='<svg class="deco" viewBox="0 0 40 90"><ellipse cx="20" cy="14" rx="5" ry="9" fill="#f2d875"><animate attributeName="ry" values="9;10.5;9" dur="1.6s" repeatCount="indefinite"/></ellipse><rect x="13" y="24" width="14" height="46" rx="2" fill="#efe6cf"/><rect x="6" y="70" width="28" height="12" rx="3" fill="#7a5238"/></svg>';
+function renderCabinet(){
+  per=innerWidth<640?4:5;const B=C.books,R=Math.max(2,Math.ceil(B.length/per));let h='';
+  for(let r=0;r<R;r++){
+    h+='<div class="shelfrow">';
+    B.slice(r*per,r*per+per).forEach((b,k)=>{const i=r*per+k,x=hsh(b.t+b.a);
+      h+=`<button class="sp${fallen.has(i)?' gone':''}" data-i="${i}" aria-label="Pull down: ${esc(b.t)}" style="--h:${150+x%52}px;--w:${42+(x>>3)%20}px;background:linear-gradient(90deg,${b.c[0]},${b.c[1]});color:${b.c[2]}"><span class="stt">${esc(b.t)}</span></button>`});
+    h+=(r===0?PLANT:r===1?CANDLE:'')+'</div><div class="pl"></div>';
+  }
+  $('rows').innerHTML=h;
+}
+addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{if((innerWidth<640?4:5)!==per)renderCabinet()},200)});
+
+/* Trigger book fall directly on click */
+function dropBook(i, el){
+  if(fallen.has(i)||(el&&el.classList.contains('fall'))) return;
+  const fr=$('floor').getBoundingClientRect();
+  const r=el ? el.getBoundingClientRect() : {bottom: 0};
+  if(el){
+    el.style.setProperty('--dy',Math.max(80,fr.top-r.bottom+60)+'px');
+    el.style.setProperty('--dx',(Math.random()*50-25)+'px');
+    el.style.setProperty('--rot',(60+Math.random()*30)+'deg');
+    el.classList.add('fall');
+  }
+  sfx('flip');
+  setTimeout(()=>{
+    sfx('thud');
+    fallen.add(i);
+    if(el){
+      el.classList.remove('fall');
+      el.classList.add('gone');
     }
+    addFloor(i);
+  }, 900);
+}
 
-    // Trả sách về lại kệ
-    function returnToShelf(id) {
-      const idx = fallenList.findIndex(b => b.id === id);
-      if (idx !== -1) {
-        const [returned] = fallenList.splice(idx, 1);
-        bookList.push(returned);
-        render();
-      }
+$('rows').addEventListener('click',e=>{
+  const el=e.target.closest('.sp');if(!el)return;const i=+el.dataset.i;
+  if(EDIT){openForm(i,el);return}
+  dropBook(i, el);
+});
+
+/* Click event on bookshelf or cover images to trigger falling book */
+$('sh').addEventListener('click', e => {
+  if(EDIT) return;
+  const cv = e.target.closest('.b3');
+  if(cv){
+    const i = +cv.dataset.i;
+    dropBook(i, $('rows').querySelector(`.sp[data-i="${i}"]`));
+    $('cabinet').scrollIntoView({ behavior: 'smooth' });
+  }
+});
+
+function addFloor(i){const b=C.books[i],f=$('floor'),x=document.createElement('button');x.className='fb';x.dataset.i=i;
+  x.style.setProperty('--r',(Math.random()*20-10)+'deg');x.setAttribute('aria-label','Open: '+b.t);x.innerHTML=cvr(b,i);f.appendChild(x);f.classList.add('has');paint(b)}
+$('floor').addEventListener('click',e=>{const x=e.target.closest('.fb');if(x)openBook(+x.dataset.i,true)});
+
+/* open book */
+function pagesOf(b){
+  const raw=(b.n||'').trim();if(!raw)return[];
+  let p=raw.split(/\n\s*\n/).map(x=>x.trim()).filter(Boolean);
+  if(p.length===1){const s=raw.match(/[^.!?]+[.!?]+["']?\s*|[^.!?]+$/g)||[raw];p=[];let c='';
+    s.forEach(x=>{c+=x;if(c.length>70){p.push(c.trim());c=''}});if(c.trim())p.push(c.trim())}
+  return p;
+}
+function face(b,x,i){
+  if(x.k==='c')return cvr(b,i);
+  if(x.k==='t')return `<div class="pp"><small>${esc(b.gl)}</small><h3>${esc(b.t)}</h3><p class="au">${esc(b.a)}</p><div class="stars">${'★'.repeat(b.r)+'☆'.repeat(5-b.r)}</div><p class="mm">${b.d?'Finished '+esc(b.d):''}${b.m?'<br>Read: '+esc(b.m):''}</p></div>`;
+  if(x.k==='n')return `<div class="pp"><div class="tape"></div><p class="hw nt1" data-t="${esc(x.t)}"></p><span class="pgn">${x.n}</span></div>`;
+  if(x.k==='f')return `<div class="pp"><small>keywords</small><div class="tg">${(b.tags||[]).map(t=>`<span>${esc(t)}</span>`).join('')}</div><p class="hw">The end of my notes.</p></div>`;
+  return '<div class="pp"></div>';
+}
+function typeEl(el){if(!el||el.dataset.d)return;el.dataset.d=1;const t=el.dataset.t;if(RM){el.textContent=t;return}
+  let i=0;const id=setInterval(()=>{el.textContent=t.slice(0,++i);if(i>=t.length)clearInterval(id)},16)}
+function revealVis(){[pgi>0&&leaves[pgi-1]&&leaves[pgi-1].querySelector('.bk .nt1'),leaves[pgi]&&leaves[pgi].querySelector('.fr .nt1')].forEach(el=>el&&typeEl(el))}
+function setFlip(n,quiet){
+  const old=pgi;pgi=Math.max(0,Math.min(L,n));
+  leaves.forEach((el,j)=>{const f=j<pgi,z=f?j+1:L-j;
+    if(el.classList.contains('fl')!==f){el.style.zIndex=100;setTimeout(()=>{el.style.zIndex=z},520)}else el.style.zIndex=z;
+    el.classList.toggle('fl',f)});
+  $('bkin').style.transform=pgi===0?'translateX(-25%)':pgi===L?'translateX(25%)':'none';
+  if(pgi!==old&&!quiet)sfx('flip');
+  revealVis();
+  $('bvc').textContent=pgi===0?'Cover':pgi===L?'The end':'Spread '+pgi+' of '+(L-1);
+}
+function openBook(i,fl){
+  const b=C.books[i];bvI=i;
+  const S=[{k:'c'},{k:'t'}];pagesOf(b).forEach((t,n)=>S.push({k:'n',t,n:n+1}));S.push({k:'f'});
+  L=Math.ceil(S.length/2);
+  $('bkin').innerHTML=Array.from({length:L},(_,j)=>`<div class="lf"><div class="fr">${face(b,S[2*j],i)}</div><div class="bk">${face(b,S[2*j+1]||{},i)}</div></div>`).join('');
+  leaves=[...$('bkin').children];pgi=0;
+  $('bvb').style.display=fl?'':'none';$('bv').classList.add('on');document.body.classList.add('mo');
+  paint(b);setFlip(0,true);$('bvx').focus();
+}
+function closeBook(){$('bv').classList.remove('on');document.body.classList.remove('mo');bvI=-1}$('bvx').onclick=closeBook;$('bvp').onclick=()=>setFlip(pgi-1);$('bvn').onclick=()=>setFlip(pgi+1);
+$('bv').addEventListener('click',e=>{if(e.target===$('bv'))closeBook()});
+$('bkin').addEventListener('click',e=>{const r=$('bkin').getBoundingClientRect();setFlip(e.clientX>r.left+r.width/2?pgi+1:pgi-1)});
+let tx=0;
+$('bkin').addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});$('bkin').addEventListener('touchend',e=>{const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>40){setFlip(pgi+(d<0?1:-1));e.preventDefault()}});
+addEventListener('keydown',e=>{if(!$('bv').classList.contains('on'))return;
+  if(e.key==='Escape')closeBook();if(e.key==='ArrowRight')setFlip(pgi+1);if(e.key==='ArrowLeft')setFlip(pgi-1)});
+$('bvb').onclick=()=>{const i=bvI;closeBook();fallen.delete(i);const f=$('floor').querySelector('.fb[data-i="'+i+'"]');f&&f.remove();
+  if(!$('floor').querySelector('.fb'))$('floor').classList.remove('has');renderCabinet();const s=$('rows').querySelector('.sp[data-i="'+i+'"]');s&&s.classList.add('back')};
+
+/* gallery */
+const PH=[["#8b7a4f","#5e5a3a","a quiet window","4/5"],["#7a5238","#2c1c12","coffee, again","1/1"],["#5d6b45","#2c3524","the corner I read in","3/4"],["#3d6a77","#1b3a45","rain on the glass","4/5"],["#b9855a","#6d3f2a","a borrowed book","1/1"],["#7d6b8e","#3f3350","late light","3/4"]];
+let gi=0,lx=0;
+function renderGallery(){
+  const G=C.gallery,g=$('gal');
+  if(!G.length){
+    g.innerHTML=PH.map((p,k)=>`<figure class="gi ph" style="--r:${[-3,2,-1.5,3,-2.5,1.5][k]}deg"><div class="gp" style="aspect-ratio:${p[3]};background:linear-gradient(135deg,${p[0]},${p[1]})"></div><figcaption class="gc">${p[2]}</figcaption></figure>`).join('')+(EDIT?'<p class="gh">Press "Add photos" in the toolbar below to put your own photos on this wall.</p>':'');
+    return;
+  }
+  g.innerHTML=G.map((x,i)=>`<figure class="gi" data-i="${i}" tabindex="0" style="--r:${((hsh(i+'g')%50)-25)/10}deg"><img src="${esc(x.u)}" alt="${esc(x.c)}" loading="lazy"><figcaption class="gc"${EDIT?' contenteditable="true"':''}>${esc(x.c)}</figcaption><div class="gt"><button data-g="l" aria-label="Move earlier">‹</button><button data-g="x" aria-label="Delete photo">×</button><button data-g="r" aria-label="Move later">›</button></div></figure>`).join('');
+}
+function pickMany(max,cb){const f=document.createElement('input');f.type='file';f.accept='image/*';f.multiple=true;
+  f.onchange=()=>{[...f.files].forEach(fl=>{const im=new Image();
+    im.onload=()=>{const k=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);
+      c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',.78));URL.revokeObjectURL(im.src)};
+    im.src=URL.createObjectURL(fl)})};f.click()}
+$('gp').onclick=()=>pickMany(1000,u=>{C.gallery.push({u,c:''});dirty=true;renderGallery()});$('gal').addEventListener('click',e=>{
+  const fg=e.target.closest('.gi');if(!fg||fg.classList.contains('ph'))return;const i=+fg.dataset.i,G=C.gallery;
+  if(EDIT){const a=e.target.closest('[data-g]');if(!a)return;const t=a.dataset.g;
+    if(t==='x'){if(!confirm('Delete this photo?'))return;G.splice(i,1)}
+    else if(t==='l'&&i>0){const x=G[i-1];G[i-1]=G[i];G[i]=x}
+    else if(t==='r'&&i<G.length-1){const x=G[i+1];G[i+1]=G[i];G[i]=x}
+    else return;
+    dirty=true;renderGallery();return}
+  openLb(i)});
+$('gal').addEventListener('input',e=>{const c=e.target.closest('.gc'),fg=e.target.closest('.gi');   if(c&&fg&&fg.dataset.i!=null){C.gallery[+fg.dataset.i].c=c.textContent.trim();dirty=true}});$('gal').addEventListener('keydown',e=>{if(EDIT||e.key!=='Enter')return;const fg=e.target.closest('.gi');if(fg&&fg.dataset.i!=null)openLb(+fg.dataset.i)});
+function openLb(i){const G=C.gallery;if(!G.length)return;gi=(i+G.length)%G.length;const x=G[gi];
+  $('lbi').src=x.u;$('lbi').alt=x.c||'';$('lbc').textContent=x.c\vert{}\vert{}'';$('lbn').textContent=(gi+1)+' of '+G.length;
+  $('lb').classList.add('on');document.body.classList.add('mo')}
+function closeLb(){$('lb').classList.remove('on');document.body.classList.remove('mo')}$('lbx').onclick=closeLb;$('lbp').onclick=()=>openLb(gi-1);$('lbnx').onclick=()=>openLb(gi+1);
+$('lb').addEventListener('click',e=>{if(e.target===$('lb'))closeLb()});
+$('lbi').addEventListener('touchstart',e=>{lx=e.touches[0].clientX},{passive:true});$('lbi').addEventListener('touchend',e=>{const d=e.changedTouches[0].clientX-lx;if(Math.abs(d)>40)openLb(gi+(d<0?1:-1))});
+addEventListener('keydown',e=>{if(!$('lb').classList.contains('on'))return;
+  if(e.key==='Escape')closeLb();if(e.key==='ArrowRight')openLb(gi+1);if(e.key==='ArrowLeft')openLb(gi-1)});
+
+/* Canvas Sakura Blossom Effect */
+(function(){
+  const canvas = $('sakura-canvas');
+  const ctx = canvas.getContext('2d');
+  let width = canvas.width = window.innerWidth;
+  let height = canvas.height = window.innerHeight;
+
+  window.addEventListener('resize', () => {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  });
+
+  const petals = [];
+  const petalCount = 35;
+
+  class Petal {
+    constructor() {
+      this.reset();
     }
-
-    function renderFallen() {
-      const container = document.getElementById('fallenList');
-      container.innerHTML = '';
-
-      fallenList.forEach(item => {
-        const el = document.createElement('div');
-        el.className = 'fallen-book-item';
-        el.style.backgroundColor = item.bg;
-        el.style.color = item.color;
-        el.innerText = item.title;
-
-        el.addEventListener('click', () => {
-          if (!isEditing) returnToShelf(item.id);
-        });
-
-        container.appendChild(el);
-      });
+    reset() {
+      this.x = Math.random() * width;
+      this.y = Math.random() * -height;
+      this.size = Math.random() * 8 + 6;
+      this.speedY = Math.random() * 1.2 + 0.8;
+      this.speedX = Math.random() * 0.8 - 0.4;
+      this.angle = Math.random() * Math.PI * 2;
+      this.spin = Math.random() * 0.02 - 0.01;
+      this.opacity = Math.random() * 0.5 + 0.4;
     }
-
-    window.removeBook = function(e, id) {
-      e.stopPropagation();
-      bookList = bookList.filter(b => b.id !== id);
-      fallenList = fallenList.filter(b => b.id !== id);
-      render();
+    update() {
+      this.y += this.speedY;
+      this.x += Math.sin(this.y * 0.01) + this.speedX;
+      this.angle += this.spin;
+      if (this.y > height + 20) this.reset();
     }
+    draw() {
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.angle);
+      ctx.globalAlpha = this.opacity;
+      ctx.fillStyle = "#ffb7c5";
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.bezierCurveTo(-this.size/2, -this.size/2, -this.size, this.size/3, 0, this.size);
+      ctx.bezierCurveTo(this.size, this.size/3, this.size/2, -this.size/2, 0, 0);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
 
-    // --- 3. CHẾ ĐỘ EDIT WEBMODE ---
-    const toggleBtn = document.getElementById('toggleEditBtn');
-    const caption = document.getElementById('captionText');
+  for (let i = 0; i < petalCount; i++) {
+    petals.push(new Petal());
+  }
 
-    toggleBtn.addEventListener('click', () => {
-      isEditing = !isEditing;
-      document.body.classList.toggle('edit-mode', isEditing);
-
-      if (isEditing) {
-        toggleBtn.innerText = 'Exit Edit Mode';
-        toggleBtn.classList.add('active');
-        caption.setAttribute('contenteditable', 'true');
-      } else {
-        toggleBtn.innerText = 'Edit Mode';
-        toggleBtn.classList.remove('active');
-        caption.setAttribute('contenteditable', 'false');
-      }
+  function render() {
+    ctx.clearRect(0, 0, width, height);
+    petals.forEach(p => {
+      p.update();
+      p.draw();
     });
+    requestAnimationFrame(render);
+  }
+  render();
+})();
 
-    // Đổi ảnh sảnh / Polaroid
-    document.getElementById('imgInput').addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (evt) => {
-          document.getElementById('windowImg').src = evt.target.result;
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-
-    // Thêm sách mới
-    document.getElementById('addBtn').addEventListener('click', () => {
-      const title = document.getElementById('newTitle').value.trim();
-      if (!title) return;
-
-      bookList.push({
-        id: Date.now().toString(),
-        title: title,
-        shelf: document.getElementById('newShelf').value,
-        bg: document.getElementById('newColor').value,
-        color: document.getElementById('newTextColor').value,
-        h: Math.floor(Math.random() * 25) + 135,
-        w: Math.floor(Math.random() * 10) + 32
-      });
-
-      render();
-      document.getElementById('newTitle').value = '';
-    });
-
-    // --- 4. CÁNH HOA ĐÀO RƠI (CANVAS ANIMATION) ---
-    const canvas = document.getElementById('petals-canvas');
-    const ctx = canvas.getContext('2d');
-    let w = canvas.width = window.innerWidth;
-    let h = canvas.height = window.innerHeight;
-
-    window.addEventListener('resize', () => {
-      w = canvas.width = window.innerWidth;
-      h = canvas.height = window.innerHeight;
-    });
-
-    class Petal {
-      constructor() {
-        this.reset();
-      }
-      reset() {
-        this.x = Math.random() * w;
-        this.y = Math.random() * -h;
-        this.size = Math.random() * 7 + 5;
-        this.vy = Math.random() * 1.2 + 0.6;
-        this.vx = Math.random() * 0.6 - 0.3;
-        this.rot = Math.random() * 360;
-        this.spin = Math.random() * 0.02 - 0.01;
-        this.opacity = Math.random() * 0.5 + 0.4;
-      }
-      update() {
-        this.y += this.vy;
-        this.x += Math.sin(this.y * 0.008) + this.vx;
-        this.rot += this.spin;
-        if (this.y > h + 20) this.reset();
-      }
-      draw() {
-        ctx.save();
-        ctx.translate(this.x, this.y);
-        ctx.rotate(this.rot);
-        ctx.globalAlpha = this.opacity;
-        ctx.fillStyle = '#f8c8d4';
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.bezierCurveTo(-this.size, -this.size/2, -this.size, this.size, 0, this.size*1.4);
-        ctx.bezierCurveTo(this.size, this.size, this.size, -this.size/2, 0, 0);
-        ctx.fill();
-        ctx.restore();
-      }
-    }
-
-    const petals = Array.from({ length: 30 }, () => new Petal());
-    function loop() {
-      ctx.clearRect(0, 0, w, h);
-      petals.forEach(p => { p.update(); p.draw(); });
-      requestAnimationFrame(loop);
-    }
-
-    render();
-    loop();
-  </script>
+/* start */
+(async()=>{
+  try{const r=await fetch('content.json',{cache:'no-store'});
+    if(r.ok){const j=await r.json();Object.assign(T,j.texts||{});if(j.images)C.images=j.images;if(Array.isArray(j.books))C.books=j.books;if(j.goal)C.goal=j.goal;if(j.email)C.email=j.email;if(Array.isArray(j.gallery))C.gallery=j.gallery}}catch(e){}
+  applyTexts();applyImages();renderShelf();renderStats();if(EDIT)startEdit();
+})();
+</script>
 </body>
 </html>
